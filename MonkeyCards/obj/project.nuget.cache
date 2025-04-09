@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "VhtKYTO3Emk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\mikro\\RiderProjects\\MonkeyCards\\MonkeyCards\\MonkeyCards.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mikro\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\mikro\\.nuget\\packages\\raylib-cs\\7.0.1\\raylib-cs.7.0.1.nupkg.sha512",
+    "C:\\Users\\mikro\\.nuget\\packages\\sfml.audio\\2.6.1\\sfml.audio.2.6.1.nupkg.sha512",
+    "C:\\Users\\mikro\\.nuget\\packages\\sfml.graphics\\2.6.1\\sfml.graphics.2.6.1.nupkg.sha512",
+    "C:\\Users\\mikro\\.nuget\\packages\\sfml.net\\2.6.1\\sfml.net.2.6.1.nupkg.sha512",
+    "C:\\Users\\mikro\\.nuget\\packages\\sfml.system\\2.6.1\\sfml.system.2.6.1.nupkg.sha512",
+    "C:\\Users\\mikro\\.nuget\\packages\\sfml.window\\2.6.1\\sfml.window.2.6.1.nupkg.sha512"
+  ],
+  "logs": []
+}
