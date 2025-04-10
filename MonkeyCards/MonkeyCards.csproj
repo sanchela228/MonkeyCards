@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Raylib-cs" Version="7.0.1" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="Resources/Shaders/noise_background_shader.frag">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
@@ -21,6 +17,10 @@
       <None Include="config.env">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Raylib-cs" Version="7.0.1" />
     </ItemGroup>
 
 </Project>

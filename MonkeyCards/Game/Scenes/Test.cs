@@ -8,12 +8,18 @@ public class Test : IScene
 {
     private Rectangle backButton;
     private Rectangle exitButton;
+
+
+    private Card _cardTest;
+    
     public Test()
     {
         backButton = new Rectangle(100, 170, 200, 50);
         exitButton = new Rectangle(100, 240, 200, 50);
         
         Visuals.BackgroundColorize.Instance.SetSettings();
+        
+        _cardTest = new Default("test", "A");
     }
     
     public void Update(float deltaTime)
@@ -34,6 +40,7 @@ public class Test : IScene
         }
         
         Visuals.BackgroundColorize.Instance.BeforeDrawing();
+        
     }
     
     public void Draw()
@@ -48,6 +55,11 @@ public class Test : IScene
         
         Raylib.DrawRectangleRec(exitButton, Color.Red);
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
+        
+        
+        Raylib.DrawRectangle(200,200, 100, 200, Color.White);
+        
+        _cardTest.Draw();
     }
     
     public void Dispose()

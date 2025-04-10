@@ -15,17 +15,17 @@ public class BackgroundColorize
     {
         _shader = Raylib.LoadShader(null, "Resources/Shaders/noise_background_shader.frag");
         
-        int speedLoc = Raylib.GetShaderLocation(_shader, "speed");
-        int scaleLoc = Raylib.GetShaderLocation(_shader, "scale");
+        var speedLoc = Raylib.GetShaderLocation(_shader, "speed");
+        var scaleLoc = Raylib.GetShaderLocation(_shader, "scale");
 
-        int color1Loc = Raylib.GetShaderLocation(_shader, "color1");
-        int color2Loc = Raylib.GetShaderLocation(_shader, "color2");
-        int color3Loc = Raylib.GetShaderLocation(_shader, "color3");
-        int color4Loc = Raylib.GetShaderLocation(_shader, "color4");
+        var color1Loc = Raylib.GetShaderLocation(_shader, "color1");
+        var color2Loc = Raylib.GetShaderLocation(_shader, "color2");
+        var color3Loc = Raylib.GetShaderLocation(_shader, "color3");
+        var color4Loc = Raylib.GetShaderLocation(_shader, "color4");
 
-        int threshold1Loc = Raylib.GetShaderLocation(_shader, "threshold1");
-        int threshold2Loc = Raylib.GetShaderLocation(_shader, "threshold2");
-        int threshold3Loc = Raylib.GetShaderLocation(_shader, "threshold3");
+        var threshold1Loc = Raylib.GetShaderLocation(_shader, "threshold1");
+        var threshold2Loc = Raylib.GetShaderLocation(_shader, "threshold2");
+        var threshold3Loc = Raylib.GetShaderLocation(_shader, "threshold3");
 
         Raylib.SetShaderValue(_shader, speedLoc, 0.1f, ShaderUniformDataType.Float);
         Raylib.SetShaderValue(_shader, scaleLoc, 1.7f, ShaderUniformDataType.Float);
@@ -48,7 +48,7 @@ public class BackgroundColorize
     public void BeforeDrawing()
     {
         var time = Raylib.GetTime();
-        Vector2 resolution = new Vector2(800, 600);
+        var resolution = new Vector2(800, 600);
 
         Raylib.SetShaderValue(_shader, _timeLoc, new float[] { (float) time }, ShaderUniformDataType.Float);
         Raylib.SetShaderValue(_shader, _resolutionLoc, new float[] { resolution.X, resolution.Y }, ShaderUniformDataType.Vec2);
