@@ -22,22 +22,26 @@ public class BackgroundColorize
         var color2Loc = Raylib.GetShaderLocation(_shader, "color2");
         var color3Loc = Raylib.GetShaderLocation(_shader, "color3");
         var color4Loc = Raylib.GetShaderLocation(_shader, "color4");
+        var color5Loc = Raylib.GetShaderLocation(_shader, "color5");
 
         var threshold1Loc = Raylib.GetShaderLocation(_shader, "threshold1");
         var threshold2Loc = Raylib.GetShaderLocation(_shader, "threshold2");
         var threshold3Loc = Raylib.GetShaderLocation(_shader, "threshold3");
+        var threshold4Loc = Raylib.GetShaderLocation(_shader, "threshold4");
 
         Raylib.SetShaderValue(_shader, speedLoc, 0.1f, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(_shader, scaleLoc, 1.7f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, scaleLoc, 0.7f, ShaderUniformDataType.Float);
 
-        Raylib.SetShaderValue(_shader, color1Loc, new Vector3(0.22f, 0.50f, 0.36f), ShaderUniformDataType.Vec3);
+        Raylib.SetShaderValue(_shader, color1Loc, new Vector3(0.22f, 0.64f, 0.36f), ShaderUniformDataType.Vec3);
         Raylib.SetShaderValue(_shader, color2Loc, new Vector3(0.22f, 0.55f, 0.36f), ShaderUniformDataType.Vec3);
         Raylib.SetShaderValue(_shader, color3Loc, new Vector3(0.22f, 0.58f, 0.36f), ShaderUniformDataType.Vec3);
-        Raylib.SetShaderValue(_shader, color4Loc, new Vector3(0.22f, 0.64f, 0.36f), ShaderUniformDataType.Vec3);
+        Raylib.SetShaderValue(_shader, color4Loc, new Vector3(0.22f, 0.62f, 0.36f), ShaderUniformDataType.Vec3);
+        Raylib.SetShaderValue(_shader, color5Loc, new Vector3(0.22f, 0.66f, 0.36f), ShaderUniformDataType.Vec3);
 
-        Raylib.SetShaderValue(_shader, threshold1Loc, 0.52f, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(_shader, threshold2Loc, 0.55f, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(_shader, threshold3Loc, 0.75f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, threshold1Loc, 0.22f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, threshold2Loc, 0.52f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, threshold3Loc, 0.55f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, threshold4Loc, 0.57f, ShaderUniformDataType.Float);
 
         _timeLoc = Raylib.GetShaderLocation(_shader, "time");
         _resolutionLoc = Raylib.GetShaderLocation(_shader, "resolution");

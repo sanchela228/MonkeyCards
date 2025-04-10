@@ -1,3 +1,5 @@
+#version 330 core
+
 uniform float time;
 uniform vec2 resolution;
 
@@ -8,10 +10,14 @@ uniform vec3 color1;
 uniform vec3 color2;
 uniform vec3 color3;
 uniform vec3 color4;
+uniform vec3 color5;
 
 uniform float threshold1;
 uniform float threshold2;
 uniform float threshold3;
+uniform float threshold4;
+
+out vec4 FragColor;
 
 float noise(vec2 p) {
     return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
@@ -53,9 +59,12 @@ void main() {
         color = color2;
     } else if (f < threshold3) {
         color = color3;
-    } else {
+    } else if (f < threshold4) {
         color = color4;
     }
+    else {
+        color = color5;
+    }
 
-    gl_FragColor = vec4(color, 1.0);
+    FragColor = vec4(color, 1.0); 
 }

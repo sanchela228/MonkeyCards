@@ -11,6 +11,9 @@
       <None Update="Resources/Shaders/noise_background_shader.frag">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="Resources\Fonts\JandaManateeSolidCyrillic.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
