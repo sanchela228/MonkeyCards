@@ -9,7 +9,18 @@
 
     <ItemGroup>
       <PackageReference Include="Raylib-cs" Version="7.0.1" />
-      <PackageReference Include="SFML.Net" Version="2.6.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Resources/Shaders/noise_background_shader.frag">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="config.env">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
