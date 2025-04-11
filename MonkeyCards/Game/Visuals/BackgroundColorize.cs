@@ -23,6 +23,11 @@ public class BackgroundColorize
         
         float[] thresholds = new float[]
         {
+            0.27f,
+            0.28f,
+            0.29f,
+            0.30f,
+            
             0.39f,
             0.40f,
             0.41f,
@@ -55,8 +60,18 @@ public class BackgroundColorize
             0.73f,
             0.74f,
             0.75f,
+            
+            0.80f,
+            0.81f,
+            0.82f,
+            0.83f,
         };
         Vector3[] colors = new Vector3[] {
+            new Vector3(0.32f, 0.6f, 0.86f),
+            new Vector3(0.32f, 0.55f, 0.86f),
+            new Vector3(0.32f, 0.5f,  0.86f),
+            new Vector3(0.32f, 0.48f, 0.86f),
+            
             new Vector3(0.32f, 0.45f, 0.86f),
             new Vector3(0.32f, 0.48f, 0.86f),
             new Vector3(0.32f, 0.5f,  0.86f),
@@ -73,23 +88,28 @@ public class BackgroundColorize
             new Vector3(0.32f, 0.55f, 0.86f),
             new Vector3(0.32f, 0.5f,  0.86f),
             new Vector3(0.32f, 0.48f, 0.86f),
-            new Vector3(0.32f, 0.45f, 0.76f),
-            new Vector3(0.32f, 0.48f, 0.76f),
-            new Vector3(0.32f, 0.5f,  0.76f),
-            new Vector3(0.32f, 0.55f, 0.76f),
-            new Vector3(0.32f, 0.6f,  0.76f),
-            new Vector3(0.32f, 0.7f,  0.76f),
-            new Vector3(0.32f, 0.77f, 0.76f),
-            new Vector3(0.32f, 0.79f, 0.76f),
-            new Vector3(0.32f, 0.8f,  0.76f),
-            new Vector3(0.32f, 0.79f, 0.76f),
-            new Vector3(0.32f, 0.77f, 0.76f),
-            new Vector3(0.32f, 0.7f,  0.76f),
-            new Vector3(0.32f, 0.6f,  0.76f),
-            new Vector3(0.32f, 0.55f, 0.76f),
-            new Vector3(0.32f, 0.5f,  0.76f),
-            new Vector3(0.32f, 0.48f, 0.76f),
-            new Vector3(0.32f, 0.45f, 0.76f),
+            new Vector3(0.32f, 0.45f, 0.86f),
+            new Vector3(0.32f, 0.48f, 0.86f),
+            new Vector3(0.32f, 0.5f,  0.86f),
+            new Vector3(0.32f, 0.55f, 0.86f),
+            new Vector3(0.32f, 0.6f,  0.86f),
+            new Vector3(0.32f, 0.7f,  0.86f),
+            new Vector3(0.32f, 0.77f, 0.86f),
+            new Vector3(0.32f, 0.79f, 0.86f),
+            new Vector3(0.32f, 0.8f,  0.86f),
+            new Vector3(0.32f, 0.79f, 0.86f),
+            new Vector3(0.32f, 0.77f, 0.86f),
+            new Vector3(0.32f, 0.7f,  0.86f),
+            new Vector3(0.32f, 0.6f,  0.86f),
+            new Vector3(0.32f, 0.55f, 0.86f),
+            new Vector3(0.32f, 0.5f,  0.86f),
+            new Vector3(0.32f, 0.48f, 0.86f),
+            new Vector3(0.32f, 0.45f, 0.86f),
+            
+            new Vector3(0.32f, 0.48f, 0.86f),
+            new Vector3(0.32f, 0.5f,  0.86f),
+            new Vector3(0.32f, 0.55f, 0.86f),
+            new Vector3(0.32f, 0.6f, 0.86f),
         };
         
         float[] colorsData = new float[colors.Length * 3];
@@ -100,8 +120,8 @@ public class BackgroundColorize
             colorsData[i * 3 + 2] = colors[i].Z;
         }
 
-        Raylib.SetShaderValue(_shader, speedLoc, 0.15f, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(_shader, scaleLoc, 1.2f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, speedLoc, 0.05f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, scaleLoc, 1f, ShaderUniformDataType.Float);
         
         Raylib.SetShaderValueV(_shader, colorsLoc, colorsData, ShaderUniformDataType.Vec3, colors.Length);
         Raylib.SetShaderValueV(_shader, thresholdsLoc, thresholds, ShaderUniformDataType.Float, thresholds.Length);
@@ -112,7 +132,7 @@ public class BackgroundColorize
         _timeLoc = Raylib.GetShaderLocation(_shader, "time");
         _resolutionLoc = Raylib.GetShaderLocation(_shader, "resolution");
 
-        _fullscreenRect = new Rectangle(0, 0, 800, 600);
+        _fullscreenRect = new Rectangle(0, 0, Raylib.GetRenderWidth(), Raylib.GetRenderHeight());
     }
 
     public void BeforeDrawing()

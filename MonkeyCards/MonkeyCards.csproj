@@ -44,4 +44,9 @@
       <PackageReference Include="Raylib-cs" Version="7.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Game\Nodes\Gameplay\" />
+      <Folder Include="Game\Nodes\UI\" />
+    </ItemGroup>
+
 </Project>

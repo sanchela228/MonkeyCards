@@ -17,7 +17,7 @@ public class Test : Scene
         
         Visuals.BackgroundColorize.Instance.SetSettings();
         
-        // _cardTest = new Default("test", "A");
+        _cardTest = new Default("test", "A");
     }
     
     public override void Update(float deltaTime)
@@ -54,7 +54,7 @@ public class Test : Scene
         Raylib.DrawRectangleRec(exitButton, Color.Red);
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
         
-        // _cardTest.Draw();
+        _cardTest.Draw();
     }
     
     public override void Dispose()

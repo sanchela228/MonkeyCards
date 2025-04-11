@@ -18,11 +18,15 @@ public abstract class Scene
 
     public void RootUpdate(float deltaTime)
     {
+        Update(deltaTime);
+        
         NodesUpdate(deltaTime);
     }
     
     public void RootDraw()
     {
+        Draw();
+        
         NodesDraw();
     }
     
