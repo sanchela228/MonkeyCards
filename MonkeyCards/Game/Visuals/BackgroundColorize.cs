@@ -100,7 +100,7 @@ public class BackgroundColorize
             colorsData[i * 3 + 2] = colors[i].Z;
         }
 
-        Raylib.SetShaderValue(_shader, speedLoc, 0.05f, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(_shader, speedLoc, 0.15f, ShaderUniformDataType.Float);
         Raylib.SetShaderValue(_shader, scaleLoc, 1.2f, ShaderUniformDataType.Float);
         
         Raylib.SetShaderValueV(_shader, colorsLoc, colorsData, ShaderUniformDataType.Vec3, colors.Length);
