@@ -34,11 +34,6 @@ public class BackgroundColorize
             0.47f,
             0.48f,
             0.49f,
-            0.50f,
-            0.51f,
-            0.52f,
-            0.53f,
-            0.54f,
             0.55f,
             0.56f,
             0.57f,
@@ -51,10 +46,15 @@ public class BackgroundColorize
             0.64f,
             0.65f,
             0.66f,
+            0.67f,
             0.68f,
             0.69f,
             0.70f,
             0.71f,
+            0.72f,
+            0.73f,
+            0.74f,
+            0.75f,
         };
         Vector3[] colors = new Vector3[] {
             new Vector3(0.32f, 0.45f, 0.86f),
@@ -113,39 +113,6 @@ public class BackgroundColorize
         _resolutionLoc = Raylib.GetShaderLocation(_shader, "resolution");
 
         _fullscreenRect = new Rectangle(0, 0, 800, 600);
-        
-        // var speedLoc = Raylib.GetShaderLocation(_shader, "speed");
-        // var scaleLoc = Raylib.GetShaderLocation(_shader, "scale");
-        //
-        // var color1Loc = Raylib.GetShaderLocation(_shader, "color1");
-        // var color2Loc = Raylib.GetShaderLocation(_shader, "color2");
-        // var color3Loc = Raylib.GetShaderLocation(_shader, "color3");
-        // var color4Loc = Raylib.GetShaderLocation(_shader, "color4");
-        // var color5Loc = Raylib.GetShaderLocation(_shader, "color5");
-        //
-        // var threshold1Loc = Raylib.GetShaderLocation(_shader, "threshold1");
-        // var threshold2Loc = Raylib.GetShaderLocation(_shader, "threshold2");
-        // var threshold3Loc = Raylib.GetShaderLocation(_shader, "threshold3");
-        // var threshold4Loc = Raylib.GetShaderLocation(_shader, "threshold4");
-        //
-        // Raylib.SetShaderValue(_shader, speedLoc, 0.2f, ShaderUniformDataType.Float);
-        // Raylib.SetShaderValue(_shader, scaleLoc, 1.5f, ShaderUniformDataType.Float);
-        //
-        // Raylib.SetShaderValue(_shader, color1Loc, new Vector3(0.22f, 0.64f, 0.36f), ShaderUniformDataType.Vec3);
-        // Raylib.SetShaderValue(_shader, color2Loc, new Vector3(0.22f, 0.55f, 0.36f), ShaderUniformDataType.Vec3);
-        // Raylib.SetShaderValue(_shader, color3Loc, new Vector3(0.22f, 0.58f, 0.36f), ShaderUniformDataType.Vec3);
-        // Raylib.SetShaderValue(_shader, color4Loc, new Vector3(0.22f, 0.62f, 0.36f), ShaderUniformDataType.Vec3);
-        // Raylib.SetShaderValue(_shader, color5Loc, new Vector3(0.22f, 0.66f, 0.36f), ShaderUniformDataType.Vec3);
-        //
-        // Raylib.SetShaderValue(_shader, threshold1Loc, 0.22f, ShaderUniformDataType.Float);
-        // Raylib.SetShaderValue(_shader, threshold2Loc, 0.52f, ShaderUniformDataType.Float);
-        // Raylib.SetShaderValue(_shader, threshold3Loc, 0.555f, ShaderUniformDataType.Float);
-        // Raylib.SetShaderValue(_shader, threshold4Loc, 0.57f, ShaderUniformDataType.Float);
-        //
-        // _timeLoc = Raylib.GetShaderLocation(_shader, "time");
-        // _resolutionLoc = Raylib.GetShaderLocation(_shader, "resolution");
-        //
-        // _fullscreenRect = new Rectangle(0, 0, 800, 600);
     }
 
     public void BeforeDrawing()

@@ -5,11 +5,11 @@ public class Manager
     static Manager() => Instance = new();
     public static Manager Instance { get; private set; }
     
-    private readonly Stack<IScene> _scenes = new();
-    public void PushScene(IScene scene) => _scenes.Push(scene);
-    public void PopScene() => _scenes.Pop()?.Dispose();
-    public void Update(float deltaTime) => _scenes.Peek()?.Update(deltaTime);
-    public void Draw() => _scenes.Peek()?.Draw();
+    private readonly Stack<Scene> _scenes = new();
+    public void PushScene(Scene scene) => _scenes.Push(scene);
+    public void PopScene() => _scenes.Pop()?.RootDispose();
+    public void Update(float deltaTime) => _scenes.Peek()?.RootUpdate(deltaTime);
+    public void Draw() => _scenes.Peek()?.RootDraw();
     public void Dispose()
     {
         while (_scenes.Count > 0)

@@ -4,7 +4,7 @@ using Raylib_cs;
 
 namespace MonkeyCards.Game.Scenes;
 
-public class Test : IScene
+public class Test : Scene
 {
     private Rectangle backButton;
     private Rectangle exitButton;
@@ -17,10 +17,10 @@ public class Test : IScene
         
         Visuals.BackgroundColorize.Instance.SetSettings();
         
-        _cardTest = new Default("test", "A");
+        // _cardTest = new Default("test", "A");
     }
     
-    public void Update(float deltaTime)
+    public override void Update(float deltaTime)
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
@@ -41,7 +41,7 @@ public class Test : IScene
         
     }
     
-    public void Draw()
+    public override void Draw()
     {
         Visuals.BackgroundColorize.Instance.Draw();
         
@@ -54,10 +54,10 @@ public class Test : IScene
         Raylib.DrawRectangleRec(exitButton, Color.Red);
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
         
-        _cardTest.Draw();
+        // _cardTest.Draw();
     }
     
-    public void Dispose()
+    public override void Dispose()
     {
         Visuals.BackgroundColorize.Instance.UnloadShader();
     }
