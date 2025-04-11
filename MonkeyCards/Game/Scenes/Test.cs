@@ -17,7 +17,7 @@ public class Test : IScene
         
         Visuals.BackgroundColorize.Instance.SetSettings();
         
-        _cardTest = new Default("test", "4A");
+        _cardTest = new Default("test", "A");
     }
     
     public void Update(float deltaTime)

@@ -13,14 +13,20 @@ public abstract class Card
     
     protected Card(string name, string shortName)
     {
-        Font customFont = Raylib.LoadFont("Resources/Fonts/JandaManateeSolidCyrillic.ttf");
+        // Font customFont = Raylib.LoadFont("Resources/Fonts/JockeyOne-Regular.ttf");
         
+        Font customFont = Raylib.LoadFontEx(
+            "Resources/Fonts/JockeyOne-Regular.ttf", 
+            52,
+            null, 
+            0
+        );
+        
+        Texture2D icon = Raylib.LoadTexture("Resources/Images/Icons/icon-hearts.png"); 
         Name = name;
         ShortName = shortName;
-        
-        string[] suits = { "♠", "♥", "♦", "♣" };
          
-         _canvas = Raylib.LoadRenderTexture(240, 400);
+         _canvas = Raylib.LoadRenderTexture(200, 300);
          
          _rect = new Rectangle(
              0,
@@ -34,19 +40,21 @@ public abstract class Card
         
          Raylib.DrawRectangleRounded(_rect, 0.2f, 10, Color.White);
          
-         Raylib.DrawText(this.ShortName, 
-             20, 
-             20, 
-             32, 
+         Raylib.DrawTextPro( 
+             customFont, 
+             ShortName, 
+             new Vector2(32, 22),
+             new Vector2(16, 16),
+             0f,
+             52,
+             3,
              Color.Black
          );
-         
-         Raylib.DrawText(suits[0], 20, 80, 32, Color.Black);
          
          Raylib.DrawTextPro( 
              customFont, 
             ShortName, 
-            new Vector2(_canvas.Texture.Width - 32, _canvas.Texture.Height - 32),
+            new Vector2(_canvas.Texture.Width - 32, _canvas.Texture.Height - 22),
             new Vector2(16, 16),
             180f,
             52,
@@ -54,15 +62,57 @@ public abstract class Card
             Color.Black
          );
          
-         Raylib.DrawTextPro( 
-             customFont, 
-             suits[0], 
-             new Vector2(_canvas.Texture.Width - 32, _canvas.Texture.Height - 82),
-             new Vector2(16, 16),
+         Rectangle iconDest = new Rectangle(
+             _canvas.Texture.Width - 28,
+             _canvas.Texture.Height - 72,
+             40, 
+             40
+         );
+         
+         Raylib.DrawTexturePro(
+             icon,
+             new Rectangle(0, 0, icon.Width, icon.Height), 
+             iconDest,
+             new Vector2(20, 20),
              180f,
-             52,
-             3,
-             Color.Black
+             Color.White
+         );
+        
+         
+        
+         
+         Rectangle iconDestThree = new Rectangle(
+             (_canvas.Texture.Width / 2),
+             (_canvas.Texture.Height / 2),
+             150, 
+             150
+         );
+         
+         Raylib.DrawTexturePro(
+             icon,
+             new Rectangle(0, 0, icon.Width, icon.Height),
+             iconDestThree,
+             new Vector2(75, 75),
+             0.0f,
+             Color.White
+         );
+        
+        
+         
+         Rectangle iconDestTwo = new Rectangle(
+             28,
+             72,
+             40, 
+             40
+         );
+         
+         Raylib.DrawTexturePro(
+             icon,
+             new Rectangle(0, 0, icon.Width, icon.Height),
+             iconDestTwo,
+             new Vector2(20, 20),
+             0.0f,
+             Color.White
          );
          
          Raylib.EndTextureMode();

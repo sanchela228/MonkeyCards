@@ -6,21 +6,14 @@ uniform vec2 resolution;
 uniform float speed;
 uniform float scale;
 
-uniform vec3 color1;
-uniform vec3 color2;
-uniform vec3 color3;
-uniform vec3 color4;
-uniform vec3 color5;
-
-uniform float threshold1;
-uniform float threshold2;
-uniform float threshold3;
-uniform float threshold4;
+uniform vec3 colors[55];
+uniform float thresholds[54];
+uniform int colorCount;
 
 out vec4 FragColor;
 
 float noise(vec2 p) {
-    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 13758.5453);
 }
 
 float interpolatedNoise(vec2 p) {
@@ -52,19 +45,14 @@ void main() {
 
     float f = fractalNoise(p, time);
 
-    vec3 color;
-    if (f < threshold1) {
-        color = color1;
-    } else if (f < threshold2) {
-        color = color2;
-    } else if (f < threshold3) {
-        color = color3;
-    } else if (f < threshold4) {
-        color = color4;
-    }
-    else {
-        color = color5;
+    vec3 color = colors[colorCount - 1];
+
+    for (int i = 0; i < colorCount - 1 && i < 55; i++) {
+        if (f < thresholds[i]) {
+            color = colors[i];
+            break;
+        }
     }
 
-    FragColor = vec4(color, 1.0); 
+    FragColor = vec4(color, 1.0);
 }
