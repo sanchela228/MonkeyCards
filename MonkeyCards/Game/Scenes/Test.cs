@@ -38,7 +38,7 @@ public class Test : Scene
         }
         
         Visuals.BackgroundColorize.Instance.BeforeDrawing();
-        
+        _cardTest.Update();
     }
     
     public override void Draw()
