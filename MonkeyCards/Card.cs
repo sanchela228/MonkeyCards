@@ -4,7 +4,7 @@ using Raylib_cs;
 using Color = Raylib_cs.Color;
 using Rectangle = Raylib_cs.Rectangle;
 
-namespace MonkeyCards;
+namespace MonkeyCards.TESTS;
 
 public abstract class Card
 {
@@ -127,6 +127,7 @@ public abstract class Card
              );
              
              Raylib.EndTextureMode();
+             
 
         #endregion
 
@@ -179,7 +180,6 @@ public abstract class Card
 
     public void Draw()
     {
-        
         Raylib.DrawTexturePro(
             _canvas.Texture,
             new Rectangle(0, 0, _canvas.Texture.Width, -_canvas.Texture.Height),

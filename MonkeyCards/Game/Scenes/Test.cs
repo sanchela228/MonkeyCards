@@ -8,7 +8,7 @@ public class Test : Scene
 {
     private Rectangle backButton;
     private Rectangle exitButton;
-    private Card _cardTest;
+    // private Card _cardTest;
     
     public Test()
     {
@@ -17,7 +17,7 @@ public class Test : Scene
         
         Visuals.BackgroundColorize.Instance.SetSettings();
         
-        _cardTest = new Default("test", "A");
+        // _cardTest = new Default("test", "A");
     }
     
     public override void Update(float deltaTime)
@@ -38,7 +38,7 @@ public class Test : Scene
         }
         
         Visuals.BackgroundColorize.Instance.BeforeDrawing();
-        _cardTest.Update();
+        // _cardTest.Update();
     }
     
     public override void Draw()
@@ -54,7 +54,7 @@ public class Test : Scene
         Raylib.DrawRectangleRec(exitButton, Color.Red);
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
         
-        _cardTest.Draw();
+        // _cardTest.Draw();
     }
     
     public override void Dispose()

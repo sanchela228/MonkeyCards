@@ -1,7 +1,6 @@
-using MonkeyCards.Engine.Core.Objects;
-
 namespace MonkeyCards.Engine.Core.Scenes;
 
+using Objects;
 public abstract class Scene
 {
     public abstract void Update(float deltaTime);

@@ -45,7 +45,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Game\Nodes\Gameplay\" />
       <Folder Include="Game\Nodes\UI\" />
     </ItemGroup>
 

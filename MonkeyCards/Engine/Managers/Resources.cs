@@ -2,10 +2,10 @@ using Raylib_cs;
 
 namespace MonkeyCards.Engine.Managers;
 
-public class Resource
+public class Resources
 {
-    private static Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
-    private static Dictionary<string, Font> _fonts = new Dictionary<string, Font>();
+    private static Dictionary<string, Texture2D> _textures = new();
+    private static Dictionary<string, Font> _fonts = new();
     
     public void LoadTexture( string[] values )
     {
