@@ -61,7 +61,7 @@ public class Menu : Scene
     
     public override void Draw()
     {
-        Raylib.ClearBackground(Color.Black);
+        Raylib.ClearBackground(Color.Gray);
 
         Raylib.DrawRectangleRec(nextSceneButton, Color.Blue);
         Raylib.DrawText("Next", (int)nextSceneButton.X + 10, (int)nextSceneButton.Y + 15, 20, Color.White);

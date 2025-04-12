@@ -1,3 +1,4 @@
+using MonkeyCards.Engine.Core.Scenes;
 using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
 using GameConfig = MonkeyCards.Engine.Configuration.Game;
 using Raylib_cs;
@@ -10,12 +11,12 @@ public class Game : IDisposable
     {
         Raylib.InitWindow(config.WindowStartWidth, config.WindowStartHeight, "MonkeyCards");
         Raylib.SetTargetFPS(120);
-            
-        SceneManager.Instance.PushScene(config.StartScene);
     }
     
-    public void Run()
+    public void Run( Scene startScene)
     {
+        SceneManager.Instance.PushScene( startScene );
+
         while (!Raylib.WindowShouldClose())
         {
             float deltaTime = Raylib.GetFrameTime();

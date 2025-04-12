@@ -8,8 +8,6 @@ public class Game
 {
     public int WindowStartWidth { get; set; } 
     public int WindowStartHeight { get; set; }
-    public required Scene StartScene { get; set; }
-
 
     public Game()
     {
