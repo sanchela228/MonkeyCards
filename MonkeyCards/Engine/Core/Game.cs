@@ -9,7 +9,7 @@ public class Game : IDisposable
     public Game(GameConfig config)
     {
         Raylib.InitWindow(config.WindowStartWidth, config.WindowStartHeight, "MonkeyCards");
-        Raylib.SetTargetFPS(60);
+        Raylib.SetTargetFPS(120);
             
         SceneManager.Instance.PushScene(config.StartScene);
     }

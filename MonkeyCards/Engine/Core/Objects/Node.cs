@@ -5,23 +5,39 @@ namespace MonkeyCards.Engine.Core.Objects;
 
 public abstract class Node : IDisposable
 {
+    public abstract void Update(float deltaTime);
+    public abstract void Draw();
+    public abstract void Dispose();
+    
+    
     public Vector2 Position { get; set; }
-    public Vector2 Size { get; set; }
-    public Rectangle Bounds => new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+    
     public bool IsActive { get; set; } = true;
 
     public int Order = 100;
     
-    public abstract void Update(float deltaTime);
-    public abstract void Draw();
-    public abstract void Dispose();
+    private Vector2 _size;
+    private Vector2 _scale = Vector2.One;
+    private Rectangle _bounds => new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+    public Rectangle Bounds { get => _bounds; }
+    public Vector2 Size 
+    { 
+        get => new Vector2(_size.X * _scale.X, _size.Y * _scale.Y);
+        set => _size = value;
+    }
+    public Vector2 Scale 
+    { 
+        get => _scale; 
+        set => _scale = value; 
+    }
+    
+    
     public virtual bool IsMouseOver()
     {
         Vector2 mousePos = Raylib.GetMousePosition();
         return Raylib.CheckCollisionPointRec(mousePos, Bounds);
     }
-        
-    public virtual bool IsMouseClicked()
+    public virtual bool IsMousePressed()
     {
         return IsMouseOver() && Raylib.IsMouseButtonPressed(MouseButton.Left);
     }
