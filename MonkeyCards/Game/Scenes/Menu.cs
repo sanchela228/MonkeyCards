@@ -1,7 +1,5 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Objects;
 using MonkeyCards.Engine.Core.Scenes;
-using MonkeyCards.Game.Controllers;
 using MonkeyCards.Game.Nodes.Game.Models;
 using Raylib_cs;
 
@@ -13,7 +11,7 @@ public class Menu : Scene
     private Rectangle backButton;
     private Rectangle exitButton;
 
-    private Hands _hands = new();
+    // private Hands _hands = new();
     
     public Menu()
     {
@@ -21,15 +19,19 @@ public class Menu : Scene
         backButton = new Rectangle(100, 170, 200, 50);
         exitButton = new Rectangle(100, 240, 200, 50);
         
-        List<Card> test = new List<Card>()
+        
+        var test = new MonkeyCards.Game.Nodes.Game.Hands( new Vector2(400, 300), 200 );
+        
+        _nodes.Add(test);
+        
+        List<Card> testlist = new List<Card>()
         {
             new Card("test_1"), new Card("test_2"), new Card("test_2"), 
             new Card("test_1"), new Card("test_2"), new Card("test_2"), 
             new Card("test_1"), new Card("test_2"), new Card("test_2"), 
         };
-        
-        foreach (var t in test)
-            _nodes.Add(t);
+
+        test.AddChildrens(testlist);
     }
     
     public override void Update(float deltaTime)
@@ -55,8 +57,6 @@ public class Menu : Scene
         {
             Raylib.CloseWindow();
         }
-        
-        _hands.PlaceCards(new Vector2(400, 300), 1000, _nodes.OfType<Card>());
     }
     
     public override void Draw()
