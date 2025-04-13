@@ -84,7 +84,7 @@ public abstract class Node : IDisposable
     }
 
     private Node _parent = null;
-    private List<Node> _childrens = new();
+    protected List<Node> _childrens = new();
 
     protected virtual PointRendering PointRendering { get; set; } = PointRendering.Center;
     

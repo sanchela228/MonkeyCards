@@ -25,4 +25,14 @@ public static class Rectangle
             rect.Size
         );
     }
+
+    public static Raylib_cs.Rectangle ChangeProportionSize(Raylib_cs.Rectangle rect, float value)
+    {
+        return new Raylib_cs.Rectangle(
+            rect.Position.X - value,
+            rect.Position.Y - value,
+            rect.Size.X + value * 2,
+            rect.Size.Y + value * 2
+        );
+    }
 }

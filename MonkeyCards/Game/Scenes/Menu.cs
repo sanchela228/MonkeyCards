@@ -26,9 +26,10 @@ public class Menu : Scene
         
         List<Card> testlist = new List<Card>()
         {
-            new Card("test_1"), new Card("test_2"), new Card("test_2"), 
-            new Card("test_1"), new Card("test_2"), new Card("test_2"), 
-            new Card("test_1"), new Card("test_2"), new Card("test_2"), 
+            new Card("test_1", "A"),new Card("test_1", "A"),
+            new Card("test_1", "A"),new Card("test_1", "A"),
+            new Card("test_1", "A"),new Card("test_1", "A"),
+            new Card("test_1", "A"),
         };
 
         test.AddChildrens(testlist);
