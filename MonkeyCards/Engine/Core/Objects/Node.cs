@@ -1,4 +1,5 @@
 using System.Numerics;
+using MonkeyCards.Engine.Managers;
 using Raylib_cs;
 
 namespace MonkeyCards.Engine.Core.Objects;
@@ -7,6 +8,12 @@ public enum PointRendering
 {
     Center,
     LeftTop,
+}
+
+public enum OverlapsMode
+{
+    None,
+    Exclusive
 }
 
 public abstract class Node : IDisposable
@@ -18,13 +25,15 @@ public abstract class Node : IDisposable
     public bool IsActive { get; set; } = true;
     public int Order = 100;
     
+    protected OverlapsMode Overlap { get; set; } = OverlapsMode.Exclusive;
+    
     public void RootUpdate(float deltaTime)
     {
         Update(deltaTime);
 
         if (_childrens is not null && _childrens.Any())
         {
-            foreach (var child in _childrens) 
+            foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
                 child.RootUpdate(deltaTime);
         }
     }
@@ -35,7 +44,7 @@ public abstract class Node : IDisposable
         
         if (_childrens is not null && _childrens.Any())
         {
-            foreach (var child in _childrens) 
+            foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
                 child.Draw();
         }
     }
@@ -46,7 +55,7 @@ public abstract class Node : IDisposable
         
         if (_childrens is not null && _childrens.Any())
         {
-            foreach (var child in _childrens) 
+            foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
                 child.Dispose();
         }
     }
@@ -110,10 +119,12 @@ public abstract class Node : IDisposable
     {
         if (list is not null && list.Any())
         {
-            _childrens.AddRange(list);
-            
-            foreach (var node in list) 
+            foreach (var node in list)
+            {
                 node.SetParent(this);
+                
+                _childrens.Add(node);
+            }
         }
     }
 
@@ -133,7 +144,7 @@ public abstract class Node : IDisposable
         {
             if (PointRendering == PointRendering.Center)
                 return Helpers.Rectangle.CenterShiftRec(Position, Size);
-        
+
             return _bounds;
         }
     }
@@ -151,8 +162,31 @@ public abstract class Node : IDisposable
     public bool ICollisionWith(Rectangle rect) => Raylib.CheckCollisionRecs(rect, Bounds);
     public virtual bool IsMouseOver()
     {
+        if (MouseTracking.Instance.BlockedHover && MouseTracking.Instance.HoveredNode != this)
+            return false;
+        
         Vector2 mousePos = Raylib.GetMousePosition();
-        return Raylib.CheckCollisionPointRec(mousePos, Bounds);
+
+        if (!Raylib.CheckCollisionPointRec(mousePos, Bounds))
+        {
+            if (MouseTracking.Instance.HoveredNode == this)
+                MouseTracking.Instance.HoveredNode = null;
+            
+            return false;
+        }
+
+        if (Overlap == OverlapsMode.Exclusive)
+        {
+            if (MouseTracking.Instance.HoveredNode != null &&
+                MouseTracking.Instance.HoveredNode != this)
+            {
+                return false;
+            }
+
+            MouseTracking.Instance.HoveredNode = this;
+        }
+
+        return true;
     }
     public virtual bool IsMousePressed() => IsMouseOver() && Raylib.IsMouseButtonPressed(MouseButton.Left);
 }

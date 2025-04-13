@@ -1,5 +1,5 @@
-using System.Drawing;
 using System.Numerics;
+using MonkeyCards.Engine.Managers;
 using Raylib_cs;
 using Color = Raylib_cs.Color;
 using Rectangle = Raylib_cs.Rectangle;
@@ -17,19 +17,19 @@ public class Card : Node
     private Font _font;
     private Texture2D _icon;
     
-
+    // protected OverlapsMode Overlap { get; set; } = OverlapsMode.None;
     // protected override PointRendering PointRendering { get; set; } = PointRendering.LeftTop;
 
     private void LoadTmpTest()
     {
         _font = Raylib.LoadFontEx(
             "Resources/Fonts/JockeyOne-Regular.ttf", 
-            52,
+            42,
             null, 
             0
         );
             
-        _icon = Raylib.LoadTexture("Resources/Images/Icons/icon-hearts.png"); 
+        _icon = Raylib.LoadTexture("Resources/Images/Icons/icon-diamond.png"); 
     }
     
     private Vector2 DefaultSize => new Vector2(136f, 206f);
@@ -46,9 +46,9 @@ public class Card : Node
 
         Rectangle placeholder = new Rectangle(
             5,
-            5,
+            0,
             _canvas.Texture.Width - 5,
-            _canvas.Texture.Height - 10
+            _canvas.Texture.Height - 5
         );
 
         #region SetupRenderTexture
@@ -80,15 +80,76 @@ public class Card : Node
                 0.2f, 
                 10,
                 4,
-                new Color() {R = 0, G = 0, B = 0, A = 35}
+                new Color() {R = 220, G = 220, B = 220, A = 255}
             );
             
+            Raylib.DrawTextPro( 
+                _font, 
+                ShortName, 
+                new Vector2(35, 22),
+                new Vector2(16, 16),
+                0f,
+                42,
+                3,
+                Color.Black
+            );
+            
+            Raylib.DrawTextPro( 
+                _font, 
+                ShortName, 
+                new Vector2(placeholder.Width - 26, placeholder.Height - 14),
+                new Vector2(16, 16),
+                180f,
+                42,
+                3,
+                Color.Black
+            );
+            
+            Raylib.DrawTexturePro(
+                _icon,
+                new Rectangle(0, 0, _icon.Width, _icon.Height), 
+                new Rectangle(
+                    27, 
+                    56, 
+                    24, 
+                    24
+                ),
+                new Vector2(12, 12),
+                0f,
+                Color.White
+            );
+             
+            Raylib.DrawTexturePro(
+                _icon,
+                new Rectangle(0, 0, _icon.Width, _icon.Height), 
+                new Rectangle(
+                    _canvas.Texture.Width - 22, 
+                    _canvas.Texture.Height - 56, 
+                    24, 
+                    24
+                ),
+                new Vector2(12, 12),
+                180f,
+                Color.White
+            );
+            
+            Raylib.DrawTexturePro(
+                _icon,
+                new Rectangle(0, 0, _icon.Width, _icon.Height),
+                new Rectangle(
+                    _canvas.Texture.Width / 2 + 3,
+                    _canvas.Texture.Height / 2,
+                    80,
+                    80
+                ),
+                new Vector2(40, 40),
+                0.0f,
+                Color.White
+            );
             
             Raylib.EndTextureMode();
         
         #endregion
-        
-        
     }
     
     private bool _isDragging = false;
@@ -98,21 +159,10 @@ public class Card : Node
         var targetSize = Vector2.One;
         Vector2 mousePos = Raylib.GetMousePosition();
         
-        if (IsMouseOver())
-        {
-            Raylib.SetMouseCursor(MouseCursor.PointingHand);
-            targetSize = new Vector2(1.2f, 1.2f);
-
-            if (IsMousePressed())
-            {
-                _isDragging = true;
-                _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
-            }
-        }
-        else Raylib.SetMouseCursor(MouseCursor.Default);
-
         if (_isDragging)
         {
+            MouseTracking.Instance.HoveredNode = this;
+            
             if (Raylib.IsMouseButtonDown(MouseButton.Left))
             {
                 Position = new Vector2(mousePos.X - _dragOffset.X, mousePos.Y - _dragOffset.Y);
@@ -120,10 +170,29 @@ public class Card : Node
             else
             {
                 _isDragging = false;
-                Raylib.SetMouseCursor(IsMouseOver() ? MouseCursor.PointingHand : MouseCursor.Default);
+                MouseTracking.Instance.BlockedHover = false;
             }
         }
-        
+    
+        if (IsMouseOver() || _isDragging)
+        {
+            Raylib.SetMouseCursor(MouseCursor.PointingHand);
+            targetSize = new Vector2(1.2f, 1.2f);
+            Order = 200;
+
+            if (IsMousePressed())
+            {
+                _isDragging = true;
+                _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
+                MouseTracking.Instance.BlockedHover = true;
+            }
+        }
+        else
+        {
+            Order = 100;
+            Raylib.SetMouseCursor(MouseCursor.Default);
+        }
+    
         Scale = Vector2.Lerp(Scale, targetSize, 18f * deltaTime);
     }
 

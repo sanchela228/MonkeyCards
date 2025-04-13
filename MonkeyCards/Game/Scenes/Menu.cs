@@ -27,8 +27,6 @@ public class Menu : Scene
         List<Card> testlist = new List<Card>()
         {
             new Card("test_1", "A"),new Card("test_1", "A"),
-            new Card("test_1", "A"),new Card("test_1", "A"),
-            new Card("test_1", "A"),new Card("test_1", "A"),
             new Card("test_1", "A"),
         };
 
@@ -75,17 +73,6 @@ public class Menu : Scene
 
         Raylib.DrawRectangleRec(exitButton, Color.Red);
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
     }
     
     public override void Dispose()

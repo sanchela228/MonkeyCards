@@ -7,8 +7,11 @@ namespace MonkeyCards.Engine.Core;
 
 public class Game : IDisposable
 {
+    public readonly GameConfig Config;
     public Game(GameConfig config)
     {
+        Config = config;
+        
         Raylib.InitWindow(config.WindowStartWidth, config.WindowStartHeight, "MonkeyCards");
         Raylib.SetTargetFPS(120);
     }

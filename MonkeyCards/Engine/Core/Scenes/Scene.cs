@@ -18,14 +18,12 @@ public abstract class Scene
     public void RootUpdate(float deltaTime)
     {
         Update(deltaTime);
-        
         NodesUpdate(deltaTime);
     }
     
     public void RootDraw()
     {
         Draw();
-        
         NodesDraw();
     }
     
@@ -33,7 +31,8 @@ public abstract class Scene
     {
         if (this._nodes.Count > 0)
         {
-            foreach (var node in _nodes) node.RootDispose();
+            foreach (var node in _nodes.OrderBy(node => node.Order).ToList()) 
+                node.RootDispose();
         }
         
         _nodes.Clear();
@@ -42,17 +41,23 @@ public abstract class Scene
 
     private void NodesUpdate(float deltaTime)
     {
-        foreach (var node in _nodes)
+        if (this._nodes.Any())
         {
-            if (node.IsActive) node.RootUpdate(deltaTime);
+            foreach (var node in _nodes.OrderBy(node => node.Order).ToList())
+            {
+                if (node.IsActive) node.RootUpdate(deltaTime);
+            }
         }
     }
     
     private void NodesDraw()
     {
-        foreach (var node in _nodes)
+        if (this._nodes.Any())
         {
-            if (node.IsActive) node.RootDraw();
+            foreach (var node in _nodes.OrderBy(node => node.Order).ToList())
+            {
+                if (node.IsActive) node.RootDraw();
+            }
         }
     }
 }
