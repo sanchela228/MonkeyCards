@@ -33,7 +33,7 @@ public abstract class Scene
     {
         if (this._nodes.Count > 0)
         {
-            foreach (var node in _nodes) node.Dispose();
+            foreach (var node in _nodes) node.RootDispose();
         }
         
         _nodes.Clear();
@@ -44,7 +44,7 @@ public abstract class Scene
     {
         foreach (var node in _nodes)
         {
-            if (node.IsActive) node.Update(deltaTime);
+            if (node.IsActive) node.RootUpdate(deltaTime);
         }
     }
     
@@ -52,7 +52,7 @@ public abstract class Scene
     {
         foreach (var node in _nodes)
         {
-            if (node.IsActive) node.Draw();
+            if (node.IsActive) node.RootDraw();
         }
     }
 }

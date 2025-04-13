@@ -8,9 +8,70 @@ public abstract class Node : IDisposable
     public abstract void Update(float deltaTime);
     public abstract void Draw();
     public abstract void Dispose();
+    
+    public void RootUpdate(float deltaTime)
+    {
+        Update(deltaTime);
+
+        if (_childrens.Any())
+        {
+            foreach (var child in _childrens) 
+                child.RootUpdate(deltaTime);
+        }
+    }
+    
+    public void RootDraw()
+    {
+        Draw();
+        
+        if (_childrens.Any())
+        {
+            foreach (var child in _childrens) 
+                child.Draw();
+        }
+    }
+    
+    public void RootDispose()
+    {
+        Dispose();
+        
+        if (_childrens.Any())
+        {
+            foreach (var child in _childrens) 
+                child.Dispose();
+        }
+    }
+    
     public Vector2 Position { get; set; }
     public bool IsActive { get; set; } = true;
     public int Order = 100;
+
+    private Node _parent = null;
+    private List<Node> _childrens;
+    
+    public Node Parent
+    {
+        get => _parent;
+    }
+    
+    public void SetParent(Node parent) => _parent = parent;
+    
+    public List<Node> Childrens
+    {
+        get => _childrens;
+    }
+
+    public void AddChild(Node node)
+    {
+        _childrens.Add(node);
+        node.SetParent(this);
+    }
+
+    public void RemoveChild(Node node)
+    {
+        _childrens.Remove(node);
+        node.SetParent(null);
+    }
     
     private Vector2 _size;
     private Vector2 _scale = Vector2.One;
