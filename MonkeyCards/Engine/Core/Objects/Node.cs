@@ -3,17 +3,26 @@ using Raylib_cs;
 
 namespace MonkeyCards.Engine.Core.Objects;
 
+public enum PointRendering
+{
+    Center,
+    LeftTop,
+}
+
 public abstract class Node : IDisposable
 {
     public abstract void Update(float deltaTime);
     public abstract void Draw();
     public abstract void Dispose();
     
+    public bool IsActive { get; set; } = true;
+    public int Order = 100;
+    
     public void RootUpdate(float deltaTime)
     {
         Update(deltaTime);
 
-        if (_childrens.Any())
+        if (_childrens is not null && _childrens.Any())
         {
             foreach (var child in _childrens) 
                 child.RootUpdate(deltaTime);
@@ -24,7 +33,7 @@ public abstract class Node : IDisposable
     {
         Draw();
         
-        if (_childrens.Any())
+        if (_childrens is not null && _childrens.Any())
         {
             foreach (var child in _childrens) 
                 child.Draw();
@@ -35,20 +44,49 @@ public abstract class Node : IDisposable
     {
         Dispose();
         
-        if (_childrens.Any())
+        if (_childrens is not null && _childrens.Any())
         {
             foreach (var child in _childrens) 
                 child.Dispose();
         }
     }
     
-    public Vector2 Position { get; set; }
-    public float Rotation { get; set; } = 0f;
-    public bool IsActive { get; set; } = true;
-    public int Order = 100;
+    private Vector2 _position;
+    
+    public Vector2 Position 
+    { 
+        get 
+        {
+            if (_parent == null)
+                return _position;
+            return _parent.Position + _position;
+        }
+        set 
+        {
+            if (_parent == null)
+                _position = value;
+            else
+                _position = value - _parent.Position;
+        }
+    }
+    
+    private float _rotation = 0f;
+    public float Rotation 
+    { 
+        get => _parent == null ? _rotation : _parent.Rotation + _rotation;
+        set 
+        {
+            if (_parent == null)
+                _rotation = value;
+            else
+                _rotation = value - _parent.Rotation;
+        }
+    }
 
     private Node _parent = null;
-    private List<Node> _childrens;
+    private List<Node> _childrens = new();
+
+    protected virtual PointRendering PointRendering { get; set; } = PointRendering.Center;
     
     public Node Parent
     {
@@ -67,6 +105,17 @@ public abstract class Node : IDisposable
         _childrens.Add(node);
         node.SetParent(this);
     }
+    
+    public void AddChildrens(IEnumerable<Node> list)
+    {
+        if (list is not null && list.Any())
+        {
+            _childrens.AddRange(list);
+            
+            foreach (var node in list) 
+                node.SetParent(this);
+        }
+    }
 
     public void RemoveChild(Node node)
     {
@@ -80,8 +129,15 @@ public abstract class Node : IDisposable
 
     public Rectangle Bounds
     {
-        get => _bounds;
+        get
+        {
+            if (PointRendering == PointRendering.Center)
+                return Helpers.Rectangle.CenterShiftRec(Position, Size);
+        
+            return _bounds;
+        }
     }
+
     public Vector2 Size 
     { 
         get => new Vector2(_size.X * _scale.X, _size.Y * _scale.Y);
