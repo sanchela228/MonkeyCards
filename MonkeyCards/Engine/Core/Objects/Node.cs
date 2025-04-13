@@ -43,6 +43,7 @@ public abstract class Node : IDisposable
     }
     
     public Vector2 Position { get; set; }
+    public float Rotation { get; set; } = 0f;
     public bool IsActive { get; set; } = true;
     public int Order = 100;
 

@@ -1,13 +1,8 @@
 ﻿using MonkeyCards.Engine.Core;
 using MonkeyCards.Game.Scenes;
 
-var config = new MonkeyCards.Engine.Configuration.Game()
-{
-    StartScene = new Menu()
-};
-
-using var game = new Game(config);
-game.Run();
+using var game = new Game( new MonkeyCards.Engine.Configuration.Game() );
+game.Run( new Menu() );
 
 
 

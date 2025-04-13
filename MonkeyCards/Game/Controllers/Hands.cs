@@ -61,8 +61,8 @@ public class Hands
             }
 
             card.Position = new Vector2(x, y);
-            // card.Rotation = rotation * (MathF.PI / 180f);
-            card.Size = new Vector2(5, 5);
+            card.Rotation = rotation * (MathF.PI / 180f);
+            card.Size = new Vector2(205, 305);
             
             i++;
         }
