@@ -8,4 +8,4 @@ var config = new MonkeyCards.Engine.Configuration.Game()
 };
 
 using var game = new Game( config );
-game.Run( new Menu() );
+game.Run( new Test() );

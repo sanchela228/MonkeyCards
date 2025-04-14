@@ -45,7 +45,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Game\Controllers\" />
       <Folder Include="Game\Nodes\UI\" />
     </ItemGroup>
 

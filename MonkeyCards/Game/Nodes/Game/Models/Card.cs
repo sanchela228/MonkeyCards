@@ -16,7 +16,6 @@ public class Card : Node
 
     private Font _font;
     private Texture2D _icon;
-    
     // protected OverlapsMode Overlap { get; set; } = OverlapsMode.None;
     // protected override PointRendering PointRendering { get; set; } = PointRendering.LeftTop;
 
@@ -32,7 +31,7 @@ public class Card : Node
         _icon = Raylib.LoadTexture("Resources/Images/Icons/icon-diamond.png"); 
     }
     
-    private Vector2 DefaultSize => new Vector2(136f, 206f);
+    public Vector2 DefaultSize => new Vector2(136f, 206f);
     
     public Card(string _name, string shortName)
     {
@@ -185,6 +184,7 @@ public class Card : Node
                 _isDragging = true;
                 _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
                 MouseTracking.Instance.BlockedHover = true;
+                // this.SetParent(null);
             }
         }
         else
@@ -193,11 +193,13 @@ public class Card : Node
             Raylib.SetMouseCursor(MouseCursor.Default);
         }
     
-        Scale = Vector2.Lerp(Scale, targetSize, 18f * deltaTime);
+        float t = 1.0f - MathF.Exp(-18f * deltaTime);
+        Scale = Vector2.Lerp(Scale, targetSize, t);
     }
 
     public override void Draw()
     {
+        Console.WriteLine("CARD DRAW");
         Raylib.DrawTexturePro(
             _canvas.Texture,
             new Rectangle(0, 0, _canvas.Texture.Width, -_canvas.Texture.Height),

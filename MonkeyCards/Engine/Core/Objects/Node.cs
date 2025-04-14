@@ -41,11 +41,11 @@ public abstract class Node : IDisposable
     public void RootDraw()
     {
         Draw();
-        
+
         if (_childrens is not null && _childrens.Any())
         {
             foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
-                child.Draw();
+                child.RootDraw();
         }
     }
     
@@ -56,7 +56,7 @@ public abstract class Node : IDisposable
         if (_childrens is not null && _childrens.Any())
         {
             foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
-                child.Dispose();
+                child.RootDispose();
         }
     }
     
@@ -66,16 +66,13 @@ public abstract class Node : IDisposable
     { 
         get 
         {
-            if (_parent == null)
-                return _position;
+            if (_parent == null) return _position;
             return _parent.Position + _position;
         }
         set 
         {
-            if (_parent == null)
-                _position = value;
-            else
-                _position = value - _parent.Position;
+            if (_parent == null) _position = value;
+            else _position = value - _parent.Position;
         }
     }
     
@@ -102,7 +99,19 @@ public abstract class Node : IDisposable
         get => _parent;
     }
     
-    public void SetParent(Node parent) => _parent = parent;
+    public void SetParent(Node newParent)
+    {
+        if (_parent == newParent)
+            return;
+
+        if (_parent != null)
+            _parent._childrens.Remove(this);
+
+        _parent = newParent;
+
+        if (_parent != null && !_parent._childrens.Contains(this))
+            _parent._childrens.Add(this);
+    }
     
     public List<Node> Childrens
     {
@@ -119,12 +128,10 @@ public abstract class Node : IDisposable
     {
         if (list is not null && list.Any())
         {
+            _childrens.AddRange(list);
+            
             foreach (var node in list)
-            {
                 node.SetParent(this);
-                
-                _childrens.Add(node);
-            }
         }
     }
 
@@ -187,6 +194,13 @@ public abstract class Node : IDisposable
         }
 
         return true;
+    }
+    
+    public virtual bool IsMouseOverWithoutOverlap()
+    {
+        Vector2 mousePos = Raylib.GetMousePosition();
+        
+        return Raylib.CheckCollisionPointRec(mousePos, Bounds);
     }
     public virtual bool IsMousePressed() => IsMouseOver() && Raylib.IsMouseButtonPressed(MouseButton.Left);
 }

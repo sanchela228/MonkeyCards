@@ -13,24 +13,33 @@ public class Hands : Node
         this.AddChildrens(cards);
 
         this.Position = centerPoint;
-        this.Size = new Vector2(maxWidth, 10);
+        this.Size = new Vector2(maxWidth, 0);
     }
     
     public override void Update(float deltaTime)
     {
-        // TODO: rewrite this
-        var count = _childrens.Count();
-        
-        if (count == 0)
-            return;
-
-        var i = 0;
-        
-        foreach (var card in _childrens)
+        if ( Childrens.Any() )
         {
-            card.Position = Vector2.Lerp(card.Position, new Vector2((Position.X - 250) + i*80, Position.Y), 18f * deltaTime);
-
-            i++;
+            var count = Childrens.Count;
+            var cardSize = (int) ((Card) Childrens[0]).DefaultSize.X;
+            int margin = -30;
+            
+            int countMargins = count - 1;
+            int totalWidth = (cardSize * count + countMargins * margin);
+            
+            for (int i = 0; i < count; i++)
+            {
+                float t = 1.0f - MathF.Exp(-18f * deltaTime);
+                
+                Childrens[i].Position = Vector2.Lerp(
+                    Childrens[i].Position, 
+                    new Vector2(
+                        (Position.X + ((cardSize + margin) * i)) - (totalWidth / 2) + cardSize / 2, 
+                        this.Position.Y
+                    ), 
+                    t
+                );
+            }
         }
         
         // float minSpacing = 100f;
@@ -93,13 +102,6 @@ public class Hands : Node
     
     public override void Draw()
     {
-        Raylib.DrawRectangle(
-            (int)Bounds.X,
-            (int)Bounds.Y,
-            (int)Bounds.Width,
-            (int)Bounds.Height,
-            Color.Green
-        );
     }
 
     public override void Dispose()
