@@ -22,14 +22,24 @@ public class Placeholder : Node
             {
                 if (!_childrens.Any())
                 {
+                    Vector2 worldPosition = DraggingCard.Instance.Card.Position;
+                    
                     DraggingCard.Instance.Card.SetParent(this);
+                    
+                    DraggingCard.Instance.Card.Position = worldPosition;
                 }
                 else
                 {
                     if (DraggingCard.Instance.Card.ExParent is not null)
                     {
-                        _childrens.First().SetParent(DraggingCard.Instance.Card.ExParent);
+                        Vector2 worldPosition = DraggingCard.Instance.Card.Position;
+
+                        var index = DraggingCard.Instance.IndexCardOnHands;
+                        
+                        _childrens.First().SetParent(DraggingCard.Instance.Card.ExParent, index ?? -1);
                         DraggingCard.Instance.Card.SetParent(this);
+                        
+                        DraggingCard.Instance.Card.Position = worldPosition;
                     }
                 }
             }
@@ -37,8 +47,8 @@ public class Placeholder : Node
 
         if (_childrens.Any())
         {
-            // Console.WriteLine(_childrens.First());
-            _childrens.First().Position = this.Position;
+            float t = 1.0f - MathF.Exp(-18f * deltaTime);
+            _childrens.First().Position = Vector2.Lerp(_childrens.First().Position, Position, t);
         }
     }
 

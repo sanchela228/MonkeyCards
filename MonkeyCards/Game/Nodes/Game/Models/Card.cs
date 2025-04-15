@@ -160,8 +160,11 @@ public class Card : Node
     protected Vector2 _dragOffset;
 
     public Node ExParent;
-    
-    protected void BackToHands() => SetParent(_hands);
+
+    protected void BackToHands()
+    {
+        SetParent(_hands, DraggingCard.Instance.IndexCardOnHands ?? -1);
+    }
     
     public override void Update(float deltaTime)
     {
@@ -180,9 +183,14 @@ public class Card : Node
             {
                 DraggingCard.Instance.Card = null;
                 _isDragging = false;
-
+                
+                Vector2 worldPosition = Position;
+                
                 if (Parent is null) BackToHands();
                 
+                Position = worldPosition;
+                
+                DraggingCard.Instance.IndexCardOnHands = 0;
                 SceneManager.Instance.PeekScene().RemoveNode(this);
                 MouseTracking.Instance.BlockedHover = false;
             }
@@ -197,6 +205,7 @@ public class Card : Node
             if (IsMousePressed())
             {
                 DraggingCard.Instance.Card = this;
+                DraggingCard.Instance.IndexCardOnHands = _hands.Childrens.IndexOf(this);
                 
                 _isDragging = true;
                 _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);

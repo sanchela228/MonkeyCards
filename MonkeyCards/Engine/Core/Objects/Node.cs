@@ -101,7 +101,7 @@ public abstract class Node : IDisposable
         get => _parent;
     }
     
-    public void SetParent(Node newParent)
+    public void SetParent(Node newParent, int index = -1)
     {
         if (_parent == newParent)
             return;
@@ -115,7 +115,12 @@ public abstract class Node : IDisposable
             SceneManager.Instance.PeekScene().RemoveNode(this);
 
         if (_parent != null && !_parent._childrens.Contains(this))
-            _parent._childrens.Add(this);
+        {
+            if (index == -1)
+                _parent._childrens.Add(this);
+            else
+                _parent._childrens.Insert(index, this);
+        }
     }
     
     public void SetParent(Scene scene)

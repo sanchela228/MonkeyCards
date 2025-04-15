@@ -9,4 +9,5 @@ public class DraggingCard
     private Card _cardNode = null;
     
     public Card Card { get => _cardNode; set => _cardNode = value; }
+    public int? IndexCardOnHands;
 }
