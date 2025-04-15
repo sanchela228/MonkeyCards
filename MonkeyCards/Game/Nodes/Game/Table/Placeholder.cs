@@ -1,6 +1,5 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
-using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Controllers;
 using MonkeyCards.Game.Nodes.Game.Models;
 using Raylib_cs;
@@ -14,18 +13,24 @@ public class Placeholder : Node
     {
         Size = DefaultSize;
     }
+
+    private Color _color;
+    private bool _hoverWithCardEffect = false;
     public override void Update(float deltaTime)
     {
+        _hoverWithCardEffect = false;
+        
         if (IsMouseOverWithoutOverlap())
         {
+            if (DraggingCard.Instance.Card is Card && !_childrens.Any()) 
+                _hoverWithCardEffect = true;
+            
             if (DraggingCard.Instance.Card is Card && !Raylib.IsMouseButtonDown(MouseButton.Left))
             {
                 if (!_childrens.Any())
                 {
                     Vector2 worldPosition = DraggingCard.Instance.Card.Position;
-                    
                     DraggingCard.Instance.Card.SetParent(this);
-                    
                     DraggingCard.Instance.Card.Position = worldPosition;
                 }
                 else
@@ -45,6 +50,8 @@ public class Placeholder : Node
                 }
             }
         }
+        
+        _color = _hoverWithCardEffect ? new Color(0,0,0,155) : new Color(0,0,0,55);
 
         if (_childrens.Any())
         {
@@ -66,7 +73,7 @@ public class Placeholder : Node
             rect,
             0.2f,
             10,
-            new Color(0,0,0,55)
+            _color
         );
     }
 

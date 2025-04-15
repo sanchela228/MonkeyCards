@@ -13,7 +13,7 @@ public class Test : Scene
     private Rectangle exitButton;
     
     public readonly Hands Hands = new Hands( 
-        new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.8f), 200 
+        new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.8f), Raylib.GetRenderWidth() * 0.8f 
     );
     public Test()
     {
@@ -28,6 +28,8 @@ public class Test : Scene
             new Card("test_5", "10", Hands),
             new Card("test_6", "8", Hands),
             new Card("test_7", "5", Hands),
+            new Card("test_8", "7", Hands),
+            new Card("test_9", "9", Hands),
         });
         _nodes.Add(Hands);
         
