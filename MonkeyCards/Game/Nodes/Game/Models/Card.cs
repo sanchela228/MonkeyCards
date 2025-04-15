@@ -1,5 +1,7 @@
 using System.Numerics;
+using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
 using MonkeyCards.Engine.Managers;
+using MonkeyCards.Game.Controllers;
 using Raylib_cs;
 using Color = Raylib_cs.Color;
 using Rectangle = Raylib_cs.Rectangle;
@@ -12,14 +14,16 @@ public class Card : Node
     public string Name;
     public string ShortName { get; }
 
-    private RenderTexture2D _canvas;
+    protected RenderTexture2D _canvas;
 
-    private Font _font;
-    private Texture2D _icon;
+    protected Font _font;
+    protected Texture2D _icon;
+    
+    protected Hands _hands { get; set; }
     // protected OverlapsMode Overlap { get; set; } = OverlapsMode.None;
     // protected override PointRendering PointRendering { get; set; } = PointRendering.LeftTop;
 
-    private void LoadTmpTest()
+    protected void LoadTmpTest()
     {
         _font = Raylib.LoadFontEx(
             "Resources/Fonts/JockeyOne-Regular.ttf", 
@@ -33,14 +37,15 @@ public class Card : Node
     
     public Vector2 DefaultSize => new Vector2(136f, 206f);
     
-    public Card(string _name, string shortName)
+    public Card(string _name, string shortName, Hands Hands)
     {
         this.LoadTmpTest(); // TODO: replace this in resources manager
         
         Name = _name;
         ShortName = shortName;
         Size = this.DefaultSize;
-        
+
+        _hands = Hands;
         _canvas = Raylib.LoadRenderTexture((int) Size.X, (int) Size.Y);
 
         Rectangle placeholder = new Rectangle(
@@ -151,8 +156,13 @@ public class Card : Node
         #endregion
     }
     
-    private bool _isDragging = false;
-    private Vector2 _dragOffset;
+    protected bool _isDragging = false;
+    protected Vector2 _dragOffset;
+
+    public Node ExParent;
+    
+    protected void BackToHands() => SetParent(_hands);
+    
     public override void Update(float deltaTime)
     {
         var targetSize = Vector2.One;
@@ -168,7 +178,12 @@ public class Card : Node
             }
             else
             {
+                DraggingCard.Instance.Card = null;
                 _isDragging = false;
+
+                if (Parent is null) BackToHands();
+                
+                SceneManager.Instance.PeekScene().RemoveNode(this);
                 MouseTracking.Instance.BlockedHover = false;
             }
         }
@@ -181,10 +196,19 @@ public class Card : Node
 
             if (IsMousePressed())
             {
+                DraggingCard.Instance.Card = this;
+                
                 _isDragging = true;
                 _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
+                
                 MouseTracking.Instance.BlockedHover = true;
-                // this.SetParent(null);
+                
+                Vector2 worldPosition = Position;
+                
+                ExParent = Parent;
+                this.SetParent( SceneManager.Instance.PeekScene() );
+                
+                Position = worldPosition;
             }
         }
         else
@@ -199,7 +223,6 @@ public class Card : Node
 
     public override void Draw()
     {
-        Console.WriteLine("CARD DRAW");
         Raylib.DrawTexturePro(
             _canvas.Texture,
             new Rectangle(0, 0, _canvas.Texture.Width, -_canvas.Texture.Height),

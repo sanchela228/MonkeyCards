@@ -1,6 +1,7 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
 using MonkeyCards.Engine.Managers;
+using MonkeyCards.Game.Controllers;
 using MonkeyCards.Game.Nodes.Game.Models;
 using Raylib_cs;
 
@@ -17,13 +18,20 @@ public class Placeholder : Node
     {
         if (IsMouseOverWithoutOverlap())
         {
-            if (MouseTracking.Instance.HoveredNode is Card 
-                && !Raylib.IsMouseButtonDown(MouseButton.Left) 
-                && !_childrens.Any()
-            )
+            if (DraggingCard.Instance.Card is Card && !Raylib.IsMouseButtonDown(MouseButton.Left))
             {
-                MouseTracking.Instance.HoveredNode.SetParent(this);
-                MouseTracking.Instance.HoveredNode = null;
+                if (!_childrens.Any())
+                {
+                    DraggingCard.Instance.Card.SetParent(this);
+                }
+                else
+                {
+                    if (DraggingCard.Instance.Card.ExParent is not null)
+                    {
+                        _childrens.First().SetParent(DraggingCard.Instance.Card.ExParent);
+                        DraggingCard.Instance.Card.SetParent(this);
+                    }
+                }
             }
         }
 

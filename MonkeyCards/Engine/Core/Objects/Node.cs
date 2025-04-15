@@ -1,6 +1,8 @@
 using System.Numerics;
+using MonkeyCards.Engine.Core.Scenes;
 using MonkeyCards.Engine.Managers;
 using Raylib_cs;
+using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
 
 namespace MonkeyCards.Engine.Core.Objects;
 
@@ -108,9 +110,22 @@ public abstract class Node : IDisposable
             _parent._childrens.Remove(this);
 
         _parent = newParent;
+        
+        if (SceneManager.Instance.PeekScene() is not null && SceneManager.Instance.PeekScene().ContainsNode(this))
+            SceneManager.Instance.PeekScene().RemoveNode(this);
 
         if (_parent != null && !_parent._childrens.Contains(this))
             _parent._childrens.Add(this);
+    }
+    
+    public void SetParent(Scene scene)
+    {
+        if (_parent != null)
+            _parent._childrens.Remove(this);
+
+        _parent = null;
+        
+        scene.AddNode(this);
     }
     
     public List<Node> Childrens
@@ -138,7 +153,6 @@ public abstract class Node : IDisposable
     public void RemoveChild(Node node)
     {
         _childrens.Remove(node);
-        node.SetParent(null);
     }
     
     private Vector2 _size;

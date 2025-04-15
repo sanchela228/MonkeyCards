@@ -21,13 +21,13 @@ public class Test : Scene
         
         Hands.AddChildrens( new List<Card>
         {
-            new Card("test_7", "A"),
-            new Card("test_7", "K"),
-            new Card("test_7", "Q"),
-            new Card("test_7", "J"),
-            new Card("test_7", "10"),
-            new Card("test_7", "8"),
-            new Card("test_7", "5"),
+            new Card("test_1", "A", Hands),
+            new Card("test_2", "K", Hands),
+            new Card("test_3", "Q", Hands),
+            new Card("test_4", "J", Hands),
+            new Card("test_5", "10", Hands),
+            new Card("test_6", "8", Hands),
+            new Card("test_7", "5", Hands),
         });
         _nodes.Add(Hands);
         
