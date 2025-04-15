@@ -33,12 +33,13 @@ public class Placeholder : Node
                     if (DraggingCard.Instance.Card.ExParent is not null)
                     {
                         Vector2 worldPosition = DraggingCard.Instance.Card.Position;
+                        Vector2 worldChildPosition = _childrens.First().Position;
 
                         var index = DraggingCard.Instance.IndexCardOnHands;
                         
-                        _childrens.First().SetParent(DraggingCard.Instance.Card.ExParent, index ?? -1);
-                        DraggingCard.Instance.Card.SetParent(this);
+                        _childrens.First().SetParent(DraggingCard.Instance.Card.ExParent, index ?? -1, worldChildPosition);
                         
+                        DraggingCard.Instance.Card.SetParent(this);
                         DraggingCard.Instance.Card.Position = worldPosition;
                     }
                 }

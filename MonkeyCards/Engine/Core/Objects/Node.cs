@@ -100,8 +100,8 @@ public abstract class Node : IDisposable
     {
         get => _parent;
     }
-    
-    public void SetParent(Node newParent, int index = -1)
+
+    public void SetParent(Node newParent, int index = -1, Vector2? position = null)
     {
         if (_parent == newParent)
             return;
@@ -110,6 +110,9 @@ public abstract class Node : IDisposable
             _parent._childrens.Remove(this);
 
         _parent = newParent;
+        
+        if (position is not null)
+            Position = position ?? Vector2.Zero;
         
         if (SceneManager.Instance.PeekScene() is not null && SceneManager.Instance.PeekScene().ContainsNode(this))
             SceneManager.Instance.PeekScene().RemoveNode(this);
