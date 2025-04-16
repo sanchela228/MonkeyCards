@@ -1,11 +1,15 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
+using MonkeyCards.Game.Nodes.Game.Models.Card;
+using MonkeyCards.Game.Nodes.Game.Table.Combo;
+using ComboElement = MonkeyCards.Game.Nodes.Game.Table.Combo.Element;
 using Raylib_cs;
 
 namespace MonkeyCards.Game.Nodes.Game.Table;
 
 public class Table : Node
 {
+    protected Line? _comboLine;
     public Table(Vector2 centerPoint)
     {
         Position = centerPoint;
@@ -19,27 +23,29 @@ public class Table : Node
         } );
         
         if ( Childrens.Any() )
-        {
-            var count = Childrens.Count;
-            int cardSize = (int) Childrens[0].Size.X;
-            int margin = 20;
-            
-            int countMargins = count - 1;
-            int totalWidth = (cardSize * count + countMargins * margin);
-            
-            for (int i = 0; i < count; i++)
-            {
-                Childrens[i].Position = new Vector2(
-                    (Position.X + ((cardSize + margin) * i)) - (totalWidth / 2) + cardSize / 2, 
-                    centerPoint.Y
-                );
-            }
-        }
+            Visuals.Render.PlaceInLine( Childrens.OfType<Placeholder>(), (int) Childrens[0].Size.X, Position, 20 );
+
+        _comboLine = new Line();
+        _comboLine.Position += new Vector2(0, -(Placeholder.DefaultSize.Y / 2 + 40 ));
+        
+        AddChild( _comboLine );
     }
     
     public override void Update(float deltaTime)
     {
+        // TODO: add cache data for List ComboElement, and rewrite font in constructor
         
+        var els = new List<Node>();
+        Childrens.OfType<Placeholder>().ToList().ForEach(x =>
+        {
+            if (x.Childrens.Any())
+            {
+                Card test = (Card) x.Childrens.First();
+                els.Add( new ComboElement( test.Value, _comboLine.Font ) );
+            }
+        });
+
+        _comboLine.Childrens = els;
     }
 
     public override void Draw()

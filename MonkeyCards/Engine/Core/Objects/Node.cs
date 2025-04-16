@@ -139,6 +139,7 @@ public abstract class Node : IDisposable
     public List<Node> Childrens
     {
         get => _childrens;
+        set => _childrens = value;
     }
 
     public void AddChild(Node node)

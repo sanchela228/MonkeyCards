@@ -1,14 +1,14 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
 using MonkeyCards.Game.Controllers;
-using MonkeyCards.Game.Nodes.Game.Models;
+using MonkeyCards.Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
 namespace MonkeyCards.Game.Nodes.Game.Table;
 
 public class Placeholder : Node
 {
-    public Vector2 DefaultSize => new Vector2(136f, 206f);
+    public static Vector2 DefaultSize => new Vector2(136f, 206f);
     public Placeholder()
     {
         Size = DefaultSize;

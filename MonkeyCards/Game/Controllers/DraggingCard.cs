@@ -1,4 +1,4 @@
-using MonkeyCards.Game.Nodes.Game.Models;
+using MonkeyCards.Game.Nodes.Game.Models.Card;
 namespace MonkeyCards.Game.Controllers;
 
 public class DraggingCard

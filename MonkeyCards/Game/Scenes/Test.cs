@@ -1,7 +1,7 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Scenes;
 using MonkeyCards.Game.Nodes.Game;
-using MonkeyCards.Game.Nodes.Game.Models;
+using MonkeyCards.Game.Nodes.Game.Models.Card;
 using MonkeyCards.Game.Nodes.Game.Table;
 using Raylib_cs;
 
@@ -13,7 +13,7 @@ public class Test : Scene
     private Rectangle exitButton;
     
     public readonly Hands Hands = new Hands( 
-        new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.8f), Raylib.GetRenderWidth() * 0.8f 
+        new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.85f), Raylib.GetRenderWidth() * 0.8f 
     );
     public Test()
     {
@@ -21,19 +21,19 @@ public class Test : Scene
         
         Hands.AddChildrens( new List<Card>
         {
-            new Card("test_1", "A", Hands),
-            new Card("test_2", "K", Hands),
-            new Card("test_3", "Q", Hands),
-            new Card("test_4", "J", Hands),
-            new Card("test_5", "10", Hands),
-            new Card("test_6", "8", Hands),
-            new Card("test_7", "5", Hands),
-            new Card("test_8", "7", Hands),
-            new Card("test_9", "9", Hands),
+            new Card("test_1", "A", Hands, new Value()),
+            new Card("test_2", "K", Hands, new Value()),
+            new Card("test_3", "Q", Hands, new Value()),
+            new Card("test_4", "J", Hands, new Value()),
+            new Card("test_5", "10", Hands, new Value()),
+            new Card("test_6", "8", Hands, new Value()),
+            new Card("test_7", "5", Hands, new Value()),
+            new Card("test_8", "7", Hands, new Value()),
+            new Card("test_9", "9", Hands, new Value()),
         });
         _nodes.Add(Hands);
         
-        _nodes.Add( new Table(new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.3f)) );
+        _nodes.Add( new Table(new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.5f)) );
         
       
     }

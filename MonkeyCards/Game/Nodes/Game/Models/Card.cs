@@ -6,12 +6,20 @@ using Raylib_cs;
 using Color = Raylib_cs.Color;
 using Rectangle = Raylib_cs.Rectangle;
 
-namespace MonkeyCards.Game.Nodes.Game.Models;
+namespace MonkeyCards.Game.Nodes.Game.Models.Card;
 using Engine.Core.Objects;
 
 public class Card : Node
 {
     public string Name;
+
+    protected Value _value;
+    
+    public Value Value
+    {
+        get => _value;
+        set => _value = value;
+    }
     public string ShortName { get; }
 
     protected RenderTexture2D _canvas;
@@ -37,13 +45,14 @@ public class Card : Node
     
     public Vector2 DefaultSize => new Vector2(136f, 206f);
     
-    public Card(string _name, string shortName, Hands Hands)
+    public Card(string _name, string shortName, Hands Hands, Value value)
     {
         this.LoadTmpTest(); // TODO: replace this in resources manager
         
         Name = _name;
         ShortName = shortName;
         Size = this.DefaultSize;
+        Value = value;
 
         _hands = Hands;
         _canvas = Raylib.LoadRenderTexture((int) Size.X, (int) Size.Y);
@@ -168,64 +177,65 @@ public class Card : Node
     
     public override void Update(float deltaTime)
     {
-        var targetSize = Vector2.One;
-        Vector2 mousePos = Raylib.GetMousePosition();
-        
-        if (_isDragging)
-        {
-            MouseTracking.Instance.HoveredNode = this;
-            
-            if (Raylib.IsMouseButtonDown(MouseButton.Left))
-            {
-                Position = new Vector2(mousePos.X - _dragOffset.X, mousePos.Y - _dragOffset.Y);
-            }
-            else
-            {
-                DraggingCard.Instance.Card = null;
-                _isDragging = false;
-                
-                Vector2 worldPosition = Position;
-                
-                if (Parent is null) BackToHands();
-                
-                Position = worldPosition;
-                
-                DraggingCard.Instance.IndexCardOnHands = 0;
-                SceneManager.Instance.PeekScene().RemoveNode(this);
-                MouseTracking.Instance.BlockedHover = false;
-            }
-        }
-    
-        if (IsMouseOver() || _isDragging)
-        {
-            Raylib.SetMouseCursor(MouseCursor.PointingHand);
-            targetSize = new Vector2(1.2f, 1.2f);
-            Order = 200;
+        // TODO: change cursor view logic
 
-            if (IsMousePressed())
+        #region DraggingCard
+
+            var targetSize = Vector2.One;
+            Vector2 mousePos = Raylib.GetMousePosition();
+            
+            if (_isDragging)
             {
-                DraggingCard.Instance.Card = this;
-                DraggingCard.Instance.IndexCardOnHands = _hands.Childrens.IndexOf(this);
+                MouseTracking.Instance.HoveredNode = this;
                 
-                _isDragging = true;
-                _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
-                
-                MouseTracking.Instance.BlockedHover = true;
-                
-                Vector2 worldPosition = Position;
-                
-                ExParent = Parent;
-                this.SetParent( SceneManager.Instance.PeekScene() );
-                
-                Position = worldPosition;
+                if (Raylib.IsMouseButtonDown(MouseButton.Left))
+                {
+                    Position = new Vector2(mousePos.X - _dragOffset.X, mousePos.Y - _dragOffset.Y);
+                }
+                else
+                {
+                    DraggingCard.Instance.Card = null;
+                    _isDragging = false;
+                    
+                    Vector2 worldPosition = Position;
+                    
+                    if (Parent is null) BackToHands();
+                    
+                    Position = worldPosition;
+                    
+                    DraggingCard.Instance.IndexCardOnHands = 0;
+                    SceneManager.Instance.PeekScene().RemoveNode(this);
+                    MouseTracking.Instance.BlockedHover = false;
+                }
             }
-        }
-        else
-        {
-            Order = 100;
-            Raylib.SetMouseCursor(MouseCursor.Default);
-        }
-    
+        
+            if (IsMouseOver() || _isDragging)
+            {
+                targetSize = new Vector2(1.2f, 1.2f);
+                Order = 200;
+
+                if (IsMousePressed())
+                {
+                    DraggingCard.Instance.Card = this;
+                    DraggingCard.Instance.IndexCardOnHands = _hands.Childrens.IndexOf(this);
+                    
+                    _isDragging = true;
+                    _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
+                    
+                    MouseTracking.Instance.BlockedHover = true;
+                    
+                    Vector2 worldPosition = Position;
+                    
+                    ExParent = Parent;
+                    this.SetParent( SceneManager.Instance.PeekScene() );
+                    
+                    Position = worldPosition;
+                }
+            }
+            else Order = 100;
+
+        #endregion
+        
         float t = 1.0f - MathF.Exp(-18f * deltaTime);
         Scale = Vector2.Lerp(Scale, targetSize, t);
     }
