@@ -25,9 +25,12 @@ public abstract class Node : IDisposable
     public abstract void Dispose();
     
     public bool IsActive { get; set; } = true;
-    public int Order = 100;
+    public int Order { get; set; } = 100;
     
     protected OverlapsMode Overlap { get; set; } = OverlapsMode.Exclusive;
+
+    public bool RecursiveDrawChildren { get; set; } = false;
+    public bool RecursiveUpdateChildren { get; set; } = false;
     
     public void RootUpdate(float deltaTime)
     {
@@ -35,8 +38,16 @@ public abstract class Node : IDisposable
 
         if (_childrens is not null && _childrens.Any())
         {
-            foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
-                child.RootUpdate(deltaTime);
+            if (RecursiveUpdateChildren)
+            {
+                foreach (var child in _childrens.OrderByDescending(node => node.Order).ToList()) 
+                    child.RootUpdate(deltaTime);
+            }
+            else
+            {
+                foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
+                    child.RootUpdate(deltaTime);
+            }
         }
     }
     
@@ -46,8 +57,16 @@ public abstract class Node : IDisposable
 
         if (_childrens is not null && _childrens.Any())
         {
-            foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
-                child.RootDraw();
+            if (RecursiveDrawChildren)
+            {
+                foreach (var child in _childrens.OrderByDescending(node => node.Order).ToList()) 
+                    child.RootDraw();
+            }
+            else
+            {
+                foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
+                    child.RootDraw();
+            }
         }
     }
     

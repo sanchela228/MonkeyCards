@@ -178,7 +178,7 @@ public class Card : Node
     public override void Update(float deltaTime)
     {
         // TODO: change cursor view logic
-
+        
         #region DraggingCard
 
             var targetSize = Vector2.One;
@@ -208,7 +208,7 @@ public class Card : Node
                     MouseTracking.Instance.BlockedHover = false;
                 }
             }
-        
+            
             if (IsMouseOver() || _isDragging)
             {
                 targetSize = new Vector2(1.2f, 1.2f);
@@ -254,7 +254,20 @@ public class Card : Node
 
     public override void Dispose()
     {
-        Raylib.UnloadFont(_font);
-        Raylib.UnloadTexture(_icon);
+        if (Parent is not null)
+        {
+            Parent.Childrens.Remove(this);
+            SetParent(null);
+        }
+        else if (SceneManager.Instance.PeekScene() is not null && SceneManager.Instance.PeekScene().ContainsNode(this))
+            SceneManager.Instance.PeekScene().RemoveNode(this);
+        
+        if (DraggingCard.Instance.Card == this)
+            DraggingCard.Instance.Card = null;
+        
+        MouseTracking.Instance.BlockedHover = false;
+        MouseTracking.Instance.HoveredNode = null;
+            
+        Childrens.Clear();
     }
 }
