@@ -110,7 +110,7 @@ public abstract class Node : IDisposable
         }
     }
 
-    private Node _parent = null;
+    private Node? _parent = null;
     protected List<Node> _childrens = new();
 
     protected virtual PointRendering PointRendering { get; set; } = PointRendering.Center;
@@ -152,7 +152,8 @@ public abstract class Node : IDisposable
 
         _parent = null;
         
-        scene.AddNode(this);
+        if (scene is not null) 
+            scene.AddNode(this);
     }
     
     public List<Node> Childrens

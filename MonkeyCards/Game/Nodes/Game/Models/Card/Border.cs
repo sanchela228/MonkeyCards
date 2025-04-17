@@ -1,6 +1,7 @@
 namespace MonkeyCards.Game.Nodes.Game.Models.Card;
 
-public class Value
+public enum Border
 {
-    public Char Symbol = 'B';
+    Default,
+    Gold
 }

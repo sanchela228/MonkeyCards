@@ -132,7 +132,7 @@ public class BackgroundColorize
         _timeLoc = Raylib.GetShaderLocation(_shader, "time");
         _resolutionLoc = Raylib.GetShaderLocation(_shader, "resolution");
 
-        _fullscreenRect = new Rectangle(0, 0, Raylib.GetRenderWidth(), Raylib.GetRenderHeight());
+        _fullscreenRect = new Rectangle(0, 0, Raylib.GetScreenWidth(), Raylib.GetScreenHeight());
     }
 
     public void BeforeDrawing()

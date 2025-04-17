@@ -41,7 +41,7 @@ public class Table : Node
             if (x.Childrens.Any())
             {
                 Card test = (Card) x.Childrens.First();
-                els.Add( new ComboElement( test.Value, _comboLine.Font ) );
+                els.Add( new ComboElement( _comboLine.Font ) );
             }
         });
 

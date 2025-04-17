@@ -11,16 +11,25 @@ using Engine.Core.Objects;
 
 public class Card : Node
 {
-    public string Name;
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public Char Symbol { get; set; }
+    public CardSuit Suit { get; set; }
+    public float Cost { get; set; }
+    public int Multiply { get; set; }
+    public FontFamily FontFamily { get; set; }
+    public View View { get; set; }
+    public Border Border { get; set; }
+    public Effect? Effect { get; set; }
 
-    protected Value _value;
-    
-    public Value Value
+    public string ShortName
     {
-        get => _value;
-        set => _value = value;
+        get
+        {
+            return Symbol.ToString();
+        }
     }
-    public string ShortName { get; }
 
     protected RenderTexture2D _canvas;
 
@@ -33,26 +42,19 @@ public class Card : Node
 
     protected void LoadTmpTest()
     {
-        _font = Raylib.LoadFontEx(
-            "Resources/Fonts/JockeyOne-Regular.ttf", 
-            42,
-            null, 
-            0
-        );
-            
-        _icon = Raylib.LoadTexture("Resources/Images/Icons/icon-diamond.png"); 
+        _icon = Resources.Instance.Texture("Icons/icon-diamond.png");
+        _font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
     }
     
     public Vector2 DefaultSize => new Vector2(136f, 206f);
     
-    public Card(string _name, string shortName, Hands Hands, Value value)
+    public Card(string _name, Hands Hands)
     {
         this.LoadTmpTest(); // TODO: replace this in resources manager
         
         Name = _name;
-        ShortName = shortName;
+        Symbol = 'A';
         Size = this.DefaultSize;
-        Value = value;
 
         _hands = Hands;
         _canvas = Raylib.LoadRenderTexture((int) Size.X, (int) Size.Y);

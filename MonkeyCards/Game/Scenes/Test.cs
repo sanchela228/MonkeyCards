@@ -14,7 +14,7 @@ public class Test : Scene
     private Rectangle exitButton;
     
     public readonly Hands Hands = new Hands( 
-        new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.85f), Raylib.GetRenderWidth() * 0.8f 
+        new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.85f), Raylib.GetScreenWidth() * 0.8f 
     );
     
     public Rectangle testDeleteRect = new Rectangle(30, 30, 100, 100);
@@ -27,18 +27,19 @@ public class Test : Scene
         
         Hands.AddChildrens( new List<Card>
         {
-            new Card("test_1", "A", Hands, new Value()),
-            new Card("test_2", "K", Hands, new Value()),
-            new Card("test_3", "Q", Hands, new Value()),
-            new Card("test_4", "J", Hands, new Value()),
-            new Card("test_5", "10", Hands, new Value()),
-            new Card("test_6", "8", Hands, new Value()),
-            new Card("test_7", "5", Hands, new Value()),
-            new Card("test_8", "7", Hands, new Value()),
-            new Card("test_9", "9", Hands, new Value()),
+            new Card("test_1", Hands),
+            new Card("test_2", Hands),
+            new Card("test_3", Hands),
+            new Card("test_4", Hands),
+            new Card("test_5", Hands),
+            new Card("test_6", Hands),
+            new Card("test_7", Hands),
+            new Card("test_8", Hands),
+            new Card("test_9", Hands)
         });
+        
         _nodes.Add(Hands);
-        _nodes.Add( new Table(new Vector2(Raylib.GetRenderWidth() / 2, Raylib.GetRenderHeight() * 0.5f)) );
+        _nodes.Add( new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f)) );
     }
     
     public override void Update(float deltaTime)
@@ -56,7 +57,7 @@ public class Test : Scene
         if (Raylib.CheckCollisionPointRec(mousePos, testAddRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             if (Hands.MaxCards > Hands.Childrens.Count)
-                Hands.AddChild( new Card("test_9", "9", Hands, new Value()) );
+                Hands.AddChild( new Card("test_9", Hands) );
         }
         
     }

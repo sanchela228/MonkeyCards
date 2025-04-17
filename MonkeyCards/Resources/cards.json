@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "content": [
+    {
+      "id": "<gen-guid>",
+      "name": "Two",
+      "description": "default two card",
+      "symbol": "2",
+      "suit": "hearts",
+      "cost": 2,
+      "multiply": 1,
+      "fontFamily": {
+        "color": "black",
+        "font": "default"
+      },
+      "view": {
+        "type": "Two",
+        "texture": "<pth_res>",
+        "position": null,
+        "sides": true,
+        "color": "white"
+      },
+      "border": "default",
+      "effect": null
+    },
+    {
+      "id": "<gen-guid>",
+      "name": "One",
+      "description": "default A card",
+      "symbol": "A",
+      "suit": "hearts",
+      "cost": 26,
+      "multiply": 1,
+      "font": {
+        "color": "black",
+        "type": "default"
+      },
+      "view": {
+        "type": "Default",
+        "resource": "<pth_res>",
+        "position": "center",
+        "sides": true,
+        "background": {
+          "color": "white",
+          "special": null
+        }
+      },
+      "border": "default",
+      "effect": null
+    }
+    
+  ]
+}

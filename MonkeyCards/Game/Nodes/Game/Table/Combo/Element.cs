@@ -7,14 +7,10 @@ namespace MonkeyCards.Game.Nodes.Game.Table.Combo;
 
 public class Element : Node
 {
-    protected Value _value;
-    public Value Value { get; }
-    
     protected Font _font;
     
-    public Element(Value value, Font font)
+    public Element(Font font)
     {
-        _value = value;
         _font = font;
     }
 
@@ -27,7 +23,7 @@ public class Element : Node
     {
         Raylib.DrawTextPro( 
             _font, 
-            _value.Symbol.ToString(), 
+            "A", 
             new Vector2(Position.X, Position.Y),
             new Vector2(21, 21),
             0f,

@@ -1,4 +1,6 @@
+using System.Resources;
 using MonkeyCards.Engine.Core.Scenes;
+using MonkeyCards.Engine.Managers;
 using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
 using GameConfig = MonkeyCards.Engine.Configuration.Game;
 using Raylib_cs;
@@ -8,6 +10,7 @@ namespace MonkeyCards.Engine.Core;
 public class Game : IDisposable
 {
     public readonly GameConfig Config;
+    
     public Game(GameConfig config)
     {
         Config = config;

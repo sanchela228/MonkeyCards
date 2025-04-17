@@ -1,5 +1,6 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
+using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Controllers;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
 using Raylib_cs;
@@ -25,12 +26,7 @@ public class Hands : Node
         Position = centerPoint;
         Size = new Vector2(maxWidth, 260);
         
-        _font = Raylib.LoadFontEx(
-            "Resources/Fonts/JockeyOne-Regular.ttf", 
-            42,
-            null, 
-            0
-        );
+        _font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
     }
     
     protected float _hideTimer;

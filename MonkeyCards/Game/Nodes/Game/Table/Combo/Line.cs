@@ -1,5 +1,6 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
+using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
@@ -11,12 +12,7 @@ public class Line : Node
     
     public Line()
     {
-        Font = Raylib.LoadFontEx(
-            "Resources/Fonts/JockeyOne-Regular.ttf", 
-            42,
-            null, 
-            0
-        );
+        Font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
     }
     public override void Update(float deltaTime)
     {
