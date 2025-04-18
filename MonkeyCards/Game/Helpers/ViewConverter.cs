@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -30,16 +31,15 @@ public class ViewConverter : JsonConverter<View>
             {
                 if (pos.ValueKind == JsonValueKind.String)
                 {
-                    string? positionStr = root.GetProperty("Position").GetString();
-                    
+                    string? positionStr = pos.GetString();
                     if (positionStr != null)
                     {
                         var parts = positionStr.Split(',');
                         if (parts.Length == 2 && 
-                            float.TryParse(parts[0], out float x) && 
-                            float.TryParse(parts[1], out float y))
+                            float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) && 
+                            float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y))
                         {
-                            view.AddPosition( new Vector2(x, y) );
+                            view.AddPosition(new Vector2(x, y));
                         }
                     }
                 }
@@ -50,15 +50,14 @@ public class ViewConverter : JsonConverter<View>
                         if (item.ValueKind == JsonValueKind.String)
                         {
                             string? positionStr = item.GetString();
-                            
                             if (positionStr != null)
                             {
                                 var parts = positionStr.Split(',');
                                 if (parts.Length == 2 && 
-                                    float.TryParse(parts[0], out float x) && 
-                                    float.TryParse(parts[1], out float y))
+                                    float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) && 
+                                    float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y))
                                 {
-                                    view.AddPosition( new Vector2(x, y) );
+                                    view.AddPosition(new Vector2(x, y));
                                 }
                             }
                         }
