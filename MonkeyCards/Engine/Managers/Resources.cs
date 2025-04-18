@@ -14,7 +14,8 @@ public class Resources
     private static readonly Dictionary<Type, Func<string, object>> Loaders = new()
     {
         { typeof(Texture2D), path => Raylib.LoadTexture(path) },
-        { typeof(Font), path => Raylib.LoadFont(path) }
+        { typeof(Font), path => Raylib.LoadFont(path) },
+        { typeof(string), path => File.ReadAllText(path)}
     };
     
     private static string GetSubfolder<T>()

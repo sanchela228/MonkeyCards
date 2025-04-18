@@ -4,6 +4,7 @@ using MonkeyCards.Game.Controllers;
 using MonkeyCards.Game.Nodes.Game;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
 using MonkeyCards.Game.Nodes.Game.Table;
+using MonkeyCards.Game.Services;
 using Raylib_cs;
 
 namespace MonkeyCards.Game.Scenes;
@@ -24,22 +25,24 @@ public class Test : Scene
     public Test()
     {
         Visuals.BackgroundColorize.Instance.SetSettings();
-        
-        Hands.AddChildrens( new List<Card>
-        {
-            new Card("test_1", Hands),
-            new Card("test_2", Hands),
-            new Card("test_3", Hands),
-            new Card("test_4", Hands),
-            new Card("test_5", Hands),
-            new Card("test_6", Hands),
-            new Card("test_7", Hands),
-            new Card("test_8", Hands),
-            new Card("test_9", Hands)
-        });
-        
-        _nodes.Add(Hands);
-        _nodes.Add( new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f)) );
+        CardsHolder.Instance.LoadCards();
+
+
+        // Hands.AddChildrens( new List<Card>
+        // {
+        //     new Card("test_1", Hands),
+        //     new Card("test_2", Hands),
+        //     new Card("test_3", Hands),
+        //     new Card("test_4", Hands),
+        //     new Card("test_5", Hands),
+        //     new Card("test_6", Hands),
+        //     new Card("test_7", Hands),
+        //     new Card("test_8", Hands),
+        //     new Card("test_9", Hands)
+        // });
+        //
+        // _nodes.Add(Hands);
+        // _nodes.Add( new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f)) );
     }
     
     public override void Update(float deltaTime)

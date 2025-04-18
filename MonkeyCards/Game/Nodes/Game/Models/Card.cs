@@ -37,8 +37,6 @@ public class Card : Node
     protected Texture2D _icon;
     
     protected Hands _hands { get; set; }
-    // protected OverlapsMode Overlap { get; set; } = OverlapsMode.None;
-    // protected override PointRendering PointRendering { get; set; } = PointRendering.LeftTop;
 
     protected void LoadTmpTest()
     {
@@ -46,7 +44,7 @@ public class Card : Node
         _font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
     }
     
-    public Vector2 DefaultSize => new Vector2(136f, 206f);
+    public Vector2 DefaultSize => new(136f, 206f);
     
     public Card(string _name, Hands Hands)
     {
