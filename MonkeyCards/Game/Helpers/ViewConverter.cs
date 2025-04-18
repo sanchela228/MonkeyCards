@@ -25,31 +25,58 @@ public class ViewConverter : JsonConverter<View>
             view.Sides = JsonSerializer.Deserialize<bool>(root.GetProperty("Sides").GetRawText());
             
             #region PositionRead
-            string? positionStr = root.GetProperty("Position").GetString();
 
-            Vector2 vec2 = new Vector2(0.5f, 0.5f);
-            if (positionStr != null)
+            if (root.TryGetProperty("Position", out var pos))
             {
-                var parts = positionStr?.Split(',');
-                
-                if (parts is not null && parts.Length == 2 && 
-                    byte.TryParse(parts[0], out byte x) &&
-                    byte.TryParse(parts[1], out byte y) )
+                if (pos.ValueKind == JsonValueKind.String)
                 {
-                    vec2 = new Vector2(x, y);
+                    string? positionStr = root.GetProperty("Position").GetString();
+                    
+                    if (positionStr != null)
+                    {
+                        var parts = positionStr.Split(',');
+                        if (parts.Length == 2 && 
+                            float.TryParse(parts[0], out float x) && 
+                            float.TryParse(parts[1], out float y))
+                        {
+                            view.AddPosition( new Vector2(x, y) );
+                        }
+                    }
+                }
+                else if (pos.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var item in pos.EnumerateArray())
+                    {
+                        if (item.ValueKind == JsonValueKind.String)
+                        {
+                            string? positionStr = item.GetString();
+                            
+                            if (positionStr != null)
+                            {
+                                var parts = positionStr.Split(',');
+                                if (parts.Length == 2 && 
+                                    float.TryParse(parts[0], out float x) && 
+                                    float.TryParse(parts[1], out float y))
+                                {
+                                    view.AddPosition( new Vector2(x, y) );
+                                }
+                            }
+                        }
+                    }
                 }
             }
             
-            view.Position = vec2;
             #endregion
 
             view.Texture = Resources.Instance.Texture(root.GetProperty("Texture").GetString());
-            
+
+            #region ColorRead
+
             string? colorStr = root.GetProperty("Color").GetString();
-            
+
             var colorParts = colorStr.Split(',');
             Color color = Color.Black;
-            
+
             if (colorParts.Length == 4 && 
                 byte.TryParse(colorParts[0], out byte r) &&
                 byte.TryParse(colorParts[1], out byte g) &&
@@ -58,8 +85,10 @@ public class ViewConverter : JsonConverter<View>
             {
                 color = new Color(r, g, b, a);
             }
-            
+
             view.Color = color;
+
+            #endregion
             
             return view;
         }
