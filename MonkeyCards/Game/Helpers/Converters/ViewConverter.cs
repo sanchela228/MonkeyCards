@@ -6,7 +6,7 @@ using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Helpers;
+namespace MonkeyCards.Game.Helpers.Converters;
 
 public class ViewConverter : JsonConverter<View>
 {
@@ -67,6 +67,63 @@ public class ViewConverter : JsonConverter<View>
             
             #endregion
 
+            #region SizeRead
+            if (root.TryGetProperty("Size", out var size))
+            {
+                if (size.ValueKind == JsonValueKind.String)
+                {
+                    string? sizeStr = size.GetString();
+                    if (sizeStr != null)
+                    {
+                        var parts = sizeStr.Split(',');
+                        if (parts.Length == 2 && 
+                            float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) && 
+                            float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y))
+                        {
+                            view.Size.Add(new Vector2(x, y));
+                        }
+                    }
+                }
+                else if (size.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var item in size.EnumerateArray())
+                    {
+                        if (item.ValueKind == JsonValueKind.String)
+                        {
+                            string? sizeStr = item.GetString();
+                            var parts = sizeStr.Split(',');
+                            if (parts.Length == 2 && 
+                                float.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float x) && 
+                                float.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float y))
+                            {
+                                view.Size.Add(new Vector2(x, y));
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            if (root.TryGetProperty("Rotation", out var rotation))
+            {
+                if (rotation.ValueKind == JsonValueKind.Number)
+                {
+                    int? rt = rotation.GetInt32();
+                    view.Rotate.Add(rt.Value);
+                }
+                else if (rotation.ValueKind == JsonValueKind.Array)
+                {
+                    foreach (var item in rotation.EnumerateArray())
+                    {
+                        if (item.ValueKind == JsonValueKind.Number)
+                        {
+                            int? rt = item.GetInt32();
+                            view.Rotate.Add(rt.Value);
+                        }
+                    }
+                }
+            }
+            
             view.Texture = Resources.Instance.Texture(root.GetProperty("Texture").GetString());
 
             #region ColorRead

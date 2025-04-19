@@ -1,48 +1,47 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MonkeyCards.Engine.Managers;
-using MonkeyCards.Game.Helpers;
+using ResourceManager = MonkeyCards.Engine.Managers.Resources;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
+using MonkeyCards.Game.Presentation;
 
 namespace MonkeyCards.Game.Services;
 
-class Test()
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public Char Symbol { get; set; }
-    public CardSuit Suit { get; set; }
-    public float Cost { get; set; }
-    public int Multiply { get; set; }
-    public Border Border { get; set; }
-    
-    [JsonConverter(typeof(FontFamilyConverter))]
-    public FontFamily FontFamily { get; set; }
-    
-    [JsonConverter(typeof(ViewConverter))]
-    public View View { get; set; }
-    
-    [JsonConverter(typeof(EffectConverter))]
-    public Effect? Effect { get; set; }
-}
-
 public class CardsHolder
 {
+    public Stack<Card> Defaults { get; set; } = new();
+
     public void LoadCards()
     {
         var options = new JsonSerializerOptions
         {
             Converters = { new JsonStringEnumConverter() },
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip
         };
 
-        string json = Resources.Instance.Get<string>("cards.json");
-
+        string json = ResourceManager.Instance.Get<string>("Cards/defaults.json");
         
-        Test[] card = JsonSerializer.Deserialize<Test[]>(json, options);
+        JsonCardResource[] resources = JsonSerializer.Deserialize<JsonCardResource[]>(json, options);
 
-        Console.WriteLine(card);
+        List<Card> list = new();
+        foreach (JsonCardResource cardResource in resources)
+        {
+            list.Add( new Card(
+                cardResource.Id,
+                cardResource.Name,
+                cardResource.Symbol,
+                cardResource.Suit,
+                cardResource.Cost,
+                cardResource.FontFamily,
+                cardResource.View,
+                cardResource.Description,
+                cardResource.Multiply,
+                cardResource.Border,
+                cardResource.Effect )
+            );
+        }
+
+        list.OrderBy(x => Random.Shared.Next()).ToList().ForEach(card => Defaults.Push(card));
     }
     
     static CardsHolder() => Instance = new();

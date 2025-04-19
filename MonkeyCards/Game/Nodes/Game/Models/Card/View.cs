@@ -8,10 +8,12 @@ public struct View
     public View()
     {
         _positions = new List<Vector2>();
+        Size = new List<Vector2>();
+        Rotate = new List<float>();
     }
     
     public TypeView Type { get; set; }
-    public Texture2D? Texture { get; set; }
+    public Texture2D Texture { get; set; }
     private List<Vector2> _positions;
     public List<Vector2> Positions { get => _positions; }
     public void AddPosition(Vector2 position) => _positions.Add( Vector2.Clamp(position, Vector2.Zero, Vector2.One) );
@@ -26,6 +28,10 @@ public struct View
                 _positions[0] = value;
         }
     }
+
+    public List<Vector2> Size { get; set; }
+    public List<float> Rotate { get; set; }
+    
     public bool Sides { get; set; }
     public Color Color { get; set; }
 }

@@ -1,7 +1,10 @@
 using System.Numerics;
-using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
+using System.Text.Json.Serialization;
 using MonkeyCards.Engine.Managers;
+using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
 using MonkeyCards.Game.Controllers;
+using MonkeyCards.Game.Helpers.Converters;
+using MonkeyCards.Game.Scenes;
 using Raylib_cs;
 using Color = Raylib_cs.Color;
 using Rectangle = Raylib_cs.Rectangle;
@@ -13,20 +16,35 @@ public class Card : Node
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public Char Symbol { get; set; }
     public CardSuit Suit { get; set; }
     public float Cost { get; set; }
-    public int Multiply { get; set; }
+    public float Multiply { get; set; } = 1f;
+    public Border Border { get; set; } = Border.Default;
     public FontFamily FontFamily { get; set; }
     public View View { get; set; }
-    public Border Border { get; set; }
     public Effect? Effect { get; set; }
 
     public string ShortName
     {
         get
         {
+            var isNumber = false;
+            var s = Symbol.ToString();
+            
+            if (s == "2" || s == "3")
+                isNumber = true;
+            
+            if (isNumber && Multiply > 1)
+                return Multiply + "x" + Symbol;
+            
+            if (!isNumber && Multiply == 2)
+                return Symbol.ToString() + Symbol;
+                
+            if (Multiply > 2)
+                return Multiply + "x" + Symbol;
+            
             return Symbol.ToString();
         }
     }
@@ -36,25 +54,30 @@ public class Card : Node
     protected Font _font;
     protected Texture2D _icon;
     
-    protected Hands _hands { get; set; }
-
-    protected void LoadTmpTest()
-    {
-        _icon = Resources.Instance.Texture("Icons/icon-diamond.png");
-        _font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
-    }
-    
+    protected Hands? _hands { get; set; }
     public Vector2 DefaultSize => new(136f, 206f);
     
-    public Card(string _name, Hands Hands)
+    public Card( Guid Id, string Name, Char Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
+        View View, string Description = null, float multiply = 1f, Border Border = Border.Default, Effect? Effect = null )
     {
-        this.LoadTmpTest(); // TODO: replace this in resources manager
+        this.Id = Id;
+        this.Name = Name;
+        this.Symbol = Symbol;
+        this.Cost = Cost;
+        this.FontFamily = FontFamily;
+        this.View = View;
+        this.Description = Description;
+        this.Multiply = multiply;
+        this.Border = Border;
+        this.Effect = Effect;
         
-        Name = _name;
-        Symbol = 'A';
+        PreventParent += node =>
+        {
+            if (node is not null && node is Hands)
+                _hands = (Hands) node;
+        };
+        
         Size = this.DefaultSize;
-
-        _hands = Hands;
         _canvas = Raylib.LoadRenderTexture((int) Size.X, (int) Size.Y);
 
         Rectangle placeholder = new Rectangle(
@@ -85,7 +108,7 @@ public class Card : Node
                 placeholder, 
                 0.2f, 
                 10, 
-                Color.White
+                View.Color
             );
             
             Raylib.DrawRectangleRoundedLinesEx(
@@ -97,69 +120,90 @@ public class Card : Node
             );
             
             Raylib.DrawTextPro( 
-                _font, 
+                FontFamily.Font, 
                 ShortName, 
-                new Vector2(35, 22),
-                new Vector2(16, 16),
+                new Vector2(42, 24),
+                new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
                 0f,
-                42,
+                FontFamily.Size,
                 3,
-                Color.Black
+                FontFamily.Color
             );
             
             Raylib.DrawTextPro( 
-                _font, 
+                FontFamily.Font, 
                 ShortName, 
-                new Vector2(placeholder.Width - 26, placeholder.Height - 14),
-                new Vector2(16, 16),
+                new Vector2(placeholder.Width - 32, placeholder.Height - 20),
+                new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
                 180f,
-                42,
+                FontFamily.Size,
                 3,
-                Color.Black
+                FontFamily.Color
             );
-            
-            Raylib.DrawTexturePro(
-                _icon,
-                new Rectangle(0, 0, _icon.Width, _icon.Height), 
-                new Rectangle(
-                    27, 
-                    56, 
-                    24, 
-                    24
-                ),
-                new Vector2(12, 12),
-                0f,
-                Color.White
-            );
+
+            if (View.Sides)
+            {
+                Raylib.DrawTexturePro(
+                    View.Texture,
+                    new Rectangle(0, 0, View.Texture.Width, View.Texture.Height), 
+                    new Rectangle(
+                        27, 
+                        56, 
+                        24, 
+                        24
+                    ),
+                    new Vector2(12, 12),
+                    0f,
+                    Color.White
+                );
              
-            Raylib.DrawTexturePro(
-                _icon,
-                new Rectangle(0, 0, _icon.Width, _icon.Height), 
-                new Rectangle(
-                    _canvas.Texture.Width - 22, 
-                    _canvas.Texture.Height - 56, 
-                    24, 
-                    24
-                ),
-                new Vector2(12, 12),
-                180f,
-                Color.White
-            );
-            
-            Raylib.DrawTexturePro(
-                _icon,
-                new Rectangle(0, 0, _icon.Width, _icon.Height),
-                new Rectangle(
-                    _canvas.Texture.Width / 2 + 3,
-                    _canvas.Texture.Height / 2,
-                    80,
-                    80
-                ),
-                new Vector2(40, 40),
-                0.0f,
-                Color.White
-            );
-            
+                Raylib.DrawTexturePro(
+                    View.Texture,
+                    new Rectangle(0, 0, View.Texture.Width, View.Texture.Height), 
+                    new Rectangle(
+                        _canvas.Texture.Width - 22, 
+                        _canvas.Texture.Height - 56, 
+                        24, 
+                        24
+                    ),
+                    new Vector2(12, 12),
+                    180f,
+                    Color.White
+                );
+            }
+
+            for (var i = 0; i < View.Positions.Count; i++)
+            {
+                int sizePickerIndex = i;
+                
+                if (View.Size.Count < i + 1)
+                    sizePickerIndex = View.Size.Count - 1;
+                
+                Vector2 size = View.Size[sizePickerIndex];
+                
+                int rotatePickerIndex = i;
+                
+                if (View.Rotate.Count < i + 1)
+                    rotatePickerIndex = View.Rotate.Count - 1;
+                
+                float rotate = View.Rotate[rotatePickerIndex];
+                
+                Raylib.DrawTexturePro(
+                    View.Texture,
+                    new Rectangle(0, 0, View.Texture.Width, View.Texture.Height),
+                    new Rectangle(
+                        _canvas.Texture.Width * View.Positions[i].X + 3,
+                        _canvas.Texture.Height * View.Positions[i].Y,
+                        size.X,
+                        size.Y
+                    ),
+                    new Vector2(size.X / 2, size.Y / 2),
+                    rotate,
+                    Color.White
+                );
+
+            }
+
             Raylib.EndTextureMode();
         
         #endregion
@@ -172,7 +216,8 @@ public class Card : Node
 
     protected void BackToHands()
     {
-        SetParent(_hands, DraggingCard.Instance.IndexCardOnHands ?? -1);
+        if ( _hands is not null)
+            SetParent(_hands, DraggingCard.Instance.IndexCardOnHands ?? -1);
     }
     
     public override void Update(float deltaTime)

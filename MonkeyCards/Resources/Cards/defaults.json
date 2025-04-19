@@ -1,0 +1,31 @@
+[
+  {
+    "Id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "Name": "Two",
+    "Description": "default two card",
+    "Symbol": "2",
+    "Suit": "Diamonds",
+    "Cost": 2,
+    "Multiply": 3,
+    "FontFamily": {
+      "Color": "10,20,30,255",
+      "Size": 42,
+      "Font": "JockeyOne-Regular.ttf"
+    },
+    "View": {
+      "Type": "Two",
+      "Texture": "Icons/icon-hearts.png",
+      "Position": ["0.1,0.1","0.31,0.31","0.61,0.71"],
+      "Size": "40,40",
+      "Rotation": 40,
+      "Sides": true,
+      "Color": "255,255,255,255"
+    },
+    "Border": "Gold",
+    "Effect": {
+      "Type": "Glow",
+      "Intensity": 5.0,
+      "Duration": 2.0
+    }
+  }
+]

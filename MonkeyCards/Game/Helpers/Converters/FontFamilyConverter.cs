@@ -4,7 +4,7 @@ using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Helpers;
+namespace MonkeyCards.Game.Helpers.Converters;
 
 public class FontFamilyConverter : JsonConverter<FontFamily>
 {

@@ -40,8 +40,8 @@ public class Test : Scene
         //     new Card("test_8", Hands),
         //     new Card("test_9", Hands)
         // });
-        //
-        // _nodes.Add(Hands);
+
+        _nodes.Add(Hands);
         // _nodes.Add( new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f)) );
     }
     
@@ -59,10 +59,9 @@ public class Test : Scene
         
         if (Raylib.CheckCollisionPointRec(mousePos, testAddRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
-            if (Hands.MaxCards > Hands.Childrens.Count)
-                Hands.AddChild( new Card("test_9", Hands) );
+            if (Hands.MaxCards > Hands.Childrens.Count && CardsHolder.Instance.Defaults.Any())
+                Hands.AddChild(CardsHolder.Instance.Defaults.Pop());
         }
-        
     }
     
     public override void Draw()

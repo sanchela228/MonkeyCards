@@ -23,10 +23,13 @@ public abstract class Node : IDisposable
     public abstract void Update(float deltaTime);
     public abstract void Draw();
     public abstract void Dispose();
+
+    public Node() => Scene = SceneManager.Instance.PeekScene();
     
     public bool IsActive { get; set; } = true;
     public int Order { get; set; } = 100;
     
+    public Scene Scene { get; }
     protected OverlapsMode Overlap { get; set; } = OverlapsMode.Exclusive;
 
     public bool RecursiveDrawChildren { get; set; } = false;
@@ -119,6 +122,8 @@ public abstract class Node : IDisposable
     {
         get => _parent;
     }
+    
+    public event Action<Node> PreventParent;
 
     public void SetParent(Node newParent, int index = -1, Vector2? position = null)
     {
@@ -129,6 +134,7 @@ public abstract class Node : IDisposable
             _parent._childrens.Remove(this);
 
         _parent = newParent;
+        PreventParent?.Invoke(newParent);
         
         if (position is not null)
             Position = position ?? Vector2.Zero;
