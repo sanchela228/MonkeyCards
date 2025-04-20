@@ -40,8 +40,10 @@ public class Table : Node
         {
             if (x.Childrens.Any())
             {
-                Card test = (Card) x.Childrens.First();
-                els.Add( new ComboElement( _comboLine.Font ) );
+                Card card = (Card) x.Childrens.First();
+
+                for (int i = 0; i < card.Multiply; i++)
+                    els.Add( new ComboElement( card.Symbol, card.Suit ) );
             }
         });
 

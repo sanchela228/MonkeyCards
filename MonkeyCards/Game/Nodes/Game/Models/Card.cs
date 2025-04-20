@@ -20,7 +20,7 @@ public class Card : Node
     public Char Symbol { get; set; }
     public CardSuit Suit { get; set; }
     public float Cost { get; set; }
-    public float Multiply { get; set; } = 1f;
+    public int Multiply { get; set; } = 1;
     public Border Border { get; set; } = Border.Default;
     public FontFamily FontFamily { get; set; }
     public View View { get; set; }
@@ -58,12 +58,13 @@ public class Card : Node
     public Vector2 DefaultSize => new(136f, 206f);
     
     public Card( Guid Id, string Name, Char Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
-        View View, string Description = null, float multiply = 1f, Border Border = Border.Default, Effect? Effect = null )
+        View View, string Description = null, int multiply = 1, Border Border = Border.Default, Effect? Effect = null )
     {
         this.Id = Id;
         this.Name = Name;
         this.Symbol = Symbol;
         this.Cost = Cost;
+        this.Suit = Suit;
         this.FontFamily = FontFamily;
         this.View = View;
         this.Description = Description;
@@ -122,7 +123,7 @@ public class Card : Node
             Raylib.DrawTextPro( 
                 FontFamily.Font, 
                 ShortName, 
-                new Vector2(42, 24),
+                new Vector2(40, 24),
                 new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
                 0f,
                 FontFamily.Size,
@@ -133,7 +134,7 @@ public class Card : Node
             Raylib.DrawTextPro( 
                 FontFamily.Font, 
                 ShortName, 
-                new Vector2(placeholder.Width - 32, placeholder.Height - 20),
+                new Vector2(placeholder.Width - 30, placeholder.Height - 20),
                 new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
                 180f,
                 FontFamily.Size,
@@ -147,12 +148,12 @@ public class Card : Node
                     View.Texture,
                     new Rectangle(0, 0, View.Texture.Width, View.Texture.Height), 
                     new Rectangle(
-                        27, 
-                        56, 
-                        24, 
-                        24
+                        25, 
+                        52, 
+                        20, 
+                        20
                     ),
-                    new Vector2(12, 12),
+                    new Vector2(10, 10),
                     0f,
                     Color.White
                 );
@@ -161,10 +162,10 @@ public class Card : Node
                     View.Texture,
                     new Rectangle(0, 0, View.Texture.Width, View.Texture.Height), 
                     new Rectangle(
-                        _canvas.Texture.Width - 22, 
-                        _canvas.Texture.Height - 56, 
-                        24, 
-                        24
+                        _canvas.Texture.Width - 21, 
+                        _canvas.Texture.Height - 52, 
+                        20, 
+                        20
                     ),
                     new Vector2(12, 12),
                     180f,

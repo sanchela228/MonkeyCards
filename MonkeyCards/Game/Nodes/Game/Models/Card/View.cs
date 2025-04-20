@@ -11,8 +11,6 @@ public struct View
         Size = new List<Vector2>();
         Rotate = new List<float>();
     }
-    
-    public TypeView Type { get; set; }
     public Texture2D Texture { get; set; }
     private List<Vector2> _positions;
     public List<Vector2> Positions { get => _positions; }

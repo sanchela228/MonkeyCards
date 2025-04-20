@@ -1,5 +1,6 @@
 using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
+using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
@@ -8,10 +9,19 @@ namespace MonkeyCards.Game.Nodes.Game.Table.Combo;
 public class Element : Node
 {
     protected Font _font;
+    protected Char _symbol;
+    protected CardSuit _suit;
     
-    public Element(Font font)
+    protected Color color = Color.Black;
+    
+    public Element(Char symbol, CardSuit suit)
     {
-        _font = font;
+        _symbol = symbol;
+        _suit = suit;
+        _font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
+        
+        if (_suit == CardSuit.Hearts || _suit == CardSuit.Diamonds)
+            color = Color.Red;
     }
 
     public override void Update(float deltaTime)
@@ -23,16 +33,14 @@ public class Element : Node
     {
         Raylib.DrawTextPro( 
             _font, 
-            "A", 
+            _symbol.ToString(), 
             new Vector2(Position.X, Position.Y),
             new Vector2(21, 21),
             0f,
             42f,
             3f,
-            Color.Red
+            color
         );
-        
-        // Raylib.DrawRectangle((int) Bounds.X, (int) Bounds.Y, 10, 10, Color.Red);
     }
 
     public override void Dispose()

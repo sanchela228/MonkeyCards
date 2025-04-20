@@ -18,11 +18,6 @@ public class ViewConverter : JsonConverter<View>
             
             var view = new View();
             
-            view.Type = JsonSerializer.Deserialize<TypeView>(
-                root.GetProperty("Type").GetRawText(),
-                options
-            );
-            
             view.Sides = JsonSerializer.Deserialize<bool>(root.GetProperty("Sides").GetRawText());
             
             #region PositionRead

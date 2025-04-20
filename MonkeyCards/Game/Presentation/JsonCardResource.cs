@@ -12,7 +12,7 @@ public class JsonCardResource
     public Char Symbol { get; set; }
     public CardSuit Suit { get; set; }
     public float Cost { get; set; }
-    public float Multiply { get; set; }
+    public int Multiply { get; set; }
     public Border Border { get; set; }
     
     [JsonConverter(typeof(FontFamilyConverter))]

@@ -8,12 +8,6 @@ namespace MonkeyCards.Game.Nodes.Game.Table.Combo;
 
 public class Line : Node
 {
-    public Font Font { get; }
-    
-    public Line()
-    {
-        Font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
-    }
     public override void Update(float deltaTime)
     {
         if (Childrens.Any())

@@ -27,22 +27,8 @@ public class Test : Scene
         Visuals.BackgroundColorize.Instance.SetSettings();
         CardsHolder.Instance.LoadCards();
 
-
-        // Hands.AddChildrens( new List<Card>
-        // {
-        //     new Card("test_1", Hands),
-        //     new Card("test_2", Hands),
-        //     new Card("test_3", Hands),
-        //     new Card("test_4", Hands),
-        //     new Card("test_5", Hands),
-        //     new Card("test_6", Hands),
-        //     new Card("test_7", Hands),
-        //     new Card("test_8", Hands),
-        //     new Card("test_9", Hands)
-        // });
-
         _nodes.Add(Hands);
-        // _nodes.Add( new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f)) );
+        _nodes.Add( new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f)) );
     }
     
     public override void Update(float deltaTime)
