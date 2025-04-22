@@ -11,7 +11,7 @@ public class Line : Node
     public override void Update(float deltaTime)
     {
         if (Childrens.Any())
-            Visuals.Render.PlaceInLine( Childrens, (int) Childrens[0].Bounds.Width, Position, 20 );
+            Visuals.Render.PlaceInLine( Childrens, Position, 20 );
     }
 
     public override void Draw()

@@ -28,4 +28,33 @@ public static class Render
             else nodes2[i].Position = targetPosition;
         }
     }
+    
+    public static void PlaceInLine(IEnumerable<Node> nodes, Vector2 centerPoint, int pixelsMargin, float lerp = 0f, float deltaTime = 0f)
+    {
+        var nodesList = nodes.ToList();
+        var count = nodesList.Count;
+        
+        if (count == 0) return;
+
+        float totalWidth = nodesList.Sum(n => n.Size.X) + (count - 1) * pixelsMargin;
+    
+        float currentX = centerPoint.X - totalWidth / 2;
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 targetPosition = new Vector2(
+                currentX, 
+                centerPoint.Y
+            );
+
+            if (lerp > 0 && deltaTime > 0)
+            {
+                float t = 1.0f - MathF.Exp(-18f * deltaTime);
+                nodesList[i].Position = Vector2.Lerp(nodesList[i].Position, targetPosition, t);
+            }
+            else nodesList[i].Position = targetPosition;
+            
+            currentX += nodesList[i].Size.X + pixelsMargin;
+        }
+    }
 }

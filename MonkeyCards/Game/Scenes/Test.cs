@@ -14,12 +14,12 @@ public class Test : Scene
     private Rectangle backButton;
     private Rectangle exitButton;
     
-    public readonly Hands Hands = new Hands( 
+    public readonly Hands Hands = new( 
         new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.85f), Raylib.GetScreenWidth() * 0.8f 
     );
     
-    public Rectangle testDeleteRect = new Rectangle(30, 30, 100, 100);
-    public Rectangle testAddRect = new Rectangle(230, 30, 100, 100);
+    public Rectangle testDeleteRect = new(30, 30, 100, 100);
+    public Rectangle testAddRect = new(230, 30, 100, 100);
     
     
     public Test()
@@ -39,8 +39,8 @@ public class Test : Scene
 
         if (Raylib.CheckCollisionPointRec(mousePos, testDeleteRect) && !Raylib.IsMouseButtonDown(MouseButton.Left))
         {
-            if (DraggingCard.Instance.Card is Card)
-                DraggingCard.Instance.Card.Dispose();
+            if (DraggingCard.Instance.Card is Card && !DraggingCard.Instance.Card.IsOnBurningAnimation)
+                DraggingCard.Instance.Card.BurnCard();
         }
         
         if (Raylib.CheckCollisionPointRec(mousePos, testAddRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))

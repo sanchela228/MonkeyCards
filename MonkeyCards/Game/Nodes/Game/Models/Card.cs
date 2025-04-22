@@ -87,7 +87,7 @@ public class Card : Node
             _canvas.Texture.Width - 5,
             _canvas.Texture.Height - 5
         );
-
+        
         #region SetupRenderTexture
         
             Raylib.BeginTextureMode(_canvas);
@@ -208,32 +208,40 @@ public class Card : Node
             Raylib.EndTextureMode();
         
         #endregion
+        
+        Effect?.Start(this, placeholder);
     }
     
     protected bool _isDragging = false;
+    protected bool _canInteract = true;
     protected Vector2 _dragOffset;
 
     public Node ExParent;
 
+
+    private bool _canBackToHand = true;
+
     protected void BackToHands()
     {
-        if ( _hands is not null)
+        if ( _hands is not null && _canBackToHand)
             SetParent(_hands, DraggingCard.Instance.IndexCardOnHands ?? -1);
     }
     
     public override void Update(float deltaTime)
     {
         // TODO: change cursor view logic
-        
-        #region DraggingCard
 
-            var targetSize = Vector2.One;
-            Vector2 mousePos = Raylib.GetMousePosition();
+        var targetSize = Vector2.One;
+        Vector2 mousePos = Raylib.GetMousePosition();
+        
+        if (_canInteract)
+        {
+            #region DraggingCard
             
             if (_isDragging)
             {
                 MouseTracking.Instance.HoveredNode = this;
-                
+
                 if (Raylib.IsMouseButtonDown(MouseButton.Left))
                 {
                     Position = new Vector2(mousePos.X - _dragOffset.X, mousePos.Y - _dragOffset.Y);
@@ -242,19 +250,23 @@ public class Card : Node
                 {
                     DraggingCard.Instance.Card = null;
                     _isDragging = false;
-                    
-                    Vector2 worldPosition = Position;
-                    
-                    if (Parent is null) BackToHands();
-                    
-                    Position = worldPosition;
-                    
-                    DraggingCard.Instance.IndexCardOnHands = 0;
-                    SceneManager.Instance.PeekScene().RemoveNode(this);
-                    MouseTracking.Instance.BlockedHover = false;
+
+                    if (_canBackToHand)
+                    {
+                        Vector2 worldPosition = Position;
+
+                        if (Parent is null) 
+                            BackToHands();
+
+                        Position = worldPosition;
+
+                        DraggingCard.Instance.IndexCardOnHands = 0;
+                        SceneManager.Instance.PeekScene().RemoveNode(this);
+                        MouseTracking.Instance.BlockedHover = false;
+                    }
                 }
             }
-            
+
             if (IsMouseOver() || _isDragging)
             {
                 targetSize = new Vector2(1.2f, 1.2f);
@@ -264,26 +276,29 @@ public class Card : Node
                 {
                     DraggingCard.Instance.Card = this;
                     DraggingCard.Instance.IndexCardOnHands = _hands.Childrens.IndexOf(this);
-                    
+
                     _isDragging = true;
                     _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
-                    
+
                     MouseTracking.Instance.BlockedHover = true;
-                    
+
                     Vector2 worldPosition = Position;
-                    
+
                     ExParent = Parent;
                     this.SetParent( SceneManager.Instance.PeekScene() );
-                    
+
                     Position = worldPosition;
                 }
             }
             else Order = 100;
 
-        #endregion
+            #endregion
+        }
         
         float t = 1.0f - MathF.Exp(-18f * deltaTime);
         Scale = Vector2.Lerp(Scale, targetSize, t);
+        
+        Effect?.Update(deltaTime, this);
     }
 
     public override void Draw()
@@ -296,6 +311,65 @@ public class Card : Node
             Rotation,
             Color.White
         );
+        
+        if (Raylib.GetRandomValue(0, 100) > 70)
+        {
+            // CreateSparkParticle(
+            //     position: cardPosition + new Vector2(Raylib.GetRandomValue(-20,20), Raylib.GetRandomValue(-20,20)),
+            //     color: new Color(255, Raylib.GetRandomValue(100,200), 0, 255)
+            // );
+        }
+        
+        Effect?.Draw(this);
+    }
+
+    private bool _isBurningAnimation = false;
+    public bool IsOnBurningAnimation => _isBurningAnimation;
+    public async void BurnCard()
+    {
+        _isBurningAnimation = true;
+        _canBackToHand = false;
+        _canInteract = false;
+
+        ClearDependencies();
+        
+        try
+        {
+            Console.WriteLine($"Карта Начала сжигание");
+            
+            await BurnCardAsyncAnimation();
+            Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при сжигании карты: {ex}");
+        }
+        finally
+        {
+            Console.WriteLine($"Карта Закончила сжигание");
+            _isBurningAnimation = false;
+        }
+    }
+
+    public async Task BurnCardAsyncAnimation()
+    {
+        float alpha = 1.0f;
+        while (alpha > 0)
+        {
+            alpha -= 0.05f;
+            // Raylib.SetTextureAlpha(_texture, (byte)(alpha * 255));
+            await Task.Delay(50); 
+        }
+    }
+
+    public void ClearDependencies()
+    {
+        if (DraggingCard.Instance.Card == this)
+            DraggingCard.Instance.Card = null;
+        
+        MouseTracking.Instance.BlockedHover = false;
+        if (MouseTracking.Instance.HoveredNode == this)
+            MouseTracking.Instance.HoveredNode = null;
     }
 
     public override void Dispose()
@@ -312,7 +386,9 @@ public class Card : Node
             DraggingCard.Instance.Card = null;
         
         MouseTracking.Instance.BlockedHover = false;
-        MouseTracking.Instance.HoveredNode = null;
+        
+        if (MouseTracking.Instance.HoveredNode == this)
+            MouseTracking.Instance.HoveredNode = null;
             
         Childrens.Clear();
     }

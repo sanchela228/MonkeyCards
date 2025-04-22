@@ -33,20 +33,39 @@ public class Table : Node
     
     public override void Update(float deltaTime)
     {
-        // TODO: add cache data for List ComboElement, and rewrite font in constructor
+        // TODO: add cache data for List ComboElement
         
         var els = new List<Node>();
+        
+        List<Card> cardsPull = new List<Card>();
+        
         Childrens.OfType<Placeholder>().ToList().ForEach(x =>
         {
             if (x.Childrens.Any())
             {
                 Card card = (Card) x.Childrens.First();
+                
+                if (card is not null) cardsPull.Add(card);
 
                 for (int i = 0; i < card.Multiply; i++)
-                    els.Add( new ComboElement( card.Symbol, card.Suit ) );
+                {
+                    els.Add( new ComboElement( card.Symbol, card.Suit )
+                    {
+                        Size = new Vector2(10, 20)
+                    } );
+                }
             }
         });
 
+        if (els.Count > 0)
+        {
+            var res = new Result(cardsPull);
+            res.Size = new Vector2(70, 20);
+            
+            els.Insert(0, res);
+        }
+           
+        
         _comboLine.Childrens = els;
     }
 

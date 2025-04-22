@@ -1,3 +1,5 @@
+using Raylib_cs;
+
 namespace MonkeyCards.Game.Nodes.Game.Models.Card;
 
 public enum EffectType
@@ -8,8 +10,10 @@ public enum EffectType
 public abstract class Effect
 {
     public abstract EffectType Type { get; }
-    public abstract void Update(float deltaTime);
-    public abstract void Draw();
+    
+    public abstract void Start(Card card, Rectangle placeholder);
+    public abstract void Update(float deltaTime, Card card);
+    public abstract void Draw(Card card);
 }
 // temp test classes
 public class ShakeEffect : Effect
@@ -18,8 +22,9 @@ public class ShakeEffect : Effect
     public float Intensity { get; set; }
     public float Duration { get; set; }
 
-    public override void Update(float deltaTime) { }
-    public override void Draw() { }
+    public override void Start(Card card, Rectangle placeholder) { }
+    public override void Update(float deltaTime, Card card) { }
+    public override void Draw(Card card) { }
 }
 
 public class GlowEffect : Effect
@@ -28,6 +33,7 @@ public class GlowEffect : Effect
     public string Color { get; set; }
     public float Radius { get; set; }
 
-    public override void Update(float deltaTime) {  }
-    public override void Draw() {  }
+    public override void Start(Card card, Rectangle placeholder) { }
+    public override void Update(float deltaTime, Card card) {  }
+    public override void Draw(Card card) {  }
 }
