@@ -60,7 +60,6 @@ public class Table : Node
         if (els.Count > 0)
         {
             var res = new Result(cardsPull);
-            res.Size = new Vector2(70, 20);
             
             els.Insert(0, res);
         }

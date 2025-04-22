@@ -2,17 +2,15 @@ using System.Numerics;
 using MonkeyCards.Engine.Core.Objects;
 using MonkeyCards.Engine.Managers;
 using MonkeyCards.Game.Nodes.Game.Models.Card;
+using MonkeyCards.Game.Services;
 using Raylib_cs;
 
 namespace MonkeyCards.Game.Nodes.Game.Table.Combo;
 
 public class Result : Node
 {
-    protected Font _font;
-    
-    protected float fontSize = 42f;
-
     protected float Cost = 0;
+    protected string Text = "";
 
     protected FontFamily FontFamily = new()
     {
@@ -21,14 +19,13 @@ public class Result : Node
         Rotation = 0,
         Spacing = 3f,
         Color = Color.Black
-        
     };
+    
     public Result(IEnumerable<Card> cards)
     {
-        Console.WriteLine("RESULT");
-        
-        Cost += cards.Sum(x => x.Cost);
-        
+        Cost = CardsHolder.CalcCombo(cards);
+        Text = Cost + "$ =";
+        Size = Raylib.MeasureTextEx(FontFamily.Font, Text, FontFamily.Size, FontFamily.Spacing);
     }
     
     public override void Update(float deltaTime)
@@ -40,7 +37,7 @@ public class Result : Node
     {
         Raylib.DrawTextPro( 
             FontFamily.Font, 
-            Cost + "$ = ", 
+            Text, 
             new Vector2(Position.X, Position.Y),
             new Vector2(21, 21),
             FontFamily.Rotation,
@@ -52,6 +49,6 @@ public class Result : Node
 
     public override void Dispose()
     {
-        throw new NotImplementedException();
+        
     }
 }

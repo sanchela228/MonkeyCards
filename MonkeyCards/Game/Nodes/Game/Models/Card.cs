@@ -22,6 +22,7 @@ public class Card : Node
     public float Cost { get; set; }
     public int Multiply { get; set; } = 1;
     public Border Border { get; set; } = Border.Default;
+    public BackgroundType Background { get; set; } = BackgroundType.Default;
     public FontFamily FontFamily { get; set; }
     public View View { get; set; }
     public Effect? Effect { get; set; }
@@ -58,7 +59,8 @@ public class Card : Node
     public Vector2 DefaultSize => new(136f, 206f);
     
     public Card( Guid Id, string Name, Char Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
-        View View, string Description = null, int multiply = 1, Border Border = Border.Default, Effect? Effect = null )
+        View View, string Description = null, int multiply = 1, Border Border = Border.Default, 
+        BackgroundType background = BackgroundType.Default, Effect? Effect = null )
     {
         this.Id = Id;
         this.Name = Name;
@@ -70,6 +72,7 @@ public class Card : Node
         this.Description = Description;
         this.Multiply = multiply;
         this.Border = Border;
+        this.Background = background;
         this.Effect = Effect;
         
         PreventParent += node =>

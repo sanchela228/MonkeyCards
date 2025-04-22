@@ -1,6 +1,6 @@
 namespace MonkeyCards.Game.Nodes.Game.Models.Card;
 
-public enum Border
+public enum BackgroundType
 {
     Default,
     Gold,

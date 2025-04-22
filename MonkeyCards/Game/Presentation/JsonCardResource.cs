@@ -15,6 +15,8 @@ public class JsonCardResource
     public int Multiply { get; set; }
     public Border Border { get; set; }
     
+    public BackgroundType Background { get; set; }
+    
     [JsonConverter(typeof(FontFamilyConverter))]
     public FontFamily FontFamily { get; set; }
     
