@@ -43,7 +43,10 @@ public abstract class Node : IDisposable
         {
             if (RecursiveUpdateChildren)
             {
-                foreach (var child in _childrens.OrderByDescending(node => node.Order).ToList()) 
+                var revertList = _childrens.ToList();
+                revertList.Reverse();
+                    
+                foreach (var child in revertList.OrderBy(node => node.Order).ToList()) 
                     child.RootUpdate(deltaTime);
             }
             else
@@ -62,7 +65,10 @@ public abstract class Node : IDisposable
         {
             if (RecursiveDrawChildren)
             {
-                foreach (var child in _childrens.OrderByDescending(node => node.Order).ToList()) 
+                var revertList = _childrens.ToList();
+                revertList.Reverse();
+                
+                foreach (var child in revertList.OrderBy(node => node.Order).ToList()) 
                     child.RootDraw();
             }
             else
@@ -193,7 +199,6 @@ public abstract class Node : IDisposable
     private Vector2 _size;
     private Vector2 _scale = Vector2.One;
     private Rectangle _bounds => new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
-
     public Rectangle Bounds
     {
         get
@@ -205,6 +210,40 @@ public abstract class Node : IDisposable
         }
     }
 
+    private Rectangle? _collider;
+    public Rectangle Collider {
+        get
+        {
+            if (_collider is null)
+            {
+                if (PointRendering == PointRendering.Center)
+                    return Helpers.Rectangle.CenterShiftRec(_bounds);
+                
+                return _bounds;
+            }
+
+            if (PointRendering == PointRendering.Center)
+            {
+                var rect = new Rectangle(
+                    _collider.Value.Position.X + Position.X,
+                    _collider.Value.Position.Y + Position.Y,
+                    _collider.Value.Size.X * _scale.X,
+                    _collider.Value.Size.Y * _scale.Y
+                );
+
+                return Helpers.Rectangle.CenterShiftRec(rect); 
+            }
+            
+            return new Rectangle(
+                _collider.Value.Position.X + Position.X,
+                _collider.Value.Position.Y + Position.Y,
+                _collider.Value.Size.X * _scale.X,
+                _collider.Value.Size.Y * _scale.Y
+            );
+        }
+        set => _collider = value;
+    }
+    
     public Vector2 Size 
     { 
         get => new Vector2(_size.X * _scale.X, _size.Y * _scale.Y);
@@ -215,7 +254,7 @@ public abstract class Node : IDisposable
         get => _scale; 
         set => _scale = value; 
     }
-    public bool ICollisionWith(Rectangle rect) => Raylib.CheckCollisionRecs(rect, Bounds);
+    public bool ICollisionWith(Rectangle rect) => Raylib.CheckCollisionRecs(rect, Collider);
     public virtual bool IsMouseOver()
     {
         if (MouseTracking.Instance.BlockedHover && MouseTracking.Instance.HoveredNode != this)
@@ -223,7 +262,7 @@ public abstract class Node : IDisposable
         
         Vector2 mousePos = Raylib.GetMousePosition();
 
-        if (!Raylib.CheckCollisionPointRec(mousePos, Bounds))
+        if (!Raylib.CheckCollisionPointRec(mousePos, Collider))
         {
             if (MouseTracking.Instance.HoveredNode == this)
                 MouseTracking.Instance.HoveredNode = null;
@@ -249,7 +288,7 @@ public abstract class Node : IDisposable
     {
         Vector2 mousePos = Raylib.GetMousePosition();
         
-        return Raylib.CheckCollisionPointRec(mousePos, Bounds);
+        return Raylib.CheckCollisionPointRec(mousePos, Collider);
     }
     public virtual bool IsMousePressed() => IsMouseOver() && Raylib.IsMouseButtonPressed(MouseButton.Left);
 }

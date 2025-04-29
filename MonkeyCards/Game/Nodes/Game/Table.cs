@@ -45,10 +45,10 @@ public class Table : Node
             {
                 Card card = (Card) x.Childrens.First();
                 
-                if (card is not null) cardsPull.Add(card);
-
                 for (int i = 0; i < card.Multiply; i++)
                 {
+                    cardsPull.Add(card);
+                    
                     els.Add( new ComboElement( card.Symbol, card.Suit )
                     {
                         Size = new Vector2(10, 20)
@@ -60,15 +60,13 @@ public class Table : Node
         if (els.Count > 0)
         {
             var res = new Result(cardsPull);
-            
             els.Insert(0, res);
         }
-           
         
         _comboLine.Childrens = els;
     }
 
-    public override void Draw()
+    public override void Draw() 
     {
         // Raylib.DrawRectangle((int)Position.X, (int)Position.Y, 20, 20, Color.Black);
     }

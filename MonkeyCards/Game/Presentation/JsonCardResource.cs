@@ -9,7 +9,7 @@ public class JsonCardResource
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public Char Symbol { get; set; }
+    public string Symbol { get; set; }
     public CardSuit Suit { get; set; }
     public float Cost { get; set; }
     public int Multiply { get; set; }

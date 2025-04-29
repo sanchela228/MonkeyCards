@@ -17,7 +17,7 @@ public class Card : Node
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
-    public Char Symbol { get; set; }
+    public string Symbol { get; set; }
     public CardSuit Suit { get; set; }
     public float Cost { get; set; }
     public int Multiply { get; set; } = 1;
@@ -32,7 +32,7 @@ public class Card : Node
         get
         {
             var isNumber = false;
-            var s = Symbol.ToString();
+            var s = Symbol;
             
             if (s == "2" || s == "3")
                 isNumber = true;
@@ -41,12 +41,12 @@ public class Card : Node
                 return Multiply + "x" + Symbol;
             
             if (!isNumber && Multiply == 2)
-                return Symbol.ToString() + Symbol;
+                return Symbol + Symbol;
                 
             if (Multiply > 2)
                 return Multiply + "x" + Symbol;
             
-            return Symbol.ToString();
+            return Symbol;
         }
     }
 
@@ -58,7 +58,7 @@ public class Card : Node
     protected Hands? _hands { get; set; }
     public Vector2 DefaultSize => new(136f, 206f);
     
-    public Card( Guid Id, string Name, Char Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
+    public Card( Guid Id, string Name, string Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
         View View, string Description = null, int multiply = 1, Border Border = Border.Default, 
         BackgroundType background = BackgroundType.Default, Effect? Effect = null )
     {
@@ -82,6 +82,8 @@ public class Card : Node
         };
         
         Size = this.DefaultSize;
+
+        // Collider = new Rectangle(-25, 0, this.DefaultSize.X - 50, this.DefaultSize.Y);
         _canvas = Raylib.LoadRenderTexture((int) Size.X, (int) Size.Y);
 
         Rectangle placeholder = new Rectangle(
@@ -232,8 +234,6 @@ public class Card : Node
     
     public override void Update(float deltaTime)
     {
-        // TODO: change cursor view logic
-
         var targetSize = Vector2.One;
         Vector2 mousePos = Raylib.GetMousePosition();
         
@@ -322,6 +322,13 @@ public class Card : Node
             //     color: new Color(255, Raylib.GetRandomValue(100,200), 0, 255)
             // );
         }
+        
+        Raylib.DrawRectangle(
+            (int)Collider.Position.X, 
+            (int)Collider.Position.Y, 
+            (int)Collider.Size.X, 
+            (int)Collider.Size.Y, 
+            new Color(255,222,33, 125));
         
         Effect?.Draw(this);
     }

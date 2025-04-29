@@ -10,6 +10,8 @@ public class CardsHolder
 {
     public Stack<Card> Defaults { get; set; } = new();
 
+    public List<Card> TakeFromTop(int count) => Defaults.Take(count).ToList();
+    
     public void LoadCards()
     {
         var options = new JsonSerializerOptions
@@ -48,9 +50,17 @@ public class CardsHolder
     public static float CalcCombo(IEnumerable<Card> cards)
     {
         float cost = 0f;
-    
-        var colorGroups = cards.GroupBy(x => IsRedSuit(x.Suit)).ToDictionary(g => g.Key, g => g.Count());
-    
+        
+        var suitGroups = new Dictionary<string, List<Card>>();
+        
+        foreach (var card in cards)
+        {
+            if ( !suitGroups.ContainsKey(card.Symbol) )
+                suitGroups[card.Symbol] = new();
+            
+            suitGroups[card.Symbol].Add(card);
+        }
+
         cost += cards.Sum(x =>
         {
             float borderMultiple = 1f;
@@ -68,18 +78,29 @@ public class CardsHolder
                 BackgroundType.Gold => backgroundMultiple + 0.2f,
                 _ => backgroundMultiple
             };
-        
-            if (cards.Count() > 1)
-                comboBonus += 0.4f * cards.Count();
-        
-            bool isRed = IsRedSuit(x.Suit);
-            int sameColorCount = colorGroups.GetValueOrDefault(isRed, 0);
-        
-            if (sameColorCount > 1)
-                comboBonus += 0.2f * sameColorCount;
+
+            var localCost = x.Cost;
             
-            return x.Cost * x.Multiply * borderMultiple * backgroundMultiple * comboBonus;
+            if (suitGroups.ContainsKey(x.Symbol) && suitGroups[x.Symbol].Count > 1)
+                localCost *= 1.5f;
+  
+            return localCost * x.Multiply * borderMultiple * backgroundMultiple;
         });
+        
+        int redColorCount = 0;
+        int blackColorCount = 0;
+        
+        foreach (var card in cards)
+        {
+            if (IsRedSuit(card.Suit))
+                redColorCount++;
+            
+            if (IsBlackSuit(card.Suit))
+                blackColorCount++;
+        }
+        
+        if (redColorCount > 4 || blackColorCount > 4)
+            cost *= 2f;
     
         return MathF.Round(cost, 1);
     }
@@ -87,6 +108,10 @@ public class CardsHolder
     private static bool IsRedSuit(CardSuit suit)
     {
         return suit == CardSuit.Hearts || suit == CardSuit.Diamonds;
+    }
+    private static bool IsBlackSuit(CardSuit suit)
+    {
+        return suit == CardSuit.Clubs || suit == CardSuit.Spades;
     }
     
     

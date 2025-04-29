@@ -148,7 +148,7 @@
     "Name": "Three",
     "Description": "Default three card",
     "Symbol": "3",
-    "Suit": "Spades",
+    "Suit": "Hearts",
     "Cost": 3,
     "Multiply": 1,
     "FontFamily": {
@@ -157,7 +157,7 @@
       "Font": "JockeyOne-Regular.ttf"
     },
     "View": {
-      "Texture": "Icons/icon-spades.png",
+      "Texture": "Icons/icon-hearts.png",
       "Position": ["0.5,0.2", "0.5,0.5", "0.5,0.8"],
       "Size": "35,35",
       "Rotation": 0,

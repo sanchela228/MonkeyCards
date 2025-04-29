@@ -1,4 +1,5 @@
 using System.Numerics;
+using MonkeyCards.Engine.Managers;
 using Raylib_cs;
 
 namespace MonkeyCards.Game.Visuals;
@@ -13,7 +14,7 @@ public class BackgroundColorize
     
     public void SetSettings()
     {
-        _shader = Raylib.LoadShader(null, "Resources/Shaders/noise_background_shader.frag");
+        _shader = Resources.Instance.Shader("noise_background_shader.frag");
         
         var speedLoc = Raylib.GetShaderLocation(_shader, "speed");
         var scaleLoc = Raylib.GetShaderLocation(_shader, "scale");
@@ -151,7 +152,7 @@ public class BackgroundColorize
         Raylib.EndShaderMode();
     }
 
-    public void UnloadShader() => Raylib.UnloadShader(_shader);
+    public void UnloadShader() => Resources.Instance.Unload<Shader>("noise_background_shader.frag");
     static BackgroundColorize() => Instance = new();
     public static BackgroundColorize Instance { get; private set; }
 }

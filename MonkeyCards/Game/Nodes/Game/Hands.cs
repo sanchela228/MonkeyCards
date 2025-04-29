@@ -22,6 +22,7 @@ public class Hands : Node
         AddChildrens(cards);
         
         RecursiveUpdateChildren = true;
+        // RecursiveDrawChildren = true;
 
         Position = centerPoint;
         Size = new Vector2(maxWidth, 260);
@@ -113,6 +114,9 @@ public class Hands : Node
 
                 for (int i = 0; i < positions.Length; i++)
                 {
+                    var cardRef = (Card)Childrens[i];
+                    bool isLastCard = i == Childrens.Count - 1;
+                    
                     float t = 1.0f - MathF.Exp(-18f * deltaTime);
                     Vector2 targetPosition = positions[i];
         
@@ -124,7 +128,27 @@ public class Hands : Node
                             targetPosition.X += spreadAmount;
                     }
                     
-                    Childrens[i].Position = Vector2.Lerp(Childrens[i].Position, targetPosition, t);
+                    // TODO: fix this shit
+                    if (count > 6 && !isLastCard )
+                    {
+                        cardRef.Collider = new Rectangle(
+                            -30,
+                            0,
+                            cardRef.DefaultSize.X - 60,
+                            cardRef.DefaultSize.Y
+                        );
+                    }
+                    else
+                    {
+                        cardRef.Collider = new Rectangle(
+                            0,
+                            0,
+                            cardRef.DefaultSize.X,
+                            cardRef.DefaultSize.Y
+                        );
+                    }
+                    
+                    cardRef.Position = Vector2.Lerp(cardRef.Position, targetPosition, t);
                 }
             }
         #endregion

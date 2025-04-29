@@ -9,12 +9,12 @@ namespace MonkeyCards.Game.Nodes.Game.Table.Combo;
 public class Element : Node
 {
     protected Font _font;
-    protected Char _symbol;
+    protected string _symbol;
     protected CardSuit _suit;
     
     protected Color color = Color.Black;
     
-    public Element(Char symbol, CardSuit suit)
+    public Element(string symbol, CardSuit suit)
     {
         _symbol = symbol;
         _suit = suit;
