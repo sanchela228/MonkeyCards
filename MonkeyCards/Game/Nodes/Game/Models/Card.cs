@@ -222,9 +222,14 @@ public class Card : Node
     protected Vector2 _dragOffset;
 
     public Node ExParent;
-
-
+    
     private bool _canBackToHand = true;
+
+    public void SetHand(Hands hands)
+    {
+        _hands = hands;
+        ExParent = hands;
+    }
 
     protected void BackToHands()
     {
@@ -278,7 +283,7 @@ public class Card : Node
                 if (IsMousePressed())
                 {
                     DraggingCard.Instance.Card = this;
-                    DraggingCard.Instance.IndexCardOnHands = _hands.Childrens.IndexOf(this);
+                    DraggingCard.Instance.IndexCardOnHands = _hands.Childrens.ToList().IndexOf(this);
 
                     _isDragging = true;
                     _dragOffset = new Vector2(mousePos.X - Position.X, mousePos.Y - Position.Y);
@@ -386,7 +391,7 @@ public class Card : Node
     {
         if (Parent is not null)
         {
-            Parent.Childrens.Remove(this);
+            Parent.RemoveChild(this);
             SetParent(null);
         }
         else if (SceneManager.Instance.PeekScene() is not null && SceneManager.Instance.PeekScene().ContainsNode(this))
@@ -400,6 +405,6 @@ public class Card : Node
         if (MouseTracking.Instance.HoveredNode == this)
             MouseTracking.Instance.HoveredNode = null;
             
-        Childrens.Clear();
+        ClearChildrens();
     }
 }

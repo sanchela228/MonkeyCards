@@ -29,7 +29,7 @@ public abstract class Node : IDisposable
     public bool IsActive { get; set; } = true;
     public int Order { get; set; } = 100;
     
-    public Scene Scene { get; }
+    public Scene Scene { get; set; }
     protected OverlapsMode Overlap { get; set; } = OverlapsMode.Exclusive;
 
     public bool RecursiveDrawChildren { get; set; } = false;
@@ -127,6 +127,7 @@ public abstract class Node : IDisposable
     public Node Parent
     {
         get => _parent;
+        set => _parent = value;
     }
     
     public event Action<Node> PreventParent;
@@ -157,6 +158,8 @@ public abstract class Node : IDisposable
         }
     }
     
+    public IReadOnlyList<Node> Childrens => _childrens.AsReadOnly();  
+    
     public void SetParent(Scene scene)
     {
         if (_parent != null)
@@ -167,18 +170,14 @@ public abstract class Node : IDisposable
         if (scene is not null) 
             scene.AddNode(this);
     }
-    
-    public List<Node> Childrens
-    {
-        get => _childrens;
-        set => _childrens = value;
-    }
 
     public void AddChild(Node node)
     {
         _childrens.Add(node);
         node.SetParent(this);
     }
+    
+    public int ChildrenCount => _childrens.Count;
     
     public void AddChildrens(IEnumerable<Node> list)
     {
@@ -189,6 +188,17 @@ public abstract class Node : IDisposable
             foreach (var node in list)
                 node.SetParent(this);
         }
+    }
+
+    public void ReplaceChildrens(IEnumerable<Node> list)
+    {
+        _childrens.Clear();
+        _childrens.AddRange(list);
+    }
+
+    public void ClearChildrens()
+    {
+        _childrens.Clear();
     }
 
     public void RemoveChild(Node node)
