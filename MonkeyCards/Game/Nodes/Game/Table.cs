@@ -38,22 +38,17 @@ public class Table : Node
         var els = new List<Node>();
         
         List<Card> cardsPull = new List<Card>();
-        
-        Childrens.OfType<Placeholder>().ToList().ForEach(x =>
+
+        GetCards().ForEach(card =>
         {
-            if (x.Childrens.Any())
+            for (int i = 0; i < card.Multiply; i++)
             {
-                Card card = (Card) x.Childrens.First();
-                
-                for (int i = 0; i < card.Multiply; i++)
-                {
-                    cardsPull.Add(card);
+                cardsPull.Add(card);
                     
-                    els.Add( new ComboElement( card.Symbol, card.Suit )
-                    {
-                        Size = new Vector2(10, 20)
-                    } );
-                }
+                els.Add( new ComboElement( card.Symbol, card.Suit )
+                {
+                    Size = new Vector2(10, 20)
+                } );
             }
         });
 
@@ -63,7 +58,32 @@ public class Table : Node
             els.Insert(0, res);
         }
         
-        _comboLine.Childrens = els;
+        _comboLine.ReplaceChildrens(els);
+    }
+
+    public List<Card> GetCards()
+    {
+        var cards = new List<Card>();
+        
+        Childrens.OfType<Placeholder>().ToList().ForEach(x =>
+        {
+            if (x.Childrens.Any())
+                cards.Add( (Card) x.Childrens.First() );
+        });
+
+        return cards;
+    }
+
+    public void Clear()
+    {
+        Childrens.OfType<Placeholder>().ToList().ForEach(x =>
+        {
+            if (x.Childrens.Any() && x.Childrens.First() is Card card)
+            {
+                x.ClearChildrens();
+                card.Dispose();
+            }
+        });
     }
 
     public override void Draw() 

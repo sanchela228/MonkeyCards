@@ -7,10 +7,19 @@ public abstract class Scene
     public abstract void Draw();
     public abstract void Dispose();
     
-    protected List<Node> _nodes = new();
+    private List<Node> _nodes = new();
     
-    public void AddNode(Node node) => _nodes.Add(node);
-    public void RemoveNode(Node node) => _nodes.Remove(node);
+    public void AddNode(Node node)
+    {
+        node.Scene = this;
+        _nodes.Add(node);
+    }
+    public void RemoveNode(Node node)
+    {
+        _nodes.Remove(node);
+        node.Scene = null;
+    }
+    
     public void ClearNodes() => _nodes.Clear();
     public bool ContainsNode(Node node) => _nodes.Contains(node);
     public void SortNodes() => _nodes.Sort((node1, node2) => node1.Order.CompareTo(node2.Order));
@@ -22,6 +31,8 @@ public abstract class Scene
         if (this._nodes.Count > 1)
             _nodes.Sort((node1, node2) => node1.Order.CompareTo(node2.Order));
     }
+
+    
 
     public void RootUpdate(float deltaTime)
     {

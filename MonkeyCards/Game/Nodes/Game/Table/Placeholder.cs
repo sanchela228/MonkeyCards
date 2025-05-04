@@ -22,7 +22,7 @@ public class Placeholder : Node
         
         if (IsMouseOverWithoutOverlap())
         {
-            if (DraggingCard.Instance.Card is Card && !_childrens.Any()) 
+            if (DraggingCard.Instance.Card is Card && !_childrens.Any())
                 _hoverWithCardEffect = true;
             
             if (DraggingCard.Instance.Card is Card && !Raylib.IsMouseButtonDown(MouseButton.Left))

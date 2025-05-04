@@ -10,7 +10,18 @@ public class CardsHolder
 {
     public Stack<Card> Defaults { get; set; } = new();
 
-    public List<Card> TakeFromTop(int count) => Defaults.Take(count).ToList();
+    public List<Card> TakeFromTop(int count)
+    {
+        List<Card> cards = new();
+
+        for (int i = 0; i < count; i++)
+        {
+            if (Defaults.Count > 0)
+                cards.Add( Defaults.Pop() );
+        }
+        
+        return cards;
+    }
     
     public void LoadCards()
     {

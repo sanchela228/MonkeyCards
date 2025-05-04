@@ -35,6 +35,20 @@ public class Hands : Node
     
     protected float _countCardsAlpha = 0f;
     protected const float FadeSpeed = 5f;
+
+    public void AddCards(IEnumerable<Node> cards)
+    {
+        foreach (Card card in cards)
+            card.SetHand(this);
+        
+        AddChildrens(cards);
+    }
+
+    public void AddCard(Card card)
+    {
+        card.SetHand(this);
+        AddChild(card);
+    }
     
     public override void Update(float deltaTime)
     {
