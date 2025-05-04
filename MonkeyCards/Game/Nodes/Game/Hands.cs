@@ -13,7 +13,7 @@ public class Hands : Node
     protected Font _font;
     protected bool _showCountCards = false;
     
-    protected int _maxCards = 10;
+    protected int _maxCards = 6;
     
     public int MaxCards { get => _maxCards;}
     
@@ -146,9 +146,9 @@ public class Hands : Node
                     if (count > 6 && !isLastCard )
                     {
                         cardRef.Collider = new Rectangle(
-                            -30,
+                            -25 + -(i * 1.5f),
                             0,
-                            cardRef.DefaultSize.X - 60,
+                            cardRef.DefaultSize.X - 50 + -(i * 3f),
                             cardRef.DefaultSize.Y
                         );
                     }

@@ -1,7 +1,7 @@
-using MonkeyCards.Game.Nodes.Game;
-using MonkeyCards.Game.Nodes.Game.Table;
+using Game.Nodes.Game;
+using Game.Nodes.Game.Table;
 
-namespace MonkeyCards.Game.Controllers;
+namespace Game.Controllers;
 
 public class Player
 {

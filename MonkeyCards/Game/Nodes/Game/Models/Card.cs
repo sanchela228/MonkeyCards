@@ -248,6 +248,10 @@ public class Card : Node
             
             if (_isDragging)
             {
+                Collider = new Rectangle(
+                    0, 0, _canvas.Texture.Width, _canvas.Texture.Height
+                );
+                
                 MouseTracking.Instance.HoveredNode = this;
 
                 if (Raylib.IsMouseButtonDown(MouseButton.Left))

@@ -1,9 +1,10 @@
-using MonkeyCards.Game.Nodes.Game;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
-using MonkeyCards.Game.Nodes.Game.Table;
-using MonkeyCards.Game.Services;
+using Game.Nodes.Game;
+using Game.Nodes.Game.Models.Card;
+using Game.Nodes.Game.Table;
+using Game.Services;
+using Raylib_cs;
 
-namespace MonkeyCards.Game.Controllers;
+namespace Game.Controllers;
 
 public class Session
 {
@@ -12,7 +13,16 @@ public class Session
 
     public int StartStack { get; protected set; } = 5;
 
-    private int _round = 1;
+    
+    // TODO: create TIMER class
+    public bool timerRunning { get; set; }
+    public float RoundTime { get; protected set; }
+    
+    public string TextTimer { get; protected set; }
+
+    public int Round { get; protected set; } = 1;
+    
+    private readonly float _roundTime = 10f;
     
     public void Init(Hands hands, Table table, IEnumerable<Card> startCards)
     {
@@ -24,26 +34,71 @@ public class Session
         Self.Hands.AddCards( startCards );
     }
 
-    public void EndRound(float money)
+    public async void EndRound(float money)
     {
+        timerRunning = false;
+        
+        await AwaitTestTimer();
+        
         Self.Money += money;
         
-        _round++;
+        Round++;
         
         PickToHandRoundCards();
+        StartTimer();
+
+        Self.Table?.Clear();
     }
     
-    public void EndRound()
+    public async void EndRound()
     {
+        timerRunning = false;
+        
+        await AwaitTestTimer();
+        
         Self.Money += CardsHolder.CalcCombo(Self.Table.GetCards());
         
-        _round++;
+        Round++;
 
         PickToHandRoundCards();
+        StartTimer();
+        
+        Self.Table?.Clear();
+    }
+    
+    public async Task AwaitTestTimer()
+    {
+        await Task.Delay(2150); 
+    }
+
+    public void StartTimer()
+    {
+        timerRunning = true;
+        RoundTime = _roundTime;
+    }
+
+    public void TimerUpdate(float deltaTime)
+    {
+        if (timerRunning && RoundTime > 0)
+        {
+            RoundTime -= deltaTime;
+
+            int minutes = (int)(RoundTime / 60);
+            int seconds = (int)(RoundTime % 60);
+
+            TextTimer = $"{minutes:D2}:{seconds:D2}";
+        }
+        else if (timerRunning && RoundTime <= 0)
+        {
+            EndRound();
+        }
     }
 
     public void PickToHandRoundCards()
     {
+        if ( Self.Hands.Childrens.Count >= Self.Hands.MaxCards) 
+            return;
+        
         if (Self.Hands.Childrens.Count <= Self.Hands.MaxCards)
         {
             if ( (Self.Hands.MaxCards - Self.Hands.Childrens.Count) == 1 )
@@ -61,7 +116,6 @@ public class Session
         
         card.BurnCard();
     }
-    
     
     static Session() => Instance = new();
     public static Session Instance { get; private set; }
