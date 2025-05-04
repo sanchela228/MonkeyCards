@@ -1,6 +1,6 @@
-using MonkeyCards.Engine.Core.Objects;
+using Engine.Core.Objects;
 
-namespace MonkeyCards.Engine.Managers;
+namespace Engine.Managers;
 
 public class MouseTracking
 {

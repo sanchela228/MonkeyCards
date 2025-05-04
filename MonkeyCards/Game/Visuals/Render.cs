@@ -1,7 +1,7 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Objects;
+using Engine.Core.Objects;
 
-namespace MonkeyCards.Game.Visuals;
+namespace Game.Visuals;
 
 public static class Render
 {

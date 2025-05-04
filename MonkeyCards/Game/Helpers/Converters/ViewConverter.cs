@@ -2,11 +2,11 @@ using System.Globalization;
 using System.Numerics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MonkeyCards.Engine.Managers;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
+using Engine.Managers;
+using Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Helpers.Converters;
+namespace Game.Helpers.Converters;
 
 public class ViewConverter : JsonConverter<View>
 {

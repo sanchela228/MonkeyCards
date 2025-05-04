@@ -1,8 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
+using Game.Nodes.Game.Models.Card;
 
-namespace MonkeyCards.Game.Helpers.Converters;
+namespace Game.Helpers.Converters;
 
 public class EffectConverter : JsonConverter<Effect>
 {

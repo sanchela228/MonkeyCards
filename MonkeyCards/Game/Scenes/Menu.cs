@@ -1,9 +1,9 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Scenes;
-using MonkeyCards.Game.Nodes.Game.Models;
+using Engine.Core.Scenes;
+using Game.Nodes.Game.Models;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Scenes;
+namespace Game.Scenes;
 
 public class Menu : Scene
 {

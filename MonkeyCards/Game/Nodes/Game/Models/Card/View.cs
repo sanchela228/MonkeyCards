@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Nodes.Game.Models.Card;
+namespace Game.Nodes.Game.Models.Card;
 
 public struct View
 {

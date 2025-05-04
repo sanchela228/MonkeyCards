@@ -1,4 +1,4 @@
-namespace MonkeyCards.Engine.Core.Scenes;
+namespace Engine.Core.Scenes;
 
 using Objects;
 public abstract class Scene

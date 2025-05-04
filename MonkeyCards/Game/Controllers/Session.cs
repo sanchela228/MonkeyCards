@@ -1,7 +1,7 @@
-using MonkeyCards.Game.Nodes.Game;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
+using Game.Nodes.Game;
+using Game.Nodes.Game.Models.Card;
 
-namespace MonkeyCards.Game.Controllers;
+namespace Game.Controllers;
 
 public class Session
 {

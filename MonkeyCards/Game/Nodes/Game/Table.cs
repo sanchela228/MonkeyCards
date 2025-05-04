@@ -1,11 +1,11 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Objects;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
-using MonkeyCards.Game.Nodes.Game.Table.Combo;
-using ComboElement = MonkeyCards.Game.Nodes.Game.Table.Combo.Element;
+using Engine.Core.Objects;
+using Game.Nodes.Game.Models.Card;
+using Game.Nodes.Game.Table.Combo;
+using ComboElement = Game.Nodes.Game.Table.Combo.Element;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Nodes.Game.Table;
+namespace Game.Nodes.Game.Table;
 
 public class Table : Node
 {

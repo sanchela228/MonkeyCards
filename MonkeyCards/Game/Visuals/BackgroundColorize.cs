@@ -1,8 +1,8 @@
 using System.Numerics;
-using MonkeyCards.Engine.Managers;
+using Engine.Managers;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Visuals;
+namespace Game.Visuals;
 
 public class BackgroundColorize
 {

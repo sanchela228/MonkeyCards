@@ -1,12 +1,11 @@
-﻿using MonkeyCards.Engine.Core;
-using MonkeyCards.Game.Scenes;
+﻿using Game.Scenes;
 
-var config = new MonkeyCards.Engine.Configuration.Game()
+var config = new Engine.Configuration.Game()
 {
     Version = 2,
     VersionName = "low_development",
     PathResourcesFolder = "Resources",
 };
 
-using var game = new Game(config);
+using var game = new Engine.Core.Game(config);
 game.Run( new Test() );

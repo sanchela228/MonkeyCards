@@ -1,6 +1,6 @@
-using MonkeyCards.Game.Nodes.Game;
+using Game.Nodes.Game;
 
-namespace MonkeyCards.Game.Controllers;
+namespace Game.Controllers;
 
 public class Player
 {

@@ -1,13 +1,13 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Scenes;
-using MonkeyCards.Game.Controllers;
-using MonkeyCards.Game.Nodes.Game;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
-using MonkeyCards.Game.Nodes.Game.Table;
-using MonkeyCards.Game.Services;
+using Engine.Core.Scenes;
+using Game.Controllers;
+using Game.Nodes.Game;
+using Game.Nodes.Game.Models.Card;
+using Game.Nodes.Game.Table;
+using Game.Services;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Scenes;
+namespace Game.Scenes;
 
 public class Test : Scene
 {

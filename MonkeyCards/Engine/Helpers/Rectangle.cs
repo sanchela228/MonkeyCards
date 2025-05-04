@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-namespace MonkeyCards.Engine.Helpers;
+namespace Engine.Helpers;
 
 public static class Rectangle
 {

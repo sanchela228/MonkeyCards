@@ -1,11 +1,11 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Objects;
-using MonkeyCards.Engine.Managers;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
-using MonkeyCards.Game.Services;
+using Engine.Core.Objects;
+using Engine.Managers;
+using Game.Nodes.Game.Models.Card;
+using Game.Services;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Nodes.Game.Table.Combo;
+namespace Game.Nodes.Game.Table.Combo;
 
 public class Result : Node
 {

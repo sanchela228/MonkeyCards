@@ -1,6 +1,6 @@
 using Raylib_cs;
 
-namespace MonkeyCards.Engine.Managers;
+namespace Engine.Managers;
 
 public class Resources
 {

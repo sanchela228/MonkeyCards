@@ -1,10 +1,10 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Scenes;
-using MonkeyCards.Engine.Managers;
+using Engine.Core.Scenes;
+using Engine.Managers;
 using Raylib_cs;
-using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
+using SceneManager = Engine.Core.Scenes.Manager;
 
-namespace MonkeyCards.Engine.Core.Objects;
+namespace Engine.Core.Objects;
 
 public enum PointRendering
 {

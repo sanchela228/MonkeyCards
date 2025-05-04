@@ -1,7 +1,7 @@
-using MonkeyCards.Engine.Managers;
-using MonkeyCards.Engine.Utilites;
+using Engine.Managers;
+using Engine.Utilites;
 
-namespace MonkeyCards.Engine.Configuration;
+namespace Engine.Configuration;
 public class Game
 {
     public required int Version { get; set; }

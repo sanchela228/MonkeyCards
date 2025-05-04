@@ -1,11 +1,11 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Objects;
-using MonkeyCards.Engine.Managers;
-using MonkeyCards.Game.Controllers;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
+using Engine.Core.Objects;
+using Engine.Managers;
+using Game.Controllers;
+using Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Nodes.Game;
+namespace Game.Nodes.Game;
 
 public class Hands : Node
 {

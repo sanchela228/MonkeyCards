@@ -1,4 +1,4 @@
-namespace MonkeyCards.Engine.Utilites;
+namespace Engine.Utilites;
 
 public static class Env
 {

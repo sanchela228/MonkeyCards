@@ -1,10 +1,10 @@
 using System.Numerics;
-using MonkeyCards.Engine.Core.Objects;
-using MonkeyCards.Game.Controllers;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
+using Engine.Core.Objects;
+using Game.Controllers;
+using Game.Nodes.Game.Models.Card;
 using Raylib_cs;
 
-namespace MonkeyCards.Game.Nodes.Game.Table;
+namespace Game.Nodes.Game.Table;
 
 public class Placeholder : Node
 {

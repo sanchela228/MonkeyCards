@@ -1,10 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ResourceManager = MonkeyCards.Engine.Managers.Resources;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
-using MonkeyCards.Game.Presentation;
+using ResourceManager = Engine.Managers.Resources;
+using Game.Nodes.Game.Models.Card;
+using Game.Presentation;
 
-namespace MonkeyCards.Game.Services;
+namespace Game.Services;
 
 public class CardsHolder
 {

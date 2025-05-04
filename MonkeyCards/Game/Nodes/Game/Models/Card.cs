@@ -1,15 +1,15 @@
 using System.Numerics;
 using System.Text.Json.Serialization;
-using MonkeyCards.Engine.Managers;
-using SceneManager = MonkeyCards.Engine.Core.Scenes.Manager;
-using MonkeyCards.Game.Controllers;
-using MonkeyCards.Game.Helpers.Converters;
-using MonkeyCards.Game.Scenes;
+using Engine.Managers;
+using SceneManager = Engine.Core.Scenes.Manager;
+using Game.Controllers;
+using Game.Helpers.Converters;
+using Game.Scenes;
 using Raylib_cs;
 using Color = Raylib_cs.Color;
 using Rectangle = Raylib_cs.Rectangle;
 
-namespace MonkeyCards.Game.Nodes.Game.Models.Card;
+namespace Game.Nodes.Game.Models.Card;
 using Engine.Core.Objects;
 
 public class Card : Node

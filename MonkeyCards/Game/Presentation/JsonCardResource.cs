@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
-using MonkeyCards.Game.Helpers.Converters;
-using MonkeyCards.Game.Nodes.Game.Models.Card;
+using Game.Helpers.Converters;
+using Game.Nodes.Game.Models.Card;
 
-namespace MonkeyCards.Game.Presentation;
+namespace Game.Presentation;
 
 public class JsonCardResource
 {
