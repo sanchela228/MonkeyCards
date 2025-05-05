@@ -43,6 +43,23 @@ public class Resources
         return resource;
     }
     
+    public void PreLoad<T>(string str) => Load<T>(str);
+
+    public void PreLoadQuad<T, K>(IEnumerable<string> strs1, IEnumerable<string> strs2)
+    {
+        foreach (var str in strs1) 
+            Load<T>(str);
+        
+        foreach (var str in strs2) 
+            Load<K>(str);
+    }
+
+    public void PreLoadTheSame<T>( IEnumerable<string> strings)
+    {
+        foreach (var str in strings) 
+            Load<T>(str);
+    }
+    
     public T Get<T>(string relativePath)
     {
         string subfolder = GetSubfolder<T>();
@@ -65,11 +82,11 @@ public class Resources
     {
         string fullPath = Path.Combine(RootFolderPath, "Fonts", relativePath);
 
-        if (_resources.TryGetValue(fullPath, out var cachedFont))
+        if (_resources.TryGetValue(fullPath + ":" + fontSize, out var cachedFont))
             return (Font)cachedFont;
 
         Font font = Raylib.LoadFontEx(fullPath, fontSize, fontChars, charCount);
-        _resources[fullPath] = font;
+        _resources[fullPath + ":" + fontSize] = font;
         return font;
     }
     

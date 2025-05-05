@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Text.Json.Serialization;
+using Engine.Core;
 using Engine.Managers;
 using SceneManager = Engine.Core.Scenes.Manager;
 using Game.Controllers;

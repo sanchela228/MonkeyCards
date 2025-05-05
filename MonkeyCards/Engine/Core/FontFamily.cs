@@ -1,6 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
-namespace Game.Nodes.Game.Models.Card;
+
+namespace Engine.Core;
 
 public struct FontFamily
 {
@@ -10,5 +11,6 @@ public struct FontFamily
     public float Rotation { get; set; }
     public float Spacing { get; set; }
 
-    public Vector2 calcTextSize(string text) => Raylib.MeasureTextEx(Font, text, Spacing, Spacing);
+    public Vector2 CalcTextSize(string text) => Raylib.MeasureTextEx(Font, text, Size, Spacing);
+    
 }

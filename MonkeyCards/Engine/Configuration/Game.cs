@@ -14,8 +14,6 @@ public class Game
     public Game()
     {
         Env.Load();
-
-        Resources.Instance.RootFolderPath = PathResourcesFolder ?? Env.Get("RESOURCES_PATH_FOLDER");
         
         WindowStartWidth = int.Parse(Env.Get("WINDOW_START_WIDTH"));
         WindowStartHeight = int.Parse(Env.Get("WINDOW_START_HEIGHT"));
