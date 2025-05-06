@@ -8,7 +8,5 @@ var config = new Engine.Configuration.Game()
     PathResourcesFolder = Env.Get("RESOURCES_PATH_FOLDER") ?? "Resources",
 };
 
-Console.WriteLine(config.PathResourcesFolder);
-
 using var game = new Engine.Core.Game(config);
 game.Run( new StartUp() );

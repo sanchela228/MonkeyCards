@@ -40,7 +40,8 @@ public static class Text
             DrawAlignedText(fontFamily, currentLine, pos.X, y, size, alignment);
     }
 
-    public static void DrawPro(FontFamily fontFamily, string text, Vector2 pos, Vector2? origin = null, float? rotation = null)
+    public static void DrawPro(FontFamily fontFamily, string text, Vector2 pos, Vector2? origin = null, float? 
+        rotation = null, Color? color = null, int? size = null, float? spacing = null)
     {
         var originLocal = fontFamily.CalcTextSize(text);
         
@@ -50,9 +51,9 @@ public static class Text
             pos,
             origin ?? new Vector2(originLocal.X / 2, originLocal.Y / 2),
             rotation ?? fontFamily.Rotation,
-            fontFamily.Size,
-            fontFamily.Spacing,
-            fontFamily.Color
+            size ?? fontFamily.Size,
+            spacing?? fontFamily.Spacing,
+            color ?? fontFamily.Color
         );
     }
 
