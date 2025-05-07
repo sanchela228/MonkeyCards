@@ -5,12 +5,15 @@ public class Animator
     private class AnimationTask
     {
         public Action<float> Action;
+        public Action OnComplete;
+        public bool HasCompletedEventFired = false;
         public float Progress;
         public float Duration;
         public float Delay;
         public bool Removable;
         public bool IsCompleted;
         public bool Mirror;
+        public bool Repeat;
         public bool IsPlayingForward = true;
     }
     
@@ -18,19 +21,22 @@ public class Animator
     
     ~Animator() => _tasks.Clear();
     
-    // TODO: add OnComplete event in end animation
-    public void Task(Action<float> action, float duration = 1f, float delay = 0f, bool removable = false, bool mirror = false)
+    public void Task(Action<float> action, Action onComplete = null, float duration = 1f, float delay = 0f, bool removable = false, 
+        bool mirror = false, bool repeat = false)
     {
         _tasks.Add(new AnimationTask
         {
             Action = action,
+            OnComplete = onComplete,
+            HasCompletedEventFired = false,
             Progress = 0f,
             Duration = duration,
             Delay = delay,
             Removable = removable,
             IsCompleted = false,
             Mirror = mirror,
-            IsPlayingForward = true
+            Repeat = repeat,
+            IsPlayingForward = true,
         });
     }
     
@@ -40,6 +46,17 @@ public class Animator
         for (int i = _tasks.Count - 1; i >= 0; i--)
         {
             var task = _tasks[i];
+
+            if (task.IsCompleted)
+            {
+                if (!task.HasCompletedEventFired && task.OnComplete != null)
+                {
+                    task.OnComplete();
+                    task.HasCompletedEventFired = true;
+                }
+                
+                continue;
+            }
 
             if (task.Delay > 0f)
             {
@@ -57,6 +74,10 @@ public class Animator
                     task.Progress = 1f;
                     task.IsPlayingForward = false;
                 }
+                else if (task.Repeat)
+                {
+                    task.Progress = 0f;
+                }
                 else
                 {
                     task.IsCompleted = true;
@@ -66,10 +87,16 @@ public class Animator
             }
             else if (!task.IsPlayingForward && task.Progress <= 0f)
             {
-                task.Progress = 0f;
-                task.IsCompleted = true;
-                
-                if (task.Removable) _tasks.RemoveAt(i);
+                if (task.Repeat)
+                {
+                    task.Progress = 0f;
+                    task.IsPlayingForward = true;
+                }
+                else
+                {
+                    task.IsCompleted = true;
+                    if (task.Removable) _tasks.RemoveAt(i);
+                }
             }
         }
     }

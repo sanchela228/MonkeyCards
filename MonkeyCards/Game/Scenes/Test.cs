@@ -12,7 +12,6 @@ namespace Game.Scenes;
 
 public class Test : Scene
 {
-    private Rectangle backButton;
     private Rectangle exitButton;
 
     private Font _font = Resources.Instance.FontEx("JockeyOne-Regular.ttf", 42);
@@ -31,8 +30,13 @@ public class Test : Scene
     
     public Test()
     {
+        Console.WriteLine("START TEST SCENE");
+        
+        
         Visuals.BackgroundColorize.Instance.SetSettings();
         CardsHolder.Instance.LoadCards();
+        
+        exitButton = new Rectangle(100, 240, 200, 50);
         
         Session.Instance.Init(Hands, Table,  CardsHolder.Instance.TakeFromTop( Session.Instance.StartStack ));
         Session.Instance.StartTimer();
@@ -75,6 +79,12 @@ public class Test : Scene
            
            Table.Clear();
         }
+        
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left) &&
+            Raylib.CheckCollisionPointRec(mousePos, exitButton))
+        {
+            Manager.Instance.PopScene();
+        }
     }
     
     public override void Draw()
@@ -95,10 +105,16 @@ public class Test : Scene
         Raylib.DrawRectangle( (int)testDeleteRect.X, (int)testDeleteRect.Y, (int)testDeleteRect.Width, (int)testDeleteRect.Height, Color.Red);
         Raylib.DrawRectangle( (int)testAddRect.X, (int)testAddRect.Y, (int)testAddRect.Width, (int)testAddRect.Height, Color.Green);
         Raylib.DrawRectangle( (int)endRoundButtonTest.X, (int)endRoundButtonTest.Y, (int)endRoundButtonTest.Width, (int)endRoundButtonTest.Height, Color.Yellow);
+        
+        Raylib.DrawRectangleRec(exitButton, Color.Red);
+        Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
     }
     
     public override void Dispose()
     {
+        Console.WriteLine("END TEST SCENE");
+        
+        
         Visuals.BackgroundColorize.Instance.UnloadShader();
     }
 }

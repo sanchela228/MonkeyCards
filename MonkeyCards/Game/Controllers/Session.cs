@@ -30,6 +30,9 @@ public class Session
         {
             Table = table
         };
+
+        RemotePlayer = new Player(hands);
+        Round = 1;
             
         Self.Hands.AddCards( startCards );
     }

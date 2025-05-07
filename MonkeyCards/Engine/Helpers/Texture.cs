@@ -12,17 +12,18 @@ public enum PointRendering
 
 public static class Texture
 {
-    public static void DrawEx(Texture2D t, Vector2 pos, float rotation = 0, float scale = 1f, Color? c = null, PointRendering pointRendering = PointRendering.Center )
+    public static void DrawEx(Texture2D texture, Vector2 position, float rotation = 0, float scale = 1f, 
+        Color? color = null, PointRendering pointRendering = PointRendering.Center )
     {
         if (pointRendering == PointRendering.Center)
-            pos = new Vector2(pos.X - t.Width / 2, pos.Y - t.Height / 2);
+            position = new Vector2(position.X - texture.Width / 2, position.Y - texture.Height / 2);
         
         Raylib.DrawTextureEx(
-            t, 
-            pos, 
+            texture, 
+            position, 
             rotation,
             scale, 
-            c ?? Color.White
+            color ?? Color.White
         );
     }
 }

@@ -3,6 +3,7 @@ using Engine.Core;
 using Engine.Core.Scenes;
 using Engine.Helpers;
 using Engine.Managers;
+using Game.Services.Network;
 using Game.Visuals;
 using Raylib_cs;
 using Rectangle = Raylib_cs.Rectangle;
@@ -11,16 +12,14 @@ namespace Game.Scenes;
 
 public class StartUp : Scene
 {
-
     private FontFamily f;
     private FontFamily fm;
     private Texture2D t;
     private Vector2 centerScreen;
     
-    private const string previewText = "We present a game in which there is a lot of blood, guts of death, and generally full of shit, yes.";
-    private const float previewTextSize = 505f;
-    
     public Animator Animator = new();
+
+    private Authorization _authorizator = new();
     
     public StartUp()
     {
@@ -40,21 +39,60 @@ public class StartUp : Scene
             Spacing = 2,
             Color = Color.White
         };
+        
+        Animator.Task((progress) =>
+        {
+            Color color = f.Color;
+            color.A = (byte)(progress * 255);
+
+
+            Text.DrawPro(f, "MonkeySpeak Team", centerScreen, color: color);
+            Texture.DrawEx(t, new Vector2(centerScreen.X, centerScreen.Y - 120), color: color);
+
+        }, duration: 2f, mirror: true, removable: true);
 
         Animator.Task((progress) =>
         {
             Color color = f.Color;
             color.A = (byte)(progress * 255);
-            Text.DrawPro(f, "MonkeySpeak Team", centerScreen, color: color);
-        }, duration: 2f, mirror: true, removable: true);
+            
+            Text.DrawPro(f, "A Game With Cards", centerScreen, color: color);
+        }, 
+        onComplete: () =>
+        {
+            Animator.Task((progress) =>
+            {
+                Raylib.DrawRectanglePro( 
+                    new Rectangle(centerScreen.X, centerScreen.Y + 150, 60, 60), 
+                    new Vector2(30, 30), 
+                    progress * 360f, 
+                    new Color(255,255,255)
+                );
+                
+                Text.DrawPro(f, "A Game With Cards", centerScreen, color: Color.White);
+                
+                Text.DrawPro(fm, _authorizator.Status, new Vector2(centerScreen.X, centerScreen.Y + 230), color: Color.White);
+                
+            }, duration: 2f, repeat: true);
+            
+            Console.WriteLine("Auth entrance");
+            
+            _authorizator.Entrance();
+
+        }, duration: 0.2f, delay: 5f);
 
     }
     
     public override void Update(float deltaTime)
     {
-        Animator.Update(deltaTime);
-        
         centerScreen = new Vector2(Raylib.GetScreenWidth() / 2, (Raylib.GetScreenHeight() + 30) / 2);
+        
+        Animator.Update(deltaTime);
+
+        if (_authorizator.IsAuthorized)
+        {
+            Manager.Instance.PushScene( new Menu() );
+        }
     }
 
     public override void Draw()
@@ -65,12 +103,9 @@ public class StartUp : Scene
         Animator.Draw();
         
         
-        Texture.DrawEx(t, new Vector2(centerScreen.X, centerScreen.Y - 120));
+        
        
 
-       
-
-        // Text.DrawWrapped(fm, previewText, new Vector2(centerScreen.X - previewTextSize / 2, centerScreen.Y + 50), previewTextSize, TextAlignment.Center);
     }
 
     public override void Dispose()

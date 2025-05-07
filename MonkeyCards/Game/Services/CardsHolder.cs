@@ -54,6 +54,8 @@ public class CardsHolder
                 cardResource.Effect )
             );
         }
+        
+        Defaults = new();
 
         list.OrderBy(x => Random.Shared.Next()).ToList().ForEach(card => Defaults.Push(card));
     }
