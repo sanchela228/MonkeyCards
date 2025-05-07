@@ -17,7 +17,7 @@ public class Menu : Scene
         exitButton = new Rectangle(100, 240, 200, 50);
     }
     
-    public override void Update(float deltaTime)
+    protected override void Update(float deltaTime)
     {
         Vector2 mousePos = Raylib.GetMousePosition();
 
@@ -34,7 +34,7 @@ public class Menu : Scene
         }
     }
     
-    public override void Draw()
+    protected override void Draw()
     {
         Raylib.ClearBackground( new Color(34, 128, 28) );
 
@@ -45,7 +45,7 @@ public class Menu : Scene
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
     }
     
-    public override void Dispose()
+    protected override void Dispose()
     {
         
     }

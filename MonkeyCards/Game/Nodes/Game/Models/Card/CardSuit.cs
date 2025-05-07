@@ -5,5 +5,6 @@ public enum CardSuit
     Hearts,
     Diamonds,
     Clubs,
-    Spades
+    Spades,
+    Joker
 }

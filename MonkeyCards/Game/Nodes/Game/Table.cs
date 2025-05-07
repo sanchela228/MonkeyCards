@@ -15,11 +15,11 @@ public class Table : Node
         Position = centerPoint;
         AddChildrens( new List<Placeholder>
         {
-            new Placeholder(),
-            new Placeholder(),
-            new Placeholder(),
-            new Placeholder(),
-            new Placeholder()
+            new Placeholder(0),
+            new Placeholder(1),
+            new Placeholder(2),
+            new Placeholder(3),
+            new Placeholder(4)
         } );
         
         if ( Childrens.Any() )

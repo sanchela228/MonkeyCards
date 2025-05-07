@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Game\Nodes\Game\Models\Card\Effects\" />
       <Folder Include="Game\Nodes\UI\" />
     </ItemGroup>
 

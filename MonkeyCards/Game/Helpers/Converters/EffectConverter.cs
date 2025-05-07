@@ -4,6 +4,9 @@ using Game.Nodes.Game.Models.Card;
 
 namespace Game.Helpers.Converters;
 
+
+// TODO: REWRITE like special converter
+
 public class EffectConverter : JsonConverter<Effect>
 {
     public override Effect Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

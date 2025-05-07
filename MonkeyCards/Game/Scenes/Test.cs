@@ -25,13 +25,14 @@ public class Test : Scene
     public Rectangle testDeleteRect = new(30, 30, 100, 100);
     public Rectangle testAddRect = new(230, 30, 100, 100);
     
-    public Rectangle endRoundButtonTest = new(380, 30, 100, 100);
+    public Rectangle testAddSpecial = new(480, 30, 100, 100);
+    
+    public Rectangle endRoundButtonTest = new(720, 30, 100, 100);
     
     
     public Test()
     {
         Console.WriteLine("START TEST SCENE");
-        
         
         Visuals.BackgroundColorize.Instance.SetSettings();
         CardsHolder.Instance.LoadCards();
@@ -41,7 +42,6 @@ public class Test : Scene
         Session.Instance.Init(Hands, Table,  CardsHolder.Instance.TakeFromTop( Session.Instance.StartStack ));
         Session.Instance.StartTimer();
         
-        // TODO: ADD MONEY AND TURN STATUS VIEW NODE
         // TODO: ADD CARDSHOLDER VIEW AND COUNTER
         
         AddNode(Hands);
@@ -49,7 +49,7 @@ public class Test : Scene
         AddNode(new SessionPlayerStatus( new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.2f)));
     }
     
-    public override void Update(float deltaTime)
+    protected override void Update(float deltaTime)
     {
         Visuals.BackgroundColorize.Instance.BeforeDrawing();
         
@@ -66,13 +66,17 @@ public class Test : Scene
         if (Raylib.CheckCollisionPointRec(mousePos, testAddRect) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             if (Hands.MaxCards > Hands.ChildrenCount && CardsHolder.Instance.Defaults.Any())
-                Hands.AddChild(CardsHolder.Instance.Defaults.Pop());
+                Hands.AddCard(CardsHolder.Instance.Defaults.Pop());
+        }
+        
+        if (Raylib.CheckCollisionPointRec(mousePos, testAddSpecial) && Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            if (Hands.MaxCards > Hands.ChildrenCount && CardsHolder.Instance.Specials.Any())
+                Hands.AddCard(CardsHolder.Instance.Specials.Pop());
         }
         
         if (Raylib.CheckCollisionPointRec(mousePos, endRoundButtonTest) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
-           // TODO: END ROUND LOGIC
-
            List<Card> cards = Table.GetCards();
            
            Session.Instance.EndRound( CardsHolder.CalcCombo(cards) );
@@ -83,11 +87,12 @@ public class Test : Scene
         if (Raylib.IsMouseButtonPressed(MouseButton.Left) &&
             Raylib.CheckCollisionPointRec(mousePos, exitButton))
         {
-            Manager.Instance.PopScene();
+            if (Manager.Instance.HasPreviousScene()) Manager.Instance.PopScene();
+            else Raylib.CloseWindow();
         }
     }
     
-    public override void Draw()
+    protected override void Draw()
     {
         Visuals.BackgroundColorize.Instance.Draw();
         
@@ -105,12 +110,13 @@ public class Test : Scene
         Raylib.DrawRectangle( (int)testDeleteRect.X, (int)testDeleteRect.Y, (int)testDeleteRect.Width, (int)testDeleteRect.Height, Color.Red);
         Raylib.DrawRectangle( (int)testAddRect.X, (int)testAddRect.Y, (int)testAddRect.Width, (int)testAddRect.Height, Color.Green);
         Raylib.DrawRectangle( (int)endRoundButtonTest.X, (int)endRoundButtonTest.Y, (int)endRoundButtonTest.Width, (int)endRoundButtonTest.Height, Color.Yellow);
+        Raylib.DrawRectangle( (int)testAddSpecial.X, (int)testAddSpecial.Y, (int)testAddSpecial.Width, (int)testAddSpecial.Height, Color.Blue);
         
         Raylib.DrawRectangleRec(exitButton, Color.Red);
         Raylib.DrawText("Exit", (int)exitButton.X + 70, (int)exitButton.Y + 15, 20, Color.White);
     }
     
-    public override void Dispose()
+    protected override void Dispose()
     {
         Console.WriteLine("END TEST SCENE");
         

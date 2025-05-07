@@ -83,7 +83,7 @@ public class StartUp : Scene
 
     }
     
-    public override void Update(float deltaTime)
+    protected override void Update(float deltaTime)
     {
         centerScreen = new Vector2(Raylib.GetScreenWidth() / 2, (Raylib.GetScreenHeight() + 30) / 2);
         
@@ -95,7 +95,7 @@ public class StartUp : Scene
         }
     }
 
-    public override void Draw()
+    protected override void Draw()
     {
         Raylib.ClearBackground( new Color(25, 25, 25));
        
@@ -108,8 +108,8 @@ public class StartUp : Scene
 
     }
 
-    public override void Dispose()
+    protected override void Dispose()
     {
-        
+        Resources.Instance.Unload<Texture2D>("Images/MonkeyPreview.png");
     }
 }

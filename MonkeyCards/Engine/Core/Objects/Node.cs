@@ -37,7 +37,7 @@ public abstract class Node : IDisposable
     
     public void RootUpdate(float deltaTime)
     {
-        Update(deltaTime);
+        if (IsActive) Update(deltaTime);
 
         if (_childrens is not null && _childrens.Any())
         {
@@ -47,19 +47,19 @@ public abstract class Node : IDisposable
                 revertList.Reverse();
                     
                 foreach (var child in revertList.OrderBy(node => node.Order).ToList()) 
-                    child.RootUpdate(deltaTime);
+                    if (child.IsActive) child.RootUpdate(deltaTime);
             }
             else
             {
                 foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
-                    child.RootUpdate(deltaTime);
+                    if (child.IsActive) child.RootUpdate(deltaTime);
             }
         }
     }
     
     public void RootDraw()
     {
-        Draw();
+        if (IsActive) Draw();
 
         if (_childrens is not null && _childrens.Any())
         {
@@ -69,12 +69,12 @@ public abstract class Node : IDisposable
                 revertList.Reverse();
                 
                 foreach (var child in revertList.OrderBy(node => node.Order).ToList()) 
-                    child.RootDraw();
+                    if (child.IsActive) child.RootDraw();
             }
             else
             {
                 foreach (var child in _childrens.OrderBy(node => node.Order).ToList()) 
-                    child.RootDraw();
+                    if (child.IsActive) child.RootDraw();
             }
         }
     }

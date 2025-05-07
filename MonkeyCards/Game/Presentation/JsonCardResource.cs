@@ -26,4 +26,7 @@ public class JsonCardResource
     
     [JsonConverter(typeof(EffectConverter))]
     public Effect? Effect { get; set; }
+    
+    [JsonConverter(typeof(SpecialConverter))]
+    public Special? Special { get; set; }
 }

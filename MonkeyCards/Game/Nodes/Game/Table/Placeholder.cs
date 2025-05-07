@@ -8,9 +8,11 @@ namespace Game.Nodes.Game.Table;
 
 public class Placeholder : Node
 {
+    public int Index { get; set; }
     public static Vector2 DefaultSize => new Vector2(136f, 206f);
-    public Placeholder()
+    public Placeholder(int index)
     {
+        Index = index;
         Size = DefaultSize;
     }
 
@@ -22,14 +24,21 @@ public class Placeholder : Node
         
         if (IsMouseOverWithoutOverlap())
         {
-            if (DraggingCard.Instance.Card is Card && !_childrens.Any())
+            if (DraggingCard.Instance.Card is Card { Special: not null } c)
+                c.Special.OnHover(c);
+            
+            if (DraggingCard.Instance.Card is Card && _childrens.Count == 0)
                 _hoverWithCardEffect = true;
             
-            if (DraggingCard.Instance.Card is Card && !Raylib.IsMouseButtonDown(MouseButton.Left))
+            if (DraggingCard.Instance.Card is Card card && !Raylib.IsMouseButtonDown(MouseButton.Left))
             {
                 if (!_childrens.Any())
                 {
                     Vector2 worldPosition = DraggingCard.Instance.Card.Position;
+                    
+                    if (card.Special is not null)
+                        card.Special.OnPlay(card);
+                    
                     DraggingCard.Instance.Card.SetParent(this);
                     DraggingCard.Instance.Card.Position = worldPosition;
                 }
@@ -37,6 +46,8 @@ public class Placeholder : Node
                 {
                     if (DraggingCard.Instance.Card.ExParent is not null)
                     {
+                       
+                        
                         Vector2 worldPosition = DraggingCard.Instance.Card.Position;
                         Vector2 worldChildPosition = _childrens.First().Position;
 
@@ -44,14 +55,24 @@ public class Placeholder : Node
                         
                         _childrens.First().SetParent(DraggingCard.Instance.Card.ExParent, index ?? -1, worldChildPosition);
                         
+                        if (card.Special is not null)
+                            card.Special.OnPlay(card);
+                        
                         DraggingCard.Instance.Card.SetParent(this);
                         DraggingCard.Instance.Card.Position = worldPosition;
                     }
                 }
             }
         }
-        
-        _color = _hoverWithCardEffect ? new Color(0,0,0,155) : new Color(0,0,0,55);
+
+        if (_hoverWithCardEffect)
+        {
+            _color = new Color(0,0,0,155);
+        }
+        else
+        {
+            _color = new Color(0,0,0,55);
+        }
 
         if (_childrens.Any())
         {

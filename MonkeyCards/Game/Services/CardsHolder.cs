@@ -9,6 +9,7 @@ namespace Game.Services;
 public class CardsHolder
 {
     public Stack<Card> Defaults { get; set; } = new();
+    public Stack<Card> Specials { get; set; } = new();
 
     public List<Card> TakeFromTop(int count)
     {
@@ -25,6 +26,8 @@ public class CardsHolder
     
     public void LoadCards()
     {
+        // TODO: clear this code
+        
         var options = new JsonSerializerOptions
         {
             Converters = { new JsonStringEnumConverter() },
@@ -51,13 +54,39 @@ public class CardsHolder
                 cardResource.Multiply,
                 cardResource.Border,
                 cardResource.Background,
-                cardResource.Effect )
+                cardResource.Effect,
+                cardResource.Special)
+            );
+        }
+        
+        json = ResourceManager.Instance.Get<string>("Cards/specials.json");
+        resources = JsonSerializer.Deserialize<JsonCardResource[]>(json, options);
+        
+        List<Card> listSpecials = new();
+        foreach (JsonCardResource cardResource in resources)
+        {
+            listSpecials.Add( new Card(
+                cardResource.Id,
+                cardResource.Name,
+                cardResource.Symbol,
+                cardResource.Suit,
+                cardResource.Cost,
+                cardResource.FontFamily,
+                cardResource.View,
+                cardResource.Description,
+                cardResource.Multiply,
+                cardResource.Border,
+                cardResource.Background,
+                cardResource.Effect,
+                cardResource.Special)
             );
         }
         
         Defaults = new();
+        Specials = new();
 
         list.OrderBy(x => Random.Shared.Next()).ToList().ForEach(card => Defaults.Push(card));
+        listSpecials.OrderBy(x => Random.Shared.Next()).ToList().ForEach(card => Specials.Push(card));
     }
 
     public static float CalcCombo(IEnumerable<Card> cards)
@@ -117,16 +146,9 @@ public class CardsHolder
     
         return MathF.Round(cost, 1);
     }
-    
-    private static bool IsRedSuit(CardSuit suit)
-    {
-        return suit == CardSuit.Hearts || suit == CardSuit.Diamonds;
-    }
-    private static bool IsBlackSuit(CardSuit suit)
-    {
-        return suit == CardSuit.Clubs || suit == CardSuit.Spades;
-    }
-    
+
+    private static bool IsRedSuit(CardSuit suit) => suit == CardSuit.Hearts || suit == CardSuit.Diamonds;
+    private static bool IsBlackSuit(CardSuit suit) => suit == CardSuit.Clubs || suit == CardSuit.Spades;
     
     static CardsHolder() => Instance = new();
     public static CardsHolder Instance { get; private set; }

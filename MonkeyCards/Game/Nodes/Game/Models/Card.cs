@@ -27,6 +27,7 @@ public class Card : Node
     public FontFamily FontFamily { get; set; }
     public View View { get; set; }
     public Effect? Effect { get; set; }
+    public Special? Special { get; set; }
 
     public string ShortName
     {
@@ -61,7 +62,7 @@ public class Card : Node
     
     public Card( Guid Id, string Name, string Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
         View View, string Description = null, int multiply = 1, Border Border = Border.Default, 
-        BackgroundType background = BackgroundType.Default, Effect? Effect = null )
+        BackgroundType background = BackgroundType.Default, Effect? Effect = null, Special? Special = null)
     {
         this.Id = Id;
         this.Name = Name;
@@ -75,6 +76,7 @@ public class Card : Node
         this.Border = Border;
         this.Background = background;
         this.Effect = Effect;
+        this.Special = Special;
         
         PreventParent += node =>
         {

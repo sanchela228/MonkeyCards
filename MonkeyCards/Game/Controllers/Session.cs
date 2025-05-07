@@ -12,7 +12,6 @@ public class Session
     public Player RemotePlayer { get; protected set; }
 
     public int StartStack { get; protected set; } = 5;
-
     
     // TODO: create TIMER class
     public bool timerRunning { get; set; }
@@ -22,7 +21,7 @@ public class Session
 
     public int Round { get; protected set; } = 1;
     
-    private readonly float _roundTime = 10f;
+    private readonly float _roundTime = 140f;
     
     public void Init(Hands hands, Table table, IEnumerable<Card> startCards)
     {
