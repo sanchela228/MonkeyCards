@@ -50,6 +50,9 @@ public class Hands : Node
         AddChild(card);
     }
     
+    public int CountCards => Childrens.OfType<Card>().Count();
+    public List<Card> GetCards() => Childrens.OfType<Card>().ToList();
+    
     public override void Update(float deltaTime)
     {
         #region CounterCardView

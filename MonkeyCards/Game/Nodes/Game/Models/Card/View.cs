@@ -31,5 +31,6 @@ public struct View
     public List<float> Rotate { get; set; }
     
     public bool Sides { get; set; }
+    public bool ReversText { get; set; }
     public Color Color { get; set; }
 }

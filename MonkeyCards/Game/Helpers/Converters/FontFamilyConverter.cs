@@ -31,6 +31,13 @@ public class FontFamilyConverter : JsonConverter<FontFamily>
             var family = new FontFamily();
             family.Color = color;
             family.Size = root.GetProperty("Size").GetInt32();
+            
+            if (root.TryGetProperty("Spacing", out var Spacing))
+            {
+                if (Spacing.ValueKind == JsonValueKind.Number)
+                    family.Spacing = Spacing.GetInt32();
+            }
+            
             family.Font = Resources.Instance.FontEx( root.GetProperty("Font").GetString(), family.Size );
 
             return family;

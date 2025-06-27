@@ -17,8 +17,16 @@ public class ViewConverter : JsonConverter<View>
             var root = doc.RootElement;
             
             var view = new View();
-            
             view.Sides = JsonSerializer.Deserialize<bool>(root.GetProperty("Sides").GetRawText());
+
+
+            if (root.TryGetProperty("ReversText", out var ReversText))
+            {
+                if (ReversText.ValueKind == JsonValueKind.True)
+                    view.ReversText = true;
+                else 
+                    view.ReversText = false;
+            }
             
             #region PositionRead
 

@@ -9,4 +9,4 @@ var config = new Engine.Configuration.Game()
 };
 
 using var game = new Engine.Core.Game(config);
-game.Run( new StartUp() );
+game.Run( new Test() );

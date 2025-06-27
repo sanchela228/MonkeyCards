@@ -10,14 +10,16 @@
     "FontFamily": {
       "Color": "10,20,30,255",
       "Size": 42,
+      "Spacing": 24,
       "Font": "JockeyOne-Regular.ttf"
     },
     "View": {
       "Texture": "Icons/icon-diamond.png",
-      "Position": ["0.5,0.2", "0.5,0.8"],
-      "Size": "35,35",
+      "Position": "0.5,0.5",
+      "Size": "80,80",
       "Rotation": 0,
-      "Sides": true,
+      "Sides": false,
+      "ReversText": true,
       "Color": "255,255,255,255"
     },
     "Border": "Default",

@@ -72,7 +72,7 @@ public class Test : Scene
         if (Raylib.CheckCollisionPointRec(mousePos, testAddSpecial) && Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
             if (Hands.MaxCards > Hands.ChildrenCount && CardsHolder.Instance.Specials.Any())
-                Hands.AddCard(CardsHolder.Instance.Specials.Pop());
+                Hands.AddCards( CardsHolder.Instance.TakeSpecials(2) );
         }
         
         if (Raylib.CheckCollisionPointRec(mousePos, endRoundButtonTest) && Raylib.IsMouseButtonPressed(MouseButton.Left))

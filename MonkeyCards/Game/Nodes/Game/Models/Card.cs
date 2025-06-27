@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.Text.Json.Serialization;
 using Engine.Core;
+using Engine.Helpers;
 using Engine.Managers;
 using SceneManager = Engine.Core.Scenes.Manager;
 using Game.Controllers;
@@ -127,28 +128,6 @@ public class Card : Node
                 4,
                 new Color() {R = 220, G = 220, B = 220, A = 255}
             );
-            
-            Raylib.DrawTextPro( 
-                FontFamily.Font, 
-                ShortName, 
-                new Vector2(40, 24),
-                new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
-                0f,
-                FontFamily.Size,
-                3,
-                FontFamily.Color
-            );
-            
-            Raylib.DrawTextPro( 
-                FontFamily.Font, 
-                ShortName, 
-                new Vector2(placeholder.Width - 30, placeholder.Height - 20),
-                new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
-                180f,
-                FontFamily.Size,
-                3,
-                FontFamily.Color
-            );
 
             if (View.Sides)
             {
@@ -211,6 +190,47 @@ public class Card : Node
                     Color.White
                 );
 
+            }
+            
+            if (View.ReversText)
+            {
+                var name = ShortName;
+
+                if (this.Suit == CardSuit.Joker)
+                    name = "JOKER";
+                
+                Text.DrawWrappedWordBySymbols(this.FontFamily, name, new Vector2(24, 24));
+                
+                Text.DrawWrappedWordBySymbols(
+                    this.FontFamily, 
+                    name, 
+                    new Vector2(placeholder.Width - 15, placeholder.Height - 20), 
+                    reverse: true
+                );
+            }
+            else
+            {
+                Raylib.DrawTextPro( 
+                    FontFamily.Font, 
+                    ShortName, 
+                    new Vector2(40, 24),
+                    new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
+                    0f,
+                    FontFamily.Size,
+                    3,
+                    FontFamily.Color
+                );
+            
+                Raylib.DrawTextPro( 
+                    FontFamily.Font, 
+                    ShortName, 
+                    new Vector2(placeholder.Width - 30, placeholder.Height - 20),
+                    new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
+                    180f,
+                    FontFamily.Size,
+                    3,
+                    FontFamily.Color
+                );
             }
 
             Raylib.EndTextureMode();
@@ -334,13 +354,6 @@ public class Card : Node
             //     color: new Color(255, Raylib.GetRandomValue(100,200), 0, 255)
             // );
         }
-        
-        Raylib.DrawRectangle(
-            (int)Collider.Position.X, 
-            (int)Collider.Position.Y, 
-            (int)Collider.Size.X, 
-            (int)Collider.Size.Y, 
-            new Color(255,222,33, 125));
         
         Effect?.Draw(this);
     }

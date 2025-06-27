@@ -98,12 +98,12 @@ public class Session
 
     public void PickToHandRoundCards()
     {
-        if ( Self.Hands.Childrens.Count >= Self.Hands.MaxCards) 
+        if ( Self.Hands.CountCards >= Self.Hands.MaxCards) 
             return;
         
-        if (Self.Hands.Childrens.Count <= Self.Hands.MaxCards)
+        if (Self.Hands.CountCards <= Self.Hands.MaxCards)
         {
-            if ( (Self.Hands.MaxCards - Self.Hands.Childrens.Count) == 1 )
+            if ( (Self.Hands.MaxCards - Self.Hands.CountCards) == 1 )
                 Self.Hands.AddCard( CardsHolder.Instance.Defaults.Pop() );
             else
             {
@@ -111,6 +111,15 @@ public class Session
             }
         }
     }
+
+    public void PickSpecialCards(int count)
+    {
+        if ( Self.Hands.CountCards >= Self.Hands.MaxCards) 
+            return;
+        
+        Self.Hands.AddCards( CardsHolder.Instance.TakeSpecials(count) );
+    }
+    
 
     public void SellCard(Card card)
     {

@@ -40,6 +40,21 @@ public static class Text
             DrawAlignedText(fontFamily, currentLine, pos.X, y, size, alignment);
     }
 
+    public static void DrawWrappedWordBySymbols(FontFamily fontFamily, string text, Vector2 pos, bool reverse = false)
+    {
+        float y = pos.Y;
+    
+        foreach (char symbol in text)
+        {
+            DrawPro(fontFamily, symbol.ToString(), new Vector2(pos.X, y), rotation: reverse ? 180f : 0f);
+            
+            if (reverse)
+                y -= fontFamily.Spacing;
+            else
+                y += fontFamily.Spacing;
+        }
+    }
+
     public static void DrawPro(FontFamily fontFamily, string text, Vector2 pos, Vector2? origin = null, float? 
         rotation = null, Color? color = null, int? size = null, float? spacing = null)
     {

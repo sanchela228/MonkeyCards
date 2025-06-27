@@ -24,10 +24,15 @@ public class CardsHolder
         return cards;
     }
     
+    public List<Card> TakeSpecials(int count)
+    {
+        return (List<Card>) Specials.Take(count);
+    }
+
     public void LoadCards()
     {
         // TODO: clear this code
-        
+
         var options = new JsonSerializerOptions
         {
             Converters = { new JsonStringEnumConverter() },
@@ -36,13 +41,13 @@ public class CardsHolder
         };
 
         string json = ResourceManager.Instance.Get<string>("Cards/defaults.json");
-        
+
         JsonCardResource[] resources = JsonSerializer.Deserialize<JsonCardResource[]>(json, options);
 
         List<Card> list = new();
         foreach (JsonCardResource cardResource in resources)
         {
-            list.Add( new Card(
+            list.Add(new Card(
                 cardResource.Id,
                 cardResource.Name,
                 cardResource.Symbol,
@@ -58,14 +63,14 @@ public class CardsHolder
                 cardResource.Special)
             );
         }
-        
+
         json = ResourceManager.Instance.Get<string>("Cards/specials.json");
         resources = JsonSerializer.Deserialize<JsonCardResource[]>(json, options);
-        
+
         List<Card> listSpecials = new();
         foreach (JsonCardResource cardResource in resources)
         {
-            listSpecials.Add( new Card(
+            listSpecials.Add(new Card(
                 cardResource.Id,
                 cardResource.Name,
                 cardResource.Symbol,
@@ -81,7 +86,7 @@ public class CardsHolder
                 cardResource.Special)
             );
         }
-        
+
         Defaults = new();
         Specials = new();
 
@@ -146,7 +151,6 @@ public class CardsHolder
     
         return MathF.Round(cost, 1);
     }
-
     private static bool IsRedSuit(CardSuit suit) => suit == CardSuit.Hearts || suit == CardSuit.Diamonds;
     private static bool IsBlackSuit(CardSuit suit) => suit == CardSuit.Clubs || suit == CardSuit.Spades;
     
