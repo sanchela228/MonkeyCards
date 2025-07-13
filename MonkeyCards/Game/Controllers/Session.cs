@@ -22,7 +22,7 @@ public class Session
 
     public int Round { get; protected set; } = 1;
     
-    private readonly float _roundTime = 2f;
+    private readonly float _roundTime = 222f;
     
     public void Init(Hands hands, Table table, IEnumerable<Card> startCards)
     {
@@ -40,8 +40,8 @@ public class Session
     public async void EndRound(float money)
     {
         timerRunning = false;
-        Self.Hands.Block(true);
         ClearGameProcess();
+        Self.Hands.Block(true);
         
         await AwaitTestTimer();
         
@@ -59,16 +59,15 @@ public class Session
     public async void EndRound()
     {
         timerRunning = false;
-        Self.Hands.Block(true);
         ClearGameProcess();
+        Self.Hands.Block(true);
         
         await AwaitTestTimer();
         
         Self.Money += CardsHolder.CalcCombo(Self.Table?.GetCards());
         
         Round++;
-
-       
+        
         PickToHandRoundCards();
         StartTimer();
         

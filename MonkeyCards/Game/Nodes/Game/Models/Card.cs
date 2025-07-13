@@ -11,13 +11,29 @@ using Rectangle = Raylib_cs.Rectangle;
 namespace Game.Nodes.Game.Models.Card;
 using Engine.Core.Objects;
 
-public class Card : Node
+public class Card : Node, ICloneable
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
     public string Symbol { get; set; }
-    public CardSuit Suit { get; set; }
+
+    private CardSuit _suit;
+    public CardSuit Suit
+    {
+        get => _suit; 
+        set
+        {
+            _suit = value;
+            ReRenderTexture?.Invoke();
+        }
+    }
+    
+    public object Clone()
+    {
+        return MemberwiseClone();
+    }
+
     public float Cost { get; set; }
     public int Multiply { get; set; } = 1;
     public Border Border { get; set; } = Border.Default;
@@ -31,7 +47,7 @@ public class Card : Node
     public void Block(bool b) => _blocked = b;
     public bool IsBlocked() => _blocked;
 
-    public Highlight Highlight;
+    public Highlight? Highlight;
 
     public string ShortName
     {
@@ -66,8 +82,7 @@ public class Card : Node
     
     public Card( Guid Id, string Name, string Symbol, CardSuit Suit, float Cost, FontFamily FontFamily, 
         View View, string Description = null, int multiply = 1, Border Border = Border.Default, 
-        BackgroundType background = BackgroundType.Default, Effect? Effect = null, Special? Special = null,
-        Highlight? highlight = null )
+        BackgroundType background = BackgroundType.Default, Effect? Effect = null, Special? Special = null)
     {
         this.Id = Id;
         this.Name = Name;
@@ -82,7 +97,6 @@ public class Card : Node
         this.Background = background;
         this.Effect = Effect;
         this.Special = Special;
-        this.Highlight = highlight ?? Highlight.Default();
         
         PreventParent += node =>
         {
@@ -122,34 +136,33 @@ public class Card : Node
         
         Raylib.BeginTextureMode(_canvas);
             
-            Raylib.ClearBackground(Color.Blank);
-            
-            Raylib.DrawRectangleRounded(
-                new Rectangle(
-                    placeholder.X - 5, placeholder.Y,
-                    placeholder.Width,
-                    placeholder.Height + 5
-                ), 
-                0.2f, 
-                10, 
-                new Color(0, 0, 0, 128)
-            );
-            
-            Raylib.DrawRectangleRounded(
-                placeholder, 
-                0.2f, 
-                10, 
-                View.Color
-            );
-            
-            Raylib.DrawRectangleRoundedLinesEx(
-                Engine.Helpers.Rectangle.ChangeProportionSize(placeholder, -3f), 
-                0.2f, 
-                10,
-                4,
-                new Color() {R = 220, G = 220, B = 220, A = 255}
-            );
         Raylib.ClearBackground(Color.Blank);
+        
+        Raylib.DrawRectangleRounded(
+            new Rectangle(
+                placeholder.X - 5, placeholder.Y,
+                placeholder.Width,
+                placeholder.Height + 5
+            ), 
+            0.2f, 
+            10, 
+            new Color(0, 0, 0, 128)
+        );
+        
+        Raylib.DrawRectangleRounded(
+            placeholder, 
+            0.2f, 
+            10, 
+            View.Color
+        );
+        
+        Raylib.DrawRectangleRoundedLinesEx(
+            Engine.Helpers.Rectangle.ChangeProportionSize(placeholder, -3f), 
+            0.2f, 
+            10,
+            4,
+            new Color() {R = 220, G = 220, B = 220, A = 255}
+        );
         
         Raylib.DrawRectangleRounded(
             new Rectangle(
@@ -261,83 +274,80 @@ public class Card : Node
             );
         }
         
-        Raylib.EndTextureMode();
-            for (var i = 0; i < View.Positions.Count; i++)
-            {
-                int sizePickerIndex = i;
-                
-                if (View.Size.Count < i + 1)
-                    sizePickerIndex = View.Size.Count - 1;
-                
-                Vector2 size = View.Size[sizePickerIndex];
-                
-                int rotatePickerIndex = i;
-                
-                if (View.Rotate.Count < i + 1)
-                    rotatePickerIndex = View.Rotate.Count - 1;
-                
-                float rotate = View.Rotate[rotatePickerIndex];
-                
-                Raylib.DrawTexturePro(
-                    View.Texture,
-                    new Rectangle(0, 0, View.Texture.Width, View.Texture.Height),
-                    new Rectangle(
-                        _canvas.Texture.Width * View.Positions[i].X + 3,
-                        _canvas.Texture.Height * View.Positions[i].Y,
-                        size.X,
-                        size.Y
-                    ),
-                    new Vector2(size.X / 2, size.Y / 2),
-                    rotate,
-                    Color.White
-                );
-
-            }
+        for (var i = 0; i < View.Positions.Count; i++)
+        {
+            int sizePickerIndex = i;
             
-            if (View.ReversText)
-            {
-                var name = ShortName;
-
-                if (this.Suit == CardSuit.Joker)
-                    name = "JOKER";
-                
-                Text.DrawWrappedWordBySymbols(this.FontFamily, name, new Vector2(24, 24));
-                
-                Text.DrawWrappedWordBySymbols(
-                    this.FontFamily, 
-                    name, 
-                    new Vector2(placeholder.Width - 15, placeholder.Height - 20), 
-                    reverse: true
-                );
-            }
-            else
-            {
-                Raylib.DrawTextPro( 
-                    FontFamily.Font, 
-                    ShortName, 
-                    new Vector2(40, 24),
-                    new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
-                    0f,
-                    FontFamily.Size,
-                    3,
-                    FontFamily.Color
-                );
+            if (View.Size.Count < i + 1)
+                sizePickerIndex = View.Size.Count - 1;
             
-                Raylib.DrawTextPro( 
-                    FontFamily.Font, 
-                    ShortName, 
-                    new Vector2(placeholder.Width - 30, placeholder.Height - 20),
-                    new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
-                    180f,
-                    FontFamily.Size,
-                    3,
-                    FontFamily.Color
-                );
-            }
+            Vector2 size = View.Size[sizePickerIndex];
+            
+            int rotatePickerIndex = i;
+            
+            if (View.Rotate.Count < i + 1)
+                rotatePickerIndex = View.Rotate.Count - 1;
+            
+            float rotate = View.Rotate[rotatePickerIndex];
+            
+            Raylib.DrawTexturePro(
+                View.Texture,
+                new Rectangle(0, 0, View.Texture.Width, View.Texture.Height),
+                new Rectangle(
+                    _canvas.Texture.Width * View.Positions[i].X + 3,
+                    _canvas.Texture.Height * View.Positions[i].Y,
+                    size.X,
+                    size.Y
+                ),
+                new Vector2(size.X / 2, size.Y / 2),
+                rotate,
+                Color.White
+            );
 
-            Raylib.EndTextureMode();
+        }
         
-        #endregion
+        if (View.ReversText)
+        {
+            var name = ShortName;
+
+            if (this.Suit == CardSuit.Joker)
+                name = "JOKER";
+            
+            Text.DrawWrappedWordBySymbols(this.FontFamily, name, new Vector2(24, 24));
+            
+            Text.DrawWrappedWordBySymbols(
+                this.FontFamily, 
+                name, 
+                new Vector2(placeholder.Width - 15, placeholder.Height - 20), 
+                reverse: true
+            );
+        }
+        else
+        {
+            Raylib.DrawTextPro( 
+                FontFamily.Font, 
+                ShortName, 
+                new Vector2(40, 24),
+                new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
+                0f,
+                FontFamily.Size,
+                3,
+                FontFamily.Color
+            );
+        
+            Raylib.DrawTextPro( 
+                FontFamily.Font, 
+                ShortName, 
+                new Vector2(placeholder.Width - 30, placeholder.Height - 20),
+                new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
+                180f,
+                FontFamily.Size,
+                3,
+                FontFamily.Color
+            );
+        }
+
+        Raylib.EndTextureMode();
         
         Effect?.Start(this, placeholder);
     }
@@ -358,8 +368,6 @@ public class Card : Node
 
     public void BackToHands()
     {
-        ReRenderTexture?.Invoke();
-        
         if ( _hands is not null && _canBackToHand)
             SetParent(_hands, DraggingCard.Instance.IndexCardOnHands ?? -1);
     }
@@ -438,9 +446,7 @@ public class Card : Node
         Scale = Vector2.Lerp(Scale, targetSize, t);
         
         Effect?.Update(deltaTime, this);
-        
-        if (Highlight.Active) 
-            Highlight.Update(deltaTime, this);
+        Highlight?.Update(deltaTime, this);
     }
 
     public override void Draw()
@@ -455,6 +461,7 @@ public class Card : Node
         );
             
         Effect?.Draw(this);
+        Highlight?.Draw(this);
         
         if (_blocked)
         {
@@ -465,9 +472,6 @@ public class Card : Node
                 new Color(0, 0, 0, 120)
             );
         }
-        
-        if (Highlight.Active) 
-            Highlight.Draw(this);
     }
 
     private bool _isBurningAnimation;

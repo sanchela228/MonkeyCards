@@ -26,9 +26,14 @@ public class CardsHolder
     
     public List<Card> TakeSpecials(int count)
     {
-        return (List<Card>) Specials.Take(count);
+        // TODO: rewrite random take count
+        
+        return Specials
+            .Take(count)
+            .Select<Card, Card>(card => (Card) card.Clone())
+            .ToList();
     }
-
+    
     public void LoadCards()
     {
         // TODO: clear this code

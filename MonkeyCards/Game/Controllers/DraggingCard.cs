@@ -7,6 +7,12 @@ public class DraggingCard
     public static DraggingCard Instance { get; private set; }
     
     private Card? _cardNode;
+
+    public void Clear()
+    {
+        Instance._cardNode = null;
+        Instance.IndexCardOnHands = null;
+    }
     
     public Card Card { get => _cardNode; set => _cardNode = value; }
     public int? IndexCardOnHands;

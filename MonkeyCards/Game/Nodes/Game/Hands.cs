@@ -22,8 +22,16 @@ public class Hands : Node
         _blocked = b;
         foreach (Card children in Childrens)
             children.Block(_blocked);
+
+        DefaultSortCards();
     }
     
+    public void DefaultSortCards()
+    {
+        foreach (var children in Childrens)
+            children.Order = 100;
+    }
+
     public int MaxCards => _maxCards;
     private Vector2 _centerPoint;
 

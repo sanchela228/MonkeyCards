@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Engine.Core.Objects;
 using Game.Nodes.Game.Models.Card;
@@ -10,17 +11,23 @@ namespace Game.Nodes.Game.Table;
 public class Table : Node
 {
     protected Line? _comboLine;
+    
+    public static int CountPlaceholders => 5;
+    private static List<Placeholder> _placeholders;
+    
     public Table(Vector2 centerPoint)
     {
         Position = centerPoint;
-        AddChildrens( new List<Placeholder>
-        {
+        List<Placeholder> placeholders = new(){
             new Placeholder(0),
             new Placeholder(1),
             new Placeholder(2),
             new Placeholder(3),
             new Placeholder(4)
-        } );
+        };
+        
+        AddChildrens(placeholders);
+        _placeholders = placeholders;
         
         if ( Childrens.Any() )
             Visuals.Render.PlaceInLine( Childrens.OfType<Placeholder>(), (int) Childrens[0].Size.X, Position, 20 );
@@ -30,7 +37,21 @@ public class Table : Node
         
         AddChild( _comboLine );
     }
+
+    public static Card GetCardFromPlaceholder(int index)
+    {
+        if (index < 1 || index >= _placeholders.Count)
+            return null;
+        
+        var placeholder = _placeholders[index];
+        
+        if (placeholder.Childrens.Count == 0)
+            return null;
+        
+        return placeholder.Childrens[0] as Card;
+    }
     
+    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.String; size: 116MB")]
     public override void Update(float deltaTime)
     {
         // TODO: add cache data for List ComboElement
