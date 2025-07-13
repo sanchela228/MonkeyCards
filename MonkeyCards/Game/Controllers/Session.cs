@@ -1,3 +1,4 @@
+using Engine.Managers;
 using Game.Nodes.Game;
 using Game.Nodes.Game.Models.Card;
 using Game.Nodes.Game.Table;
@@ -21,7 +22,7 @@ public class Session
 
     public int Round { get; protected set; } = 1;
     
-    private readonly float _roundTime = 140f;
+    private readonly float _roundTime = 2f;
     
     public void Init(Hands hands, Table table, IEnumerable<Card> startCards)
     {
@@ -39,6 +40,8 @@ public class Session
     public async void EndRound(float money)
     {
         timerRunning = false;
+        Self.Hands.Block(true);
+        ClearGameProcess();
         
         await AwaitTestTimer();
         
@@ -49,22 +52,27 @@ public class Session
         PickToHandRoundCards();
         StartTimer();
 
+        Self.Hands.Block(false);
         Self.Table?.Clear();
     }
     
     public async void EndRound()
     {
         timerRunning = false;
+        Self.Hands.Block(true);
+        ClearGameProcess();
         
         await AwaitTestTimer();
         
-        Self.Money += CardsHolder.CalcCombo(Self.Table.GetCards());
+        Self.Money += CardsHolder.CalcCombo(Self.Table?.GetCards());
         
         Round++;
 
+       
         PickToHandRoundCards();
         StartTimer();
         
+        Self.Hands.Block(false);
         Self.Table?.Clear();
     }
     
@@ -93,6 +101,19 @@ public class Session
         else if (timerRunning && RoundTime <= 0)
         {
             EndRound();
+        }
+    }
+
+    public void ClearGameProcess()
+    {
+        MouseTracking.Instance.BlockedHover = false;
+        if (MouseTracking.Instance.HoveredNode != null)
+            MouseTracking.Instance.HoveredNode = null;
+        
+        if (DraggingCard.Instance.Card != null)
+        {
+            DraggingCard.Instance.Card.BackToHands();
+            DraggingCard.Instance.Card = null;
         }
     }
 
