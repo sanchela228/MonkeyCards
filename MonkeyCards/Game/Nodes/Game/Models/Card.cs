@@ -436,6 +436,8 @@ public class Card : Node, ICloneable
 
                     Position = worldPosition;
                 }
+
+                if (IsMouseSecondDown()) _showInfo = true;
             }
             else Order = 100;
 
@@ -449,6 +451,7 @@ public class Card : Node, ICloneable
         Highlight?.Update(deltaTime, this);
     }
 
+    private bool _showInfo;
     public override void Draw()
     {
         Raylib.DrawTexturePro(
@@ -471,6 +474,97 @@ public class Card : Node, ICloneable
                 10,
                 new Color(0, 0, 0, 120)
             );
+        }
+
+        // TODO: rewrite in method and put to UPDATE
+        if (_showInfo)
+        {
+            FontFamily testFont = new FontFamily()
+            {
+                Color = Color.White,
+                Font = FontFamily.Font,
+                Rotation = 0f,
+                Size = 32,
+                Spacing = 2f
+            };
+            
+            float overlayWidth = 260f;
+            float overlayHeight = 40f;
+            float margin = 10f;
+
+            float centerX = Bounds.X + (Bounds.Width - overlayWidth) / 2f;
+            float topY = Bounds.Y - margin - overlayHeight;
+            float bottomY = Bounds.Y + Bounds.Height + margin;
+
+            float overlayY = topY;
+            
+            
+            float textHeight = Engine.Helpers.Text.CalculateWrappedTextHeight(
+                testFont, 
+                Description,
+                overlayWidth - 20f
+            );
+            
+            overlayHeight += textHeight + testFont.Size / 2;
+
+            if (topY < 0)
+            {
+                overlayY = bottomY;
+                if (overlayY + overlayHeight > Raylib.GetScreenHeight())
+                {
+                    overlayY = Raylib.GetScreenHeight() - overlayHeight - margin;
+                }
+            }
+
+            Raylib.DrawRectangleRounded(
+                new Rectangle(centerX, overlayY - (textHeight + testFont.Size / 2), overlayWidth, overlayHeight), 
+                0.2f, 
+                10,
+                new Color(25, 25, 25, 255)
+            );
+            
+            Raylib.DrawRectangleRoundedLinesEx(
+                new Rectangle(centerX, overlayY - (textHeight + testFont.Size / 2), overlayWidth, overlayHeight), 
+                0.2f, 
+                10,
+                4,
+                new Color() {R = 55, G = 55, B = 55, A = 255}
+            );
+            
+            float textCenterX = centerX + overlayWidth / 2f;
+            float firstTextY = overlayY - (textHeight + testFont.Size / 2) + 20f;
+            float secondTextY = firstTextY + 30f;
+            
+            Engine.Helpers.Text.DrawPro(
+                testFont, 
+                Name, 
+                new Vector2(textCenterX, firstTextY)
+            );
+
+            
+          
+            
+            Engine.Helpers.Text.DrawWrapped(
+                testFont, 
+                Description, 
+                new Vector2(textCenterX - (overlayWidth - 20f) / 2f, secondTextY), 
+                overlayWidth - 20f, 
+                TextAlignment.Center
+            );
+
+            // string additionalText = ;
+            // Raylib.DrawTextPro(
+            //     FontFamily.Font,
+            //     additionalText,
+            //     new Vector2(textCenterX, secondTextY),
+            //     new Vector2(Raylib.MeasureTextEx(FontFamily.Font, additionalText, FontFamily.Size, 3).X / 2, 0),
+            //     0f,
+            //     FontFamily.Size,
+            //     3,
+            //     Color.White
+            // );
+            
+            _showInfo = false;
         }
 
         if (IsOnBurningAnimation)

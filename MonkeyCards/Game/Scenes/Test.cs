@@ -44,9 +44,11 @@ public class Test : Scene
         
         // TODO: ADD CARDSHOLDER VIEW AND COUNTER
         
-        AddNode(Hands);
-        AddNode(Table);
         AddNode(new SessionPlayerStatus( new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.2f)));
+        
+        AddNode(Table);
+        AddNode(Hands);
+        
     }
     
     protected override void Update(float deltaTime)

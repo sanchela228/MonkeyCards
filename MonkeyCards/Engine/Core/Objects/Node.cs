@@ -301,4 +301,5 @@ public abstract class Node : IDisposable
         return Raylib.CheckCollisionPointRec(mousePos, Collider);
     }
     public virtual bool IsMousePressed() => IsMouseOver() && Raylib.IsMouseButtonPressed(MouseButton.Left);
+    public virtual bool IsMouseSecondDown() => IsMouseOver() && Raylib.IsMouseButtonDown(MouseButton.Right);
 }

@@ -18,6 +18,7 @@ public static class Text
         string[] words = text.Split(' ');
         string currentLine = "";
         float y = pos.Y;
+        int lines = 0;
 
         foreach (string word in words)
         {
@@ -38,6 +39,39 @@ public static class Text
 
         if (currentLine.Length > 0)
             DrawAlignedText(fontFamily, currentLine, pos.X, y, size, alignment);
+    }
+
+    public static float CalculateWrappedTextHeight(FontFamily fontFamily, string text, float maxWidth)
+    {
+        if (string.IsNullOrEmpty(text)) 
+            return 0;
+
+        string[] words = text.Split(' ');
+        string currentLine = "";
+        float totalHeight = fontFamily.Size;
+        int lineCount = 1;
+
+        foreach (string word in words)
+        {
+            string testLine = currentLine.Length > 0 ? currentLine + " " + word : word;
+            float textWidth = Raylib.MeasureTextEx(fontFamily.Font, testLine, fontFamily.Size, fontFamily.Spacing).X;
+    
+            if (textWidth <= maxWidth)
+            {
+                currentLine = testLine;
+            }
+            else
+            {
+                if (currentLine.Length > 0)
+                {
+                    lineCount++;
+                    totalHeight += fontFamily.Size + fontFamily.Spacing;
+                }
+                currentLine = word;
+            }
+        }
+
+        return totalHeight;
     }
 
     public static void DrawWrappedWordBySymbols(FontFamily fontFamily, string text, Vector2 pos, bool reverse = false)

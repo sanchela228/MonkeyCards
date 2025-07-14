@@ -23,16 +23,20 @@ public class Table : Node
         for (int i = 0; i < CountPlaceholders; i++)
             placeholders.Add( new Placeholder(i) );
         
-        AddChildrens(placeholders);
-        _placeholders = placeholders;
-        
-        if ( Childrens.Any() )
-            Visuals.Render.PlaceInLine( Childrens.OfType<Placeholder>(), (int) Childrens[0].Size.X, Position, 20 );
-
         _comboLine = new Line();
         _comboLine.Position += new Vector2(0, -(Placeholder.DefaultSize.Y / 2 + 40 ));
         
         AddChild( _comboLine );
+        
+        AddChildrens(placeholders);
+        _placeholders = placeholders;
+        
+        Visuals.Render.PlaceInLine( 
+            Childrens.OfType<Placeholder>(), 
+            (int) Childrens.OfType<Placeholder>().First().Size.X, 
+            Position, 
+            20 
+        );
     }
 
     public static Card GetCardFromPlaceholder(int index)

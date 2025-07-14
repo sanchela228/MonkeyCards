@@ -15,7 +15,15 @@ public class Game : IDisposable
     public Game(GameConfig config)
     {
         Config = config;
+        
+        Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint);
+        
         Raylib.InitWindow(config.WindowStartWidth, config.WindowStartHeight, "MonkeyCards");
+        
+        Image icon = Raylib.LoadImage("Resources/m-i.png");
+        
+        Raylib.SetWindowIcon(icon);
+        Raylib.UnloadImage(icon);
         // Raylib.SetTargetFPS(120);
     }
     
