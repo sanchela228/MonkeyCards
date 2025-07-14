@@ -14,12 +14,12 @@
       "Font": "JockeyOne-Regular.ttf"
     },
     "View": {
-      "Texture": "Icons/icon-diamond.png",
+      "Texture": "Icons/JokerBodies/Reverse.png",
       "Position": "0.5,0.5",
       "Size": "80,80",
       "Rotation": 0,
       "Sides": false,
-      "ReversText": true,
+      "ReversText": false,
       "Color": "255,255,255,255"
     },
     "Border": "Default",

@@ -46,9 +46,8 @@ public class Card : Node, ICloneable
     private bool _blocked;
     public void Block(bool b) => _blocked = b;
     public bool IsBlocked() => _blocked;
-
     public Highlight? Highlight;
-
+    protected Hint Hint;
     public string ShortName
     {
         get
@@ -121,6 +120,7 @@ public class Card : Node, ICloneable
         );
         
         Effect?.Start(this, placeholder);
+        Hint = new Hint(Name, Description, Cost);
     }
 
     private event Action ReRenderTexture;
@@ -128,10 +128,10 @@ public class Card : Node, ICloneable
     private void SetupRenderTexture()
     {
         Rectangle placeholder = new Rectangle(
-            5,
             0,
-            _canvas.Texture.Width - 5,
-            _canvas.Texture.Height - 5
+            0,
+            _canvas.Texture.Width,
+            _canvas.Texture.Height
         );
         
         Raylib.BeginTextureMode(_canvas);
@@ -139,17 +139,6 @@ public class Card : Node, ICloneable
         Raylib.ClearBackground(Color.Blank);
         
         Raylib.DrawRectangleRounded(
-            new Rectangle(
-                placeholder.X - 5, placeholder.Y,
-                placeholder.Width,
-                placeholder.Height + 5
-            ), 
-            0.2f, 
-            10, 
-            new Color(0, 0, 0, 128)
-        );
-        
-        Raylib.DrawRectangleRounded(
             placeholder, 
             0.2f, 
             10, 
@@ -165,17 +154,6 @@ public class Card : Node, ICloneable
         );
         
         Raylib.DrawRectangleRounded(
-            new Rectangle(
-                placeholder.X - 5, placeholder.Y,
-                placeholder.Width,
-                placeholder.Height + 5
-            ), 
-            0.2f, 
-            10, 
-            new Color(0, 0, 0, 128)
-        );
-        
-        Raylib.DrawRectangleRounded(
             placeholder, 
             0.2f, 
             10, 
@@ -188,28 +166,6 @@ public class Card : Node, ICloneable
             10,
             4,
             new Color() {R = 220, G = 220, B = 220, A = 255}
-        );
-        
-        Raylib.DrawTextPro(
-            FontFamily.Font, 
-            ShortName, 
-            new Vector2(40, 24),
-            new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
-            0f,
-            FontFamily.Size,
-            3,
-            FontFamily.Color
-        );
-        
-        Raylib.DrawTextPro(
-            FontFamily.Font,
-            ShortName, 
-            new Vector2(placeholder.Width - 30, placeholder.Height - 20),
-            new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
-            180f,
-            FontFamily.Size,
-            3,
-            FontFamily.Color
         );
 
         if (View.Sides)
@@ -274,38 +230,6 @@ public class Card : Node, ICloneable
             );
         }
         
-        for (var i = 0; i < View.Positions.Count; i++)
-        {
-            int sizePickerIndex = i;
-            
-            if (View.Size.Count < i + 1)
-                sizePickerIndex = View.Size.Count - 1;
-            
-            Vector2 size = View.Size[sizePickerIndex];
-            
-            int rotatePickerIndex = i;
-            
-            if (View.Rotate.Count < i + 1)
-                rotatePickerIndex = View.Rotate.Count - 1;
-            
-            float rotate = View.Rotate[rotatePickerIndex];
-            
-            Raylib.DrawTexturePro(
-                View.Texture,
-                new Rectangle(0, 0, View.Texture.Width, View.Texture.Height),
-                new Rectangle(
-                    _canvas.Texture.Width * View.Positions[i].X + 3,
-                    _canvas.Texture.Height * View.Positions[i].Y,
-                    size.X,
-                    size.Y
-                ),
-                new Vector2(size.X / 2, size.Y / 2),
-                rotate,
-                Color.White
-            );
-
-        }
-        
         if (View.ReversText)
         {
             var name = ShortName;
@@ -327,7 +251,7 @@ public class Card : Node, ICloneable
             Raylib.DrawTextPro( 
                 FontFamily.Font, 
                 ShortName, 
-                new Vector2(40, 24),
+                new Vector2(35, 24),
                 new Vector2(FontFamily.Size / 2, FontFamily.Size / 2),
                 0f,
                 FontFamily.Size,
@@ -454,6 +378,34 @@ public class Card : Node, ICloneable
     private bool _showInfo;
     public override void Draw()
     {
+        if (IsMouseOver() || _isDragging)
+        {
+            Raylib.DrawRectangleRounded(
+                new Rectangle(
+                    Bounds.X - 5, 
+                    Bounds.Y,
+                    Bounds.Width,
+                    Bounds.Height + 5
+                ), 
+                0.2f, 
+                10, 
+                new Color(0, 0, 0, 68)
+            );
+        }
+        else if (ImOnHands())
+        {
+            Raylib.DrawRectangleRounded(
+                new Rectangle(
+                    Bounds.X - 5, Bounds.Y,
+                    Bounds.Width,
+                    Bounds.Height + 5
+                ), 
+                0.2f, 
+                10, 
+                new Color(0, 0, 0, 90)
+            );
+        }
+        
         Raylib.DrawTexturePro(
             _canvas.Texture,
             new Rectangle(0, 0, _canvas.Texture.Width, -_canvas.Texture.Height),
@@ -476,94 +428,9 @@ public class Card : Node, ICloneable
             );
         }
 
-        // TODO: rewrite in method and put to UPDATE
         if (_showInfo)
         {
-            FontFamily testFont = new FontFamily()
-            {
-                Color = Color.White,
-                Font = FontFamily.Font,
-                Rotation = 0f,
-                Size = 32,
-                Spacing = 2f
-            };
-            
-            float overlayWidth = 260f;
-            float overlayHeight = 40f;
-            float margin = 10f;
-
-            float centerX = Bounds.X + (Bounds.Width - overlayWidth) / 2f;
-            float topY = Bounds.Y - margin - overlayHeight;
-            float bottomY = Bounds.Y + Bounds.Height + margin;
-
-            float overlayY = topY;
-            
-            
-            float textHeight = Engine.Helpers.Text.CalculateWrappedTextHeight(
-                testFont, 
-                Description,
-                overlayWidth - 20f
-            );
-            
-            overlayHeight += textHeight + testFont.Size / 2;
-
-            if (topY < 0)
-            {
-                overlayY = bottomY;
-                if (overlayY + overlayHeight > Raylib.GetScreenHeight())
-                {
-                    overlayY = Raylib.GetScreenHeight() - overlayHeight - margin;
-                }
-            }
-
-            Raylib.DrawRectangleRounded(
-                new Rectangle(centerX, overlayY - (textHeight + testFont.Size / 2), overlayWidth, overlayHeight), 
-                0.2f, 
-                10,
-                new Color(25, 25, 25, 255)
-            );
-            
-            Raylib.DrawRectangleRoundedLinesEx(
-                new Rectangle(centerX, overlayY - (textHeight + testFont.Size / 2), overlayWidth, overlayHeight), 
-                0.2f, 
-                10,
-                4,
-                new Color() {R = 55, G = 55, B = 55, A = 255}
-            );
-            
-            float textCenterX = centerX + overlayWidth / 2f;
-            float firstTextY = overlayY - (textHeight + testFont.Size / 2) + 20f;
-            float secondTextY = firstTextY + 30f;
-            
-            Engine.Helpers.Text.DrawPro(
-                testFont, 
-                Name, 
-                new Vector2(textCenterX, firstTextY)
-            );
-
-            
-          
-            
-            Engine.Helpers.Text.DrawWrapped(
-                testFont, 
-                Description, 
-                new Vector2(textCenterX - (overlayWidth - 20f) / 2f, secondTextY), 
-                overlayWidth - 20f, 
-                TextAlignment.Center
-            );
-
-            // string additionalText = ;
-            // Raylib.DrawTextPro(
-            //     FontFamily.Font,
-            //     additionalText,
-            //     new Vector2(textCenterX, secondTextY),
-            //     new Vector2(Raylib.MeasureTextEx(FontFamily.Font, additionalText, FontFamily.Size, 3).X / 2, 0),
-            //     0f,
-            //     FontFamily.Size,
-            //     3,
-            //     Color.White
-            // );
-            
+            Hint.Draw(Bounds);
             _showInfo = false;
         }
 
@@ -630,7 +497,8 @@ public class Card : Node, ICloneable
         if (MouseTracking.Instance.HoveredNode == this)
             MouseTracking.Instance.HoveredNode = null;
     }
-
+    
+    public bool ImOnHands() => Parent is Hands;
     public override void Dispose()
     {
         if (Parent is not null)
