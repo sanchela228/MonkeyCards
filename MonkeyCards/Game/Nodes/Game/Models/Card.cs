@@ -472,6 +472,21 @@ public class Card : Node, ICloneable
                 new Color(0, 0, 0, 120)
             );
         }
+
+        if (IsOnBurningAnimation)
+        {
+            Raylib.DrawRectangleRounded(
+                new Rectangle(
+                    Bounds.X, 
+                    (Bounds.Y + DefaultSize.Y) - _redHeight, 
+                    Bounds.Width, 
+                    Bounds.Height - DefaultSize.Y + _redHeight
+                ), 
+                0.2f, 
+                10,
+                new Color(120, 0, 0, 120)
+            );
+        }
     }
 
     private bool _isBurningAnimation;
@@ -502,14 +517,13 @@ public class Card : Node, ICloneable
         }
     }
 
+    private float _redHeight = 0;
     public async Task BurnCardAsyncAnimation()
     {
-        float alpha = 1.0f;
-        while (alpha > 0)
+        while (_redHeight < DefaultSize.Y)
         {
-            alpha -= 0.05f;
-            // Raylib.SetTextureAlpha(_texture, (byte)(alpha * 255));
-            await Task.Delay(50); 
+            _redHeight += 8f;
+            await Task.Delay(20); 
         }
     }
 

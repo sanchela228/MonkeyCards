@@ -18,13 +18,10 @@ public class Table : Node
     public Table(Vector2 centerPoint)
     {
         Position = centerPoint;
-        List<Placeholder> placeholders = new(){
-            new Placeholder(0),
-            new Placeholder(1),
-            new Placeholder(2),
-            new Placeholder(3),
-            new Placeholder(4)
-        };
+        
+        List<Placeholder> placeholders = new();
+        for (int i = 0; i < CountPlaceholders; i++)
+            placeholders.Add( new Placeholder(i) );
         
         AddChildrens(placeholders);
         _placeholders = placeholders;
@@ -51,7 +48,6 @@ public class Table : Node
         return placeholder.Childrens[0] as Card;
     }
     
-    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.String; size: 116MB")]
     public override void Update(float deltaTime)
     {
         // TODO: add cache data for List ComboElement

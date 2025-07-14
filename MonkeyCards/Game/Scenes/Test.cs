@@ -22,7 +22,7 @@ public class Test : Scene
 
     public readonly Table Table = new Table(new Vector2(Raylib.GetScreenWidth() / 2, Raylib.GetScreenHeight() * 0.5f));
     
-    public Rectangle testDeleteRect = new(30, 30, 100, 100);
+    public Rectangle testDeleteRect = new(90, 50, 100, 100);
     public Rectangle testAddRect = new(230, 30, 100, 100);
     
     public Rectangle testAddSpecial = new(480, 30, 100, 100);
